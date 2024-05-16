@@ -1,0 +1,19 @@
+{% load static %}
+<html>
+    <head>
+        <title>
+            {% block title %}
+            {% endblock title %}
+        </title>
+
+        <script src="{% static 'js/jquery/jquery.js' %}"></script>
+        <link href="{% static 'css/bootstrap/bootstrap.css' %}" rel="stylesheet"/>
+        <link href="{% static 'css/fontawesome/all.css' %}" rel="stylesheet"/>
+    </head>
+    <body>
+        {% block content %}
+        {% endblock content %}
+    </body>
+    <script src="{% static 'js/bootstrap/bootstrap.js' %}"></script>
+    <script src="{% static 'js/fontawesome/all.js' %}"></script>
+</html>
