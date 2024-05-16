@@ -79,7 +79,12 @@ decorators folders holds the files that demonstrate how to use python decorators
 3. phone
 
 # dictionary and dictionary comprehension :
-dictionary package contains all the programs related to dictionary and dictionary comprehension:
+dictionary package contains all the programs related to dictionary and dictionary comprehension :
 A. dictionary  
 1. dictionary_comprehension [single and nested dictionary comprehension]
+
+# [creating a date object, current date, date output , date formatting] dates : 
+python dates are in a folder called dates inside simple_folders :
+A. simple_folders  
+1. dates
  
