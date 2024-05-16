@@ -11,6 +11,7 @@ from dictionary.anagrams import *
 from dictionary.sort_dict_key_value import *
 from dictionary.dictionary_comprehension.list_to_dictionary import *
 from dictionary.dictionary_comprehension.generate_a_dictionary import *
+from dictionary.dictionary_comprehension.nested_dict_comprehension import *
 
 class DriverDictionary:
     def driver_dictionary(self):
@@ -34,6 +35,7 @@ class DriverDictionary:
 |  10. Sort Dictionary key and values List                                                     |
 |  11. Convert lists to dictionary using \033[93m(Using Dictionary Comprehension)\033[97m      |
 |  12. Generate dictionary from a single list \033[93m(Using Dictionary Comprehension)\033[97m |
+|  13. Generate dictionary from a string \033[93m(Nested Dictionary Comprehension)\033[97m     |
 |                                                                                              |
 ------------------------------------------------------------------------------------------------
 
@@ -191,6 +193,14 @@ class DriverDictionary:
                 gdfsl = GenerateDictionaryFromSingleList(var_keys)
                 print(f"Entered keys : \033[93m{gdfsl.keys}\033[97m")
                 result = gdfsl.generate()
+                print(f"\033[92mConverted dictionary : {str(result)}\033[97m")
+
+            elif choice_dictionary == '13':
+                print(f"\033[94mOption 13 Generate dictionary from a string \033[93m(Nested Dictionary Comprehension)\033[97m")
+                var_string = str(input("Enter the string : "))
+                nd = NestedDictionary(var_string)
+                print(f"Entered keys : \033[93m{nd.var_string}\033[97m")
+                result = nd.generate()
                 print(f"\033[92mConverted dictionary : {str(result)}\033[97m")
 
             else:

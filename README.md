@@ -81,5 +81,5 @@ decorators folders holds the files that demonstrate how to use python decorators
 # dictionary and dictionary comprehension :
 dictionary package contains all the programs related to dictionary and dictionary comprehension:
 A. dictionary  
-1. dictionary_comprehension 
+1. dictionary_comprehension [single and nested dictionary comprehension]
  
