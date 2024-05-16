@@ -36,10 +36,10 @@ used in Operator package in files as listed below :
 Conditional statements are used to drive menu driven programs
 the files where conditional statements are used are listed below : 
 ### Stand alone files
-1. main.py [Python Exceptions]
+1. main.py 
 ### Packages : 
 A. drivers : files inside this package uses conditional statements and loops to drive the menu system :
-1. driver_dictionary
+1. driver_dictionary 
 2. driver_list
 3. driver_loop
 4. driver_operator
