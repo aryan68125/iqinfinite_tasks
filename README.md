@@ -10,8 +10,8 @@ The following packages that are created and then used in main.py file are as fol
 7. strings
 8. tuples   
 
-# classes, constructors, (getters and setters), methods, private variables, __private methods:
-[Classes,constructors, (getters and setters), methods] have been used in all the files inside packages as listed below : 
+# classes, constructors, (getters and setters), methods, private variables, __private methods, Abstraction:
+[Classes,constructors, (getters and setters), methods, Abstraction] have been used in all the files inside packages as listed below : 
 1. drivers
 2. dictionary
 3. list_custom
@@ -20,6 +20,11 @@ The following packages that are created and then used in main.py file are as fol
 6. sets
 7. strings
 8. tuples  
+
+# Inheritance, Polymorphism, Encapsulation, Class variables:
+[Inheritance, Polymorphism, Encapsulation, Class variables] have been used in the solution.py file inside a class_oop folder :  
+NOTE: class_oop is not a package it's just a folder
+1. solution.py
 
 # magic methods:
 Magic methods are those methods that can't be created by us but we can use them to create some new things to meet our requirements for example creating a fraction datatype:
