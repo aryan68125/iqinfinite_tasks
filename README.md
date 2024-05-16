@@ -3,22 +3,22 @@ Creating and using packages are covered.
 The following packages that are created and then used in main.py file are as follows : 
 1. drivers
 2. dictionary
-3. list_custom
-4. loop
+3. list_custom [List comprehension]
+4. loop [break, continue, range]
 5. operators
 6. sets
-7. strings
+7. strings [regex library]
 8. tuples   
 
-# classes, constructors, (getters and setters), methods, private variables, __private methods, Abstraction:
-[Classes,constructors, (getters and setters), methods, Abstraction] have been used in all the files inside packages as listed below : 
+# classes, constructors, (getters and setters), methods, private variables, __private methods, Abstraction , Type casting:
+[Classes,constructors, (getters and setters), methods, Abstraction, Type casting] have been used in all the files inside packages as listed below : 
 1. drivers
 2. dictionary
-3. list_custom
-4. loop
+3. list_custom [List comprehension]
+4. loop [break, continue, range]
 5. operators
 6. sets
-7. strings
+7. strings [regex library]
 8. tuples  
 
 # Inheritance, Polymorphism, Encapsulation, Class variables:
@@ -30,13 +30,13 @@ NOTE: class_oop is not a package it's just a folder
 Magic methods are those methods that can't be created by us but we can use them to create some new things to meet our requirements for example creating a fraction datatype:
 used in Operator package in files as listed below : 
 1. fraction  
-2. fraction_calculator (used this fraction datatype in here)
+2. fraction_calculator (used this fraction datatype in here) 
 
-# conditional statements and loops: 
+# conditional statements, loops [break, range] and Exceptions: 
 Conditional statements are used to drive menu driven programs
 the files where conditional statements are used are listed below : 
 ### Stand alone files
-1. main.py
+1. main.py [Python Exceptions]
 ### Packages : 
 A. drivers : files inside this package uses conditional statements and loops to drive the menu system :
 1. driver_dictionary
