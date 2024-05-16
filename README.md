@@ -51,4 +51,10 @@ B. operators : files inside this package uses conditional statements and loops t
 1. calculator
 2. fraction_calculator
 3. unit_converter
+
+# generators : 
+generator folder is not a package it's a simple folder that contains some examples of generators: 
+1. example_0
+2. example_1
+3. example_2
  
