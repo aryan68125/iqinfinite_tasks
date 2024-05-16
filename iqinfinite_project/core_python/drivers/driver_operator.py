@@ -2,6 +2,7 @@ import pyfiglet
 # operators related imports
 from operators.calculator import *
 from operators.fraction_calculator import *
+from operators.unit_converter import *
 
 class DriverOperator:
     def driver_operator(self):
@@ -15,6 +16,7 @@ class DriverOperator:
 |                               >>> OPERATOR SECTION <<<                                |
 |  1.  Calculator                                                                       |
 |  2.  Fraction Calculator                                                              |
+|  3.  Unit Converter                                                                   |
 |                                                                                       |
 -----------------------------------------------------------------------------------------
 
@@ -74,6 +76,27 @@ class DriverOperator:
                     else:
                         print ("\033[91m!!! Program Terminated !!!\033[97m")
                         break
+
+            elif choice_sets == '3':
+                print(f"\033[94mOption 3 Unit Converter\033[97m")
+                uc = UnitConverter()
+                for i in range(0,9999):
+                    ch = input("Enter 'y' to continue : ")
+                    if ch.lower() == 'y':
+                        uc.menu()
+                        
+                        outer_menu_choice = int(input("Enter the your choice : "))
+                        uc.set_var_choice(outer_menu_choice)
+                        inner_menu_choice = int(input("Enter your choice : "))
+                        uc.set_var_inner_choice(inner_menu_choice)
+                        number = float(input("Enter the value : "))
+                        uc.set_var_num1(number)
+                        result = uc.calculate()
+                        print(f"Result = \033[92m{result}\033[97m")
+                    else:
+                        print ("\033[91m!!! Program Terminated !!!\033[97m")
+                        break
+
 
             else:
                 print("\033[91m!!! Wrong choice !!!\033[97m")
