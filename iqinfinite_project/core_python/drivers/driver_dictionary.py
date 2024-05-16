@@ -9,6 +9,8 @@ from dictionary.UniqueValues import *
 from dictionary.KeysValuesDict import *
 from dictionary.anagrams import *
 from dictionary.sort_dict_key_value import *
+from dictionary.dictionary_comprehension.list_to_dictionary import *
+from dictionary.dictionary_comprehension.generate_a_dictionary import *
 
 class DriverDictionary:
     def driver_dictionary(self):
@@ -17,21 +19,23 @@ class DriverDictionary:
             ASCII_art_1 = pyfiglet.figlet_format(T,font="doh")
             print(f"\033[95m{ASCII_art_1}\033[97m")
             print("""
------------------------------------------------------------------------------------------
-|                                                                                       |
-|                               >>> DICTIONARY SECTION <<<                              |
-|  1.  Convert dictionary string values to List of dictionaries                         |
-|  2.  Swapping Hierarchy in Nested Dictionaries                                        |
-|  3.  Reverse Dictionary Keys Order                                                    |
-|  4.  Remove keys with Values Greater than K ( Including mixed values )                |
-|  5.  Dictionary with maximum count of pairs                                           |
-|  6.  Extract Unique values dictionary values                                          |
-|  7.  Keys associated with Values in Dictionary                                        |
-|  8.  Anagrams together in Python using List and Dictionary                            |
-|  9.  Counter to find the size of largest subset of anagram words                      |
-|  10. Sort Dictionary key and values List                                              |
-|                                                                                       |
------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------
+|                                                                                              |
+|                               >>> DICTIONARY SECTION <<<                                     |
+|  1.  Convert dictionary string values to List of dictionaries                                |
+|  2.  Swapping Hierarchy in Nested Dictionaries                                               |
+|  3.  Reverse Dictionary Keys Order                                                           |
+|  4.  Remove keys with Values Greater than K ( Including mixed values )                       |
+|  5.  Dictionary with maximum count of pairs                                                  |
+|  6.  Extract Unique values dictionary values                                                 |
+|  7.  Keys associated with Values in Dictionary                                               |
+|  8.  Anagrams together in Python using List and Dictionary                                   |
+|  9.  Counter to find the size of largest subset of anagram words                             |
+|  10. Sort Dictionary key and values List                                                     |
+|  11. Convert lists to dictionary using \033[93m(Using Dictionary Comprehension)\033[97m      |
+|  12. Generate dictionary from a single list \033[93m(Using Dictionary Comprehension)\033[97m |
+|                                                                                              |
+------------------------------------------------------------------------------------------------
 
                \033[91m
 -----------------------------------------------------------------------------------------
@@ -156,6 +160,38 @@ class DriverDictionary:
                 print(f"Entered dictionary : \033[93m{sd.get_dictionary()}\033[97m")
                 result = sd.sort()
                 print(f"\033[92mCounter to find the size of largest subset of anagram words : {str(result)}\033[97m")
+
+            elif choice_dictionary == '11':
+                print(f"\033[94mOption 11 Convert lists to dictionary using \033[93m(Using Dictionary Comprehension)\033[97m")
+                var_keys = []
+                var_values = []
+                size = int(input("Enter the size of the list : "))
+                print("Enter keys in the keys list : ")
+                for i in range(0,size):
+                    elements = int(input("Enter keys : "))
+                    var_keys.append(elements)
+                print("Enter the values in the values list : ")
+                for j in range(0,size):
+                    elements = input("Enter values : ")
+                    var_values.append(elements)
+                ltd = ListToDictionary(var_keys,var_values)
+                print(f"Entered keys : \033[93m{ltd.keys}\033[97m")
+                print(f"Entered values : \033[93m{ltd.values}\033[97m")
+                result = ltd.convert()
+                print(f"\033[92mConverted dictionary : {str(result)}\033[97m")
+
+            elif choice_dictionary == '12':
+                print(f"\033[94mOption 12 Generate dictionary from a single list \033[93m(Using Dictionary Comprehension)\033[97m")
+                var_keys = []
+                size = int(input("Enter the size of the keys list : "))
+                print("Enter keys in the in the keys list : ")
+                for i in range(0,size):
+                    elements = int(input("Enter keys : "))
+                    var_keys.append(elements)
+                gdfsl = GenerateDictionaryFromSingleList(var_keys)
+                print(f"Entered keys : \033[93m{gdfsl.keys}\033[97m")
+                result = gdfsl.generate()
+                print(f"\033[92mConverted dictionary : {str(result)}\033[97m")
 
             else:
                 print("\033[91m!!! Wrong choice !!!\033[97m")

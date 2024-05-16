@@ -78,4 +78,8 @@ decorators folders holds the files that demonstrate how to use python decorators
 2. main
 3. phone
 
+# dictionary and dictionary comprehension :
+dictionary package contains all the programs related to dictionary and dictionary comprehension:
+A. dictionary  
+1. dictionary_comprehension 
  
