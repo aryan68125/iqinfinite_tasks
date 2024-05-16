@@ -57,4 +57,19 @@ generator folder is not a package it's a simple folder that contains some exampl
 1. example_0
 2. example_1
 3. example_2
+
+# args and kwargs : 
+args_kwargs folder holds the programs related to args and kwargs:
+args_akwargs :
+1. example_0
+2. example_1
+A. args  
+1. example_1
+2. example_2
+3. example_3
+B. kwargs
+1. example1
+2. example2
+3. example3
+
  
