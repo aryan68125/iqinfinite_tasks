@@ -10,7 +10,7 @@ The following packages that are created and then used in main.py file are as fol
 7. strings
 8. tuples   
 
-# classes, constructors, (getters and setters), methods:
+# classes, constructors, (getters and setters), methods, private variables:
 [Classes,constructors, (getters and setters), methods] have been used in all the files inside packages as listed below : 
 1. drivers
 2. dictionary
