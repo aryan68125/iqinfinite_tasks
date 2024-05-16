@@ -72,4 +72,10 @@ B. kwargs
 2. example2
 3. example3
 
+# decorators [@property, @classmethod, @staticmethod, @name.setter]:
+decorators folders holds the files that demonstrate how to use python decorators : 
+1. item
+2. main
+3. phone
+
  
