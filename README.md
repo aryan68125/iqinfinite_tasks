@@ -62,11 +62,11 @@ generator folder is not a package it's a simple folder that contains some exampl
 args_kwargs folder holds the programs related to args and kwargs:
 args_akwargs :
 1. example_0
-2. example_1
+2. example_1  
 A. args  
 1. example_1
 2. example_2
-3. example_3
+3. example_3  
 B. kwargs
 1. example1
 2. example2
@@ -79,12 +79,12 @@ decorators folders holds the files that demonstrate how to use python decorators
 3. phone
 
 # dictionary and dictionary comprehension :
-dictionary package contains all the programs related to dictionary and dictionary comprehension :
+dictionary package contains all the programs related to dictionary and dictionary comprehension :  
 A. dictionary  
 1. dictionary_comprehension [single and nested dictionary comprehension]
 
 # [creating a date object, current date, date output , date formatting] dates : 
-python dates are in a folder called dates inside simple_folders :
+python dates are in a folder called dates inside simple_folders :  
 A. simple_folders  
 1. dates
  
