@@ -20,8 +20,7 @@
     print("Multiplication:", multiplication_result) # Output: 1/6
     print("Division:", division_result) 
 
-    some explaination : 
-    
+    some explaination :
 '''
 class Fraction_class:
     def __init__(self,n,d):
