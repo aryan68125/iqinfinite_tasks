@@ -73,7 +73,8 @@ B. kwargs
 3. example3
 
 # decorators [@property, @classmethod, @staticmethod, @name.setter]:
-decorators folders holds the files that demonstrate how to use python decorators : 
+decorators folders holds the files that demonstrate how to use python decorators.  
+It is inside a folder called simple_folder : 
 1. item
 2. main
 3. phone
@@ -87,4 +88,14 @@ A. dictionary
 python dates are in a folder called dates inside simple_folders :  
 A. simple_folders  
 1. dates
- 
+
+# os module:
+os module folder is inside simple_folders
+1. change_directory
+2. create_directory
+3. create_multiple_directories
+4. delete_directory_files
+5. get_current_working_directory
+6. get_os_name
+7. list_files_directories
+8. os_errors
