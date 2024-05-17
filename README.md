@@ -104,3 +104,112 @@ os module folder is inside simple_folders
 12. remove_files
 13. check_if_path_exists
 14. get_file_size
+
+# Postgres Database : 
+### stodred procedures
+```
+/*
+table (parent table) with auto-increment primary key column
+create, insert and select all 
+*/
+CREATE TABLE IF NOT EXISTS student (
+	id SERIAL PRIMARY KEY,
+	student_name VARCHAR(50),
+	roll_number INT
+);
+/*
+CREATE a stored procedure for student table
+INSERT , SELECT_ALL, UPDATE, DELETE
+*/
+CREATE OR REPLACE PROCEDURE insert_student(
+	IN student_name_var VARCHAR(50),
+	IN roll_number_var INT
+)
+LANGUAGE SQL
+AS $$
+INSERT INTO student(student_name, roll_number) VALUES
+(student_name_var, roll_number_var);
+$$;
+
+CREATE OR REPLACE PROCEDURE select_all_student()
+	RETURNS TABLE(id int, student_name VARCHAR(50), roll_number = INT)
+LANGUAGE SQL
+AS $$
+SELECT * FROM student;
+$$;
+
+CREATE OR REPLACE PROCEDURE update_student(
+	IN id_var INT,
+	IN student_name_var VARCHAR(50),
+	IN roll_number_var INT
+)
+LANGUAGE SQL
+AS $$
+UPDATE student SET student_name = student_name_var , roll_number = roll_number_var WHERE id = id_var;
+$$;
+
+CREATE OR REPLACE PROCEDURE delete_student(
+	IN id_var INT
+)
+LANGUAGE SQL
+AS $$
+DELETE FROM student WHERE id = id_var;
+$$
+/*
+CALL stored procedures for student table
+INSERT , SELECT_ALL, UPDATE, DELETE
+*/
+CALL insert_student('Dynamite', 911);
+CALL update_student(7,'Kombat', 365);
+CALL delete_student(7);
+
+CALL select_all_student(); --The stored procedures in postgres do not return a table It only happen in Microsoft SQL
+SELECT * FROM student;
+```
+### Use stored procedures along with triggers
+create a table named student_marks:  
+```
+CREATE TABLE IF NOT EXISTS student_marks (
+	id SERIAL PRIMARY KEY,
+	student_pk INT REFERENCES student(id),
+	maths NUMERIC(10,2),
+	physics NUMERIC(10,2),
+	chemistry NUMERIC(10,2),
+	english NUMERIC(10,2),
+	hindi NUMERIC(10,2),
+	computer NUMERIC(10,2),
+	total NUMERIC(10,2),
+	percentage NUMERIC(10,2)
+    );
+```  
+trigger to detect the insert operation on student_marks table  
+```
+CREATE TRIGGER calculate_marks_and_percentage
+BEFORE INSERT ON student_marks
+FOR EACH ROW
+EXECUTE FUNCTION calculate_total_and_percentage();
+```  
+stored procedure to calculate the total and percentage of the marks present in a student_marks table  
+```
+CREATE OR REPLACE FUNCTION calculate_total_and_percentage()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.total := NEW.maths + NEW.physics + NEW.chemistry + NEW.english + NEW.hindi + NEW.computer;
+    NEW.percentage := (NEW.total / 600) * 100; -- Assuming total marks for all subjects is 600
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+```  
+Now if we insert something in the table then the total marks and percentage will be calculated before the insert operation takes place in the database  
+```
+INSERT INTO student_marks (student_pk, maths ,physics ,chemistry ,english ,hindi ,computer ) VALUES
+(1,99,97,95,80,92,100),
+(2,85,89,75,72,84,70),
+(3,60,55,65,80,76,92),
+(4,55,40,40,32,60,85),
+(5,100,100,100,32,90,100);
+
+SELECT * FROM student_marks
+```  
+output:  
+![](postgres_database/related_images/Screenshot from 2024-05-17 18-16-48.png)
