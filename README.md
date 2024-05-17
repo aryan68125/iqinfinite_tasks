@@ -99,3 +99,8 @@ os module folder is inside simple_folders
 6. get_os_name
 7. list_files_directories
 8. os_errors
+10. read_write_files
+11. rename_files
+12. remove_files
+13. check_if_path_exists
+14. get_file_size
