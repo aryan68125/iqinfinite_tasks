@@ -106,6 +106,54 @@ os module folder is inside simple_folders
 14. get_file_size
 
 # Postgres Database : 
+### create a table with a column of primary key with auto increment 
+```
+(normally)
+CREATE TABLE YourTableName (
+    id INT IDENTITY(1,1) PRIMARY KEY,
+    other_column VARCHAR(255),
+    another_column INT
+);
+
+(in case of postgres)
+CREATE TABLE IF NOT EXISTS student (
+	id SERIAL PRIMARY KEY,
+	student_name VARCHAR(50),
+	roll_number INT
+);
+```
+
+### create a table with a column of primary key and foreign key
+```
+CREATE TABLE parent_table (
+    parent_id SERIAL PRIMARY KEY,
+    parent_name VARCHAR(100)
+);
+
+CREATE TABLE child_table (
+    child_id SERIAL PRIMARY KEY,
+    child_name VARCHAR(100),
+    parent_id INT REFERENCES parent_table(parent_id)
+);
+```
+### alter an existing table to add a constraint in a column
+```
+CREATE TABLE IF NOT EXISTS student_profile (
+	id SERIAL PRIMARY KEY,
+	student_pk INT REFERENCES student(id),
+	address VARCHAR(255),
+	phone_number BIGINT
+);
+
+INSERT INTO student_profile(student_pk, address, phone_number) VALUES
+(1,'Lucknow',8887634464),
+(2,'Chandigarh',9451907083),
+(3,'Kolkata',9451907102),
+(4,'Chennai',8004224178),
+(5,'Mumbai',8896298052);
+ALTER TABLE student_profile
+ADD CONSTRAINT unique_student_pk UNIQUE (student_pk);
+```
 ### stodred procedures
 ```
 /*
