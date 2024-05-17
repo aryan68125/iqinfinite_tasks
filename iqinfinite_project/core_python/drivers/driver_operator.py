@@ -8,7 +8,8 @@ class DriverOperator:
     def driver_operator(self):
         for i in range (0,9999):
             T = "operator"
-            ASCII_art_1 = pyfiglet.figlet_format(T,font="doh")
+            # ASCII_art_1 = pyfiglet.figlet_format(T,font="doh")
+            ASCII_art_1 = pyfiglet.figlet_format(T)
             print(f"\033[95m{ASCII_art_1}\033[97m")
             print("""
 -----------------------------------------------------------------------------------------
