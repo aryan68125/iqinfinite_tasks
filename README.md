@@ -212,4 +212,4 @@ INSERT INTO student_marks (student_pk, maths ,physics ,chemistry ,english ,hindi
 SELECT * FROM student_marks
 ```  
 output:  
-![](postgres_database/related_images/Screenshot from 2024-05-17 18-16-48.png)
+![](postgres_database/related_images/result_1_for_triggers_with_procedures.png)
