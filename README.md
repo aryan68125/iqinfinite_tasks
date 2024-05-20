@@ -230,7 +230,7 @@ CREATE TABLE IF NOT EXISTS student_marks (
 	percentage NUMERIC(10,2)
     );
 ```  
-#### Before insert Trigger
+#### Before insert Trigger (before insert operation)
 trigger to detect the insert operation on student_marks table  
 ```
 CREATE TRIGGER calculate_marks_and_percentage
@@ -285,7 +285,7 @@ SELECT * FROM student_marks
 output:  
 ![](postgres_database/related_images/result_1_for_triggers_with_procedures.png)  
 
-### create a TRIGGER FUNCTION to count all the rows in the student table and call that dtrigger function after the insert operation
+### create a TRIGGER FUNCTION to count all the rows in the student table and call that trigger function after the insert operation (after insert operation)
 ```
 /* TRIGGER FUNCTION */
 CREATE OR REPLACE FUNCTION total_students()
@@ -342,3 +342,63 @@ CREATE TRIGGER after_insert_student
 CALL insert_student('Dynamite', 911);
 ```  
 This trigger will get activated after the insert operation is complete.
+### CREATE a trigger that prints the entire table after the insert operation is complete .CREATE a trigger function that selects all rows of the table and prints it (after insert operation)
+```
+/* TRIGGER FUNCTION */
+CREATE OR REPLACE FUNCTION print_student()
+RETURNS TRIGGER AS $$
+	DECLARE
+    student_record student%ROWTYPE; -- Define a record variable to hold a single row of the student table
+BEGIN
+    -- Print the contents of the student table
+    RAISE NOTICE 'Contents of student table after insert:';
+    FOR student_record IN SELECT * FROM student LOOP
+        RAISE NOTICE 'id: %, student_name: %, roll_number: %', student_record.id, student_record.student_name, student_record.roll_number;
+    END LOOP;
+    
+    RETURN NULL; -- Return NULL to indicate that the trigger is done
+END;
+$$ LANGUAGE plpgsql;
+```
+explanation : 
+```CREATE OR REPLACE FUNCTION print_student()```:  
+This line initiates the creation or replacement of a PostgreSQL function named print_student().
+```RETURNS TRIGGER AS $$```:  
+This line specifies that the function returns a TRIGGER. In PostgreSQL, a trigger function is invoked automatically when a specified event occurs on a table, and it can perform actions based on that event.
+```DECLARE student_record student%ROWTYPE;```:  
+This line declares a local variable named student_record of type student%ROWTYPE. The %ROWTYPE is a special data type in PostgreSQL that represents a whole row of a table. So, student_record will hold a single row from the student table.
+```BEGIN ... END;```:  
+This block encapsulates the main body of the function. All the actions that the function performs are contained within this block.
+```RAISE NOTICE 'Contents of student table after insert:';```:  
+This line raises a notice message indicating that the contents of the student table are about to be printed.
+```FOR student_record IN SELECT * FROM student LOOP```:  
+This line initiates a loop that iterates over each row in the student table. The SELECT * FROM student query fetches all rows from the student table, and the loop iterates over each of these rows.
+```RAISE NOTICE 'id: %, student_name: %, roll_number: %', student_record.id, student_record.student_name, student_record.roll_number;```:  
+Within the loop, this line raises a notice message for each row in the student table. It displays the id, student_name, and roll_number fields of the current row using the values stored in the student_record variable.
+```RETURN NULL;```:  
+This line returns NULL to indicate that the trigger function has completed its execution. Since this trigger function is designed to be an AFTER trigger, it doesn't need to return any data to the caller.
+```$$ LANGUAGE plpgsql;```:  
+This line concludes the function definition. The $$ is a delimiter that marks the beginning and end of the function's body. LANGUAGE plpgsql specifies that the function is written in PL/pgSQL, which is a procedural language extension for PostgreSQL.
+
+```
+/* TRIGGER (after insert operation) */
+CREATE TRIGGER display_student_table_after_insert
+AFTER INSERT ON student
+FOR EACH STATEMENT
+EXECUTE FUNCTION print_student();
+```
+calling stored procedure to insert a row.  
+```
+/* USING STORED PROCEDURE TO INSERT A STUDENT IN student table */
+CALL insert_student('Dynamite', 911);
+```
+output:  
+```
+NOTICE: Contents of student table after insert: NOTICE: id: 1, student_name: Rollex, roll_number: 997 
+NOTICE: id: 2, student_name: Ballistic, roll_number: 1000 NOTICE: id: 3, student_name: Barbatos, roll_number: 117 
+NOTICE: id: 4, student_name: Barricade, roll_number: 247 NOTICE: id: 5, student_name: Bullet, roll_number: 567 
+NOTICE: id: 9, student_name: Dynamite, roll_number: 911 NOTICE: id: 10, student_name: Dynamite, roll_number: 911 
+NOTICE: id: 11, student_name: Dynamite, roll_number: 911
+```
+
+
