@@ -404,7 +404,89 @@ NOTICE: id: 11, student_name: Dynamite, roll_number: 911
 ## SELECT : statements
 ## SELECT : max percentage from the table and print all the columns in that row
 This is the table :  
-![](postgres_database/related_images/student_table.png)   
+![](postgres_database/related_images/student_table.png)  
+```
+SELECT * FROM student_marks where percentage=(SELECT MAX(percentage) from student_marks) ;
+```  
 output :   
-![](postgres_database/related_images/output_select_max_percentage.png) 
+![](postgres_database/related_images/output_select_max_percentage.png)  
+
+## SELECT : max percentage and min percentage from the table and print it in a column using aliasing
+This is the table :  
+![](postgres_database/related_images/student_table.png)  
+```
+/* SELECT MAX AND MIN PERCENTAGE FROM THE TABLE */
+SELECT MAX(percentage) AS "Max Percentage" , MIN(percentage) AS "Min Percentage" FROM student_marks;
+```  
+output :   
+![](postgres_database/related_images/select_max_and_min_percentage.png)
+
+## DATABASE VIEWS : (LEFT JOIN, RIGHT JOIN, INNER JOIN, FULL OUTER JOIN)
+### Left join view :
+```
+CREATE VIEW left_join AS
+SELECT s.*, sp.address, sp.phone_number, sm.maths, sm.physics, sm.chemistry, sm.english, sm.hindi, sm.computer, sm.total, sm.percentage
+FROM student s
+LEFT JOIN student_profile sp ON s.id = sp.student_pk
+LEFT JOIN student_marks sm ON s.id = sm.student_pk;
+```  
+call the left_join view  
+```
+SELECT * FROM left_join
+```  
+you can also order by the rows based on the columns that is provided in the query in ascending and descending order  
+```
+SELECT * FROM left_join ORDER BY student_name ASC;
+```  
+### Right join view :
+```
+CREATE VIEW right_join AS 
+SELECT s.*, sp.address, sp.phone_number, sm.maths, sm.physics, sm.chemistry, sm.english, sm.hindi, sm.computer, sm.total, sm.percentage
+FROM student s
+RIGHT JOIN student_profile sp ON s.id = sp.student_pk
+RIGHT JOIN student_marks sm ON s.id = sm.student_pk;
+```  
+call the right_join view  
+```
+SELECT * FROM right_join;
+```  
+you can also order by the rows based on the columns that is provided in the query in ascending and descending order  
+```
+SELECT * FROM right_join ORDER BY student_name ASC;
+```  
+### Inner join view : 
+```
+CREATE VIEW inner_join AS
+SELECT s.*, sp.address, sp.phone_number, sm.maths, sm.physics, sm.chemistry, sm.english, sm.hindi, sm.computer, sm.total, sm.percentage
+FROM student s
+INNER JOIN student_profile sp ON s.id = sp.student_pk
+INNER JOIN student_marks sm ON s.id = sm.student_pk;
+```  
+call the inner_join view  
+```
+SELECT * FROM inner_join;
+```  
+you can also order by the rows based on the columns that is provided in the query in ascending and descending order  
+```
+SELECT * FROM inner_join ORDER BY student_name ASC;
+```  
+### Full outer join view :
+```
+CREATE VIEW full_outer_join AS
+SELECT s.*, sp.address, sp.phone_number, sm.maths, sm.physics, sm.chemistry, sm.english, sm.hindi, sm.computer, sm.total, sm. percentage
+FROM student s
+FULL OUTER JOIN student_profile sp ON s.id = sp.student_pk
+FULL OUTER JOIN student_marks sm ON s.id = sm.student_pk;
+```  
+call the full_outer_join view  
+```
+SELECT * FROM full_outer_join;
+```  
+you can also order by the rows based on the columns that is provided in the query in ascending and descending order  
+```
+SELECT * FROM full_outer_join ORDER BY student_name ASC;
+```  
+
+
+
 
