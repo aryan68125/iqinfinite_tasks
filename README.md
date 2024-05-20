@@ -230,6 +230,7 @@ CREATE TABLE IF NOT EXISTS student_marks (
 	percentage NUMERIC(10,2)
     );
 ```  
+#### Before insert Trigger
 trigger to detect the insert operation on student_marks table  
 ```
 CREATE TRIGGER calculate_marks_and_percentage
@@ -248,6 +249,28 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 ```  
+Explaination :  
+```CREATE OR REPLACE FUNCTION calculate_total_and_percentage()```  
+This line initiates the creation or replacement of a PostgreSQL function named calculate_total_and_percentage(). Functions in PostgreSQL are named blocks of code that perform a specific task when called.
+
+```RETURNS TRIGGER AS $$```  
+This line specifies that the function returns a TRIGGER. In PostgreSQL, a trigger is a set of actions that are automatically performed when certain database events occur on a specified table or view.
+
+```BEGIN ... END;```  
+This block encapsulates the main body of the function. All the actions that the function performs are contained within this block.
+
+```NEW.total := NEW.maths + NEW.physics + NEW.chemistry + NEW.english + NEW.hindi + NEW.computer;```  
+This line calculates the total marks obtained by adding the marks obtained in various subjects. The keyword NEW refers to the new row that triggered the function. This function seems to be designed to be used as an insert or update trigger, calculating the total marks whenever a new row is inserted or updated in the table.
+
+```NEW.percentage := (NEW.total / 600) * 100;```  
+This line calculates the percentage of marks obtained by dividing the total marks by the maximum possible marks (in this case, 600) and then multiplying by 100 to convert it into a percentage.
+
+```RETURN NEW;```  
+This line indicates that the function should return the modified row (NEW) after the calculations are done. This is important for trigger functions, as it allows the modified row to be written back to the table after any necessary modifications.
+
+```$$ LANGUAGE plpgsql;```  
+This line concludes the function definition. The $$ is a delimiter that marks the beginning and end of the function's body. LANGUAGE plpgsql specifies that the function is written in PL/pgSQL, which is a procedural language extension for PostgreSQL.  
+
 Now if we insert something in the table then the total marks and percentage will be calculated before the insert operation takes place in the database  
 ```
 INSERT INTO student_marks (student_pk, maths ,physics ,chemistry ,english ,hindi ,computer ) VALUES
