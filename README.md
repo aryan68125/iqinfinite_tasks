@@ -214,7 +214,7 @@ CALL delete_student(7);
 CALL select_all_student(); --The stored procedures in postgres do not return a table It only happen in Microsoft SQL
 SELECT * FROM student;
 ```
-### Use stored procedures along with triggers
+### Use triggers and caryy out calculations via trigger functions
 create a table named student_marks:  
 ```
 CREATE TABLE IF NOT EXISTS student_marks (
@@ -238,7 +238,7 @@ BEFORE INSERT ON student_marks
 FOR EACH ROW
 EXECUTE FUNCTION calculate_total_and_percentage();
 ```  
-stored procedure to calculate the total and percentage of the marks present in a student_marks table  
+trigger function to calculate the total and percentage of the marks present in a student_marks table  
 ```
 CREATE OR REPLACE FUNCTION calculate_total_and_percentage()
 RETURNS TRIGGER AS $$
