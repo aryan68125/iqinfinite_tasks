@@ -6,5 +6,5 @@ class RegisterUserPage(TemplateView):
     template_name = 'auth_user/register_user.html'
     def get_context_data(self,*args, **kwargs):
         context = super(RegisterUserPage, self).get_context_data(*args,**kwargs)
-        context['title'] = "Register User"
+        context['title'] = "Register User Page"
         return context
