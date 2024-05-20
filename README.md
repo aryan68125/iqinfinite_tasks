@@ -438,6 +438,9 @@ you can also order by the rows based on the columns that is provided in the quer
 ```
 SELECT * FROM left_join ORDER BY student_name ASC;
 ```  
+output :   
+![](postgres_database/related_images/left_join_view.png)  
+
 ### Right join view :
 ```
 CREATE VIEW right_join AS 
@@ -453,7 +456,10 @@ SELECT * FROM right_join;
 you can also order by the rows based on the columns that is provided in the query in ascending and descending order  
 ```
 SELECT * FROM right_join ORDER BY student_name ASC;
-```  
+```    
+output :   
+![](postgres_database/related_images/right_join_view.png)  
+
 ### Inner join view : 
 ```
 CREATE VIEW inner_join AS
@@ -469,7 +475,10 @@ SELECT * FROM inner_join;
 you can also order by the rows based on the columns that is provided in the query in ascending and descending order  
 ```
 SELECT * FROM inner_join ORDER BY student_name ASC;
-```  
+```    
+output :   
+![](postgres_database/related_images/inner_join_view.png)  
+
 ### Full outer join view :
 ```
 CREATE VIEW full_outer_join AS
@@ -485,7 +494,10 @@ SELECT * FROM full_outer_join;
 you can also order by the rows based on the columns that is provided in the query in ascending and descending order  
 ```
 SELECT * FROM full_outer_join ORDER BY student_name ASC;
-```  
+```    
+output :   
+![](postgres_database/related_images/full_outer_join_view.png)  
+
 
 
 
