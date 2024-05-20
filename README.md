@@ -403,8 +403,8 @@ NOTICE: id: 11, student_name: Dynamite, roll_number: 911
 
 ## SELECT : statements
 ## SELECT : max percentage from the table and print all the columns in that row
-This is the table : 
-![](postgres_database/related_images/student_table.png) 
-output : 
+This is the table :  
+![](postgres_database/related_images/student_table.png)   
+output :   
 ![](postgres_database/related_images/output_select_max_percentage.png) 
 
