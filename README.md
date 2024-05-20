@@ -214,7 +214,7 @@ CALL delete_student(7);
 CALL select_all_student(); --The stored procedures in postgres do not return a table It only happen in Microsoft SQL
 SELECT * FROM student;
 ```
-### Use triggers and caryy out calculations via trigger functions
+### Use triggers and carry out calculations via trigger functions
 create a table named student_marks:  
 ```
 CREATE TABLE IF NOT EXISTS student_marks (
@@ -283,4 +283,62 @@ INSERT INTO student_marks (student_pk, maths ,physics ,chemistry ,english ,hindi
 SELECT * FROM student_marks
 ```  
 output:  
-![](postgres_database/related_images/result_1_for_triggers_with_procedures.png)
+![](postgres_database/related_images/result_1_for_triggers_with_procedures.png)  
+
+### create a TRIGGER FUNCTION to count all the rows in the student table and call that dtrigger function after the insert operation
+```
+/* TRIGGER FUNCTION */
+CREATE OR REPLACE FUNCTION total_students()
+RETURNS TRIGGER AS $$
+DECLARE
+    total_rows INTEGER;
+BEGIN
+    -- Count the number of rows in the student table
+    SELECT count(*) INTO total_rows FROM student;
+    
+    -- Display the count
+    RAISE NOTICE 'Number of rows in student table: %', total_rows;
+    
+    RETURN NULL; -- Return NULL to indicate that the trigger is done
+END;
+$$ LANGUAGE plpgsql;
+```
+Explanation : 
+```CREATE OR REPLACE FUNCTION count_student_rows()```  
+This line initiates the creation or replacement of a PostgreSQL function named count_student_rows().
+```RETURNS TRIGGER AS $$```  
+This line specifies that the function returns a TRIGGER. In PostgreSQL, a trigger function is invoked automatically when a specified event occurs on a table, and it can perform actions based on that event.
+```DECLARE total_rows INTEGER;```  
+This line declares a local variable named total_rows of type INTEGER. This variable will store the count of rows in the student table.
+```BEGIN ... END;```  
+This block encapsulates the main body of the function. All the actions that the function performs are contained within this block.
+```SELECT count(*) INTO total_rows FROM student;```  
+This line executes a SQL query to count the number of rows in the student table and stores the result in the total_rows variable. The count(*) function returns the number of rows in the specified table.
+```RAISE NOTICE 'Number of rows in student table: %', total_rows;```  
+This line raises a notice message, displaying the count of rows in the student table. The % acts as a placeholder for the value of the total_rows variable, which will be dynamically inserted into the notice message.
+```RETURN NULL;```  
+This line returns NULL to indicate that the trigger function has completed its execution. Since this trigger function is designed to be an AFTER trigger (i.e., it doesn't modify the data being inserted or updated), it returns NULL.
+```$$ LANGUAGE plpgsql;```  
+This line concludes the function definition. The $$ is a delimiter that marks the beginning and end of the function's body. LANGUAGE plpgsql specifies that the function is written in PL/pgSQL, which is a procedural language extension for PostgreSQL.
+#### RAISE : 
+The RAISE statement is similar to a print statement. It's primarily used for debugging purposes or to provide informational messages during the execution of functions, triggers, or procedures.  
+There are several variants of the RAISE statement:
+
+```RAISE NOTICE```: This variant is commonly used to display informational messages. These messages are displayed in the PostgreSQL log if the logging configuration includes the LOG_NOTICE level. They are also displayed to the client if the client has enabled verbose messages.
+
+```RAISE WARNING```: This variant is used to display warning messages. These messages are displayed similarly to RAISE NOTICE, but at a higher level of severity.
+
+```RAISE EXCEPTION```: This variant is used to raise an exception. It can be used to abort the execution of a function, trigger, or procedure and report an error to the client.
+
+```RAISE DEBUG```: This variant is used to display debug messages. These messages are displayed in the PostgreSQL log if the logging configuration includes the LOG_DEBUG level.  
+
+```
+/* TRIGGER (after insert operation) */
+CREATE TRIGGER after_insert_student
+	AFTER INSERT ON student
+	FOR EACH STATEMENT
+	EXECUTE FUNCTION total_students();
+/* USING STORED PROCEDURE TO INSERT A STUDENT IN student table */
+CALL insert_student('Dynamite', 911);
+```  
+This trigger will get activated after the insert operation is complete.
