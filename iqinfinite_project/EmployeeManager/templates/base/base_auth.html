@@ -1,0 +1,22 @@
+{% load static %}
+<html>
+    <head>
+        <title>
+            {% block title %}
+            {% endblock title %}
+        </title>
+
+        <script src="{% static 'js/jquery/jquery.js' %}"></script>
+        <script src="{% static 'js/sweetalert/sweetalert.js' %}"></script>
+        <link href="{% static 'css/bootstrap/bootstrap.css' %}" rel="stylesheet"/>
+        <link href="{% static 'css/fontawesome/all.css' %}" rel="stylesheet"/>
+    </head>
+    <body class="container">
+        <div class="container-fluid">
+            {% block content %}
+        {% endblock content %}
+        </div>
+    </body>
+    <script src="{% static 'js/bootstrap/bootstrap.js' %}"></script>
+    <script src="{% static 'js/fontawesome/all.js' %}"></script>
+</html>

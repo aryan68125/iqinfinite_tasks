@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "Employee_manager",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}

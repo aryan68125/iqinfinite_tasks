@@ -8,7 +8,8 @@ class UserRole(models.Model):
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User,on_delete=models.CASCADE)
-    role = models.ForeignKey(UserRole,on_delete=models.PROTECT,null=True)
+    role = models.ForeignKey(UserRole,on_delete=models.PROTECT,null=True,blank=True)
+    role_name = models.CharField(max_length=50,null=True,blank=True)
     # add profile picture imagefield
     def __str__(self):
-        return self.user
+        return self.role_name
