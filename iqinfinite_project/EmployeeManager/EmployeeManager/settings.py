@@ -46,6 +46,15 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt.token_blacklist',
     'auth_user',
 ]
+'''
+CELERY REALTED SETTINGS 
+'''
+CELERY_BROKER_URL = 'amqp://localhost'
+
+'''
+CELERY FLOWER RELATED SETTINGS
+'''
+BROKER_URL = 'amqp://guest:guest@localhost//'
 
 '''
 REST FRAMEWORK RELATED SETTINGS STARTS
