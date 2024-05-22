@@ -1,0 +1,11 @@
+.display_flex_style{
+    display:flex;
+    justify-content: center;
+    align-items: space-around;
+    margin-top:20%;
+}
+.display_flex_style_button{
+    display:flex;
+    justify-content: center;
+    align-items: space-around;
+}

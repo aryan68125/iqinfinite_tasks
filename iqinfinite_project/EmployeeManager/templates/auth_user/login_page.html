@@ -1,0 +1,35 @@
+{% extends 'base/base_auth.html' %}
+{% load static %}
+{{ title }}
+{% block title %}
+{% endblock title %}
+
+{% block content %}
+<script>
+
+</script>
+
+<div class="container">
+<div class="w-100 display_flex_style">
+    <div class="card w-50">
+        <div class="card-body">
+            <div><h3>Sign in</h3></div>
+            <div class="mb-3">
+                <label for="email" class="form-label">Email address</label>
+                <input type="email" class="form-control" id="email" aria-describedby="emailHelp">
+                <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password">
+            </div>
+            <div>
+                <button type="submit" class="btn btn-dark" id="signin">Sign in</button>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<script src="{% static 'js/auth_user/login_page.js' %}"></script>
+<link href="{% static 'css/auth_user/login_page.css' %}" rel="stylesheet"/>
+{% endblock content %}

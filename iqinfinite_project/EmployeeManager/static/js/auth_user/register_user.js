@@ -50,13 +50,15 @@ function collect_form_data(){
     ).then(response=>response.json())
     .then(data=>{
         if(data.status==200){
+            reset_form()
             Swal.fire({
                 position: "top-end",
                 icon: "success",
                 title: data.msg,
                 showConfirmButton: false,
-                timer: 1500
+                timer: 1500,
               });
+              window.location.href=verify_otp_page_url
         }
         else{
             console.log(data)
@@ -123,3 +125,13 @@ function dropdown_options(id,role_name){
 // create the options in the dropdown dynamically ENDS
 
 //GET DATA ABOUT USER ROLES FROM THE BACKEND AND SHOW IT IN THE DROP-DOWN ENDS
+
+// RESET FORM STARTS
+function reset_form(){
+    $('#user_name').val("")
+    $('#email').val("")
+    $('#role').val("default")
+    $('#password1').val("")
+    $('#password2').val("")
+}
+// RESET FORM ENDS

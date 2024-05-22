@@ -1,8 +1,14 @@
 from rest_framework import serializers
-from rest_framework.serializers import ModelSerializer
+from rest_framework.serializers import ModelSerializer, Serializer
 from django.contrib.auth.models import User
 from auth_user.models import *
-        
+
+# CUSTOM VALIDATION FOR USER PROFILE SERIALIZER STARTS
+# def validate_user_role(value):
+#     if value == -1:
+#         raise serializers.ValidationError("User role can not be empty \n Select the user role and try again.")
+# CUSTOM VALIDATION FOR USER PROFILE SERIALIZER ENDS
+
 class CreateUserSerializer(serializers.ModelSerializer):
     password2 = serializers.CharField(write_only=True)
 
@@ -31,4 +37,10 @@ class UserRoleSerializer(serializers.ModelSerializer):
     class Meta:
         model=UserRole
         fields = ['id','role_name']
-        
+
+class VerifyOTPSerializer(serializers.Serializer):
+    otp = serializers.CharField(max_length=200)
+    def validate_otp(self,value):
+        if value == "":
+            raise serializers.ValidationError("OTP can't be empty")
+        return value

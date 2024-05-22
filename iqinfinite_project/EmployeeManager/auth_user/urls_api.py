@@ -16,4 +16,5 @@ urlpatterns = [
 
     path('RegisterUser/',RegisterUser.as_view(),name="RegisterUser"),
     path('ReadUserRoles/',ReadUserRoles.as_view(),name="ReadUserRoles"),
+    path('VerifyOTPResendOTP/',VerifyOTPResendOTP.as_view(),name="VerifyOTPResendOTP"),
 ]
