@@ -20,4 +20,5 @@ urlpatterns = [
     path('LoginSameOrigin/',LoginSameOrigin.as_view(),name="LoginSameOrigin"),
     path('LogoutSameOrigin/',LogoutSameOrigin.as_view(),name="LogoutSameOrigin"),
     path('ForgotPassword/',ForgotPassword.as_view(),name="ForgotPassword"),
+    path('PasswordTokenCheck/<uid>/<token>/',PasswordTokenCheck.as_view(),name="PasswordTokenCheck"),
 ]

@@ -35,9 +35,16 @@ def login_page(request):
     else:
         return redirect('HomePage')
     
-def forgot_password(request):
+def forgot_password_page(request):
     if not request.user.is_authenticated:
         return render(request,'auth_user/forgot_password_page.html')
+    else:
+        return redirect('HomePage')
+    
+def reset_password_page(request,uid,token):
+    if not request.user.is_authenticated:
+
+        return render(request,'auth_user/reset_password_page.html')
     else:
         return redirect('HomePage')
 
@@ -52,3 +59,4 @@ def home_page(request):
         return render(request,'auth_user/home_page.html')
     else:
         return redirect('LoginPage')
+    
