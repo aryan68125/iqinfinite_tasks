@@ -1,8 +1,9 @@
 from django.urls import path,include
 from auth_user.views import *
 urlpatterns = [
-    path('',RegisterUserPage.as_view(),name="RegisterUserPage"),
-    path('VerifyOtpPage/',VerifyOtpPage.as_view(),name="VerifyOtpPage"),
-    path('LoginPage/',LoginPage.as_view(),name="LoginPage"),
+    path('',register_user_page,name="RegisterUserPage"),
+    path('VerifyOtpPage/',verify_otp_page,name="VerifyOtpPage"),
+    path('LoginPage/',login_page,name="LoginPage"),
+    path('HomePage/',home_page,name="HomePage"),
     path('auth_api/',include('auth_user.urls_api')),
 ]

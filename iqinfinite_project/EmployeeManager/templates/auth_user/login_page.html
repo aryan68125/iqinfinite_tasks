@@ -6,7 +6,7 @@
 
 {% block content %}
 <script>
-
+var home_page_url = '{% url "HomePage" %}'
 </script>
 
 <div class="container">
@@ -23,8 +23,14 @@
                 <label for="password" class="form-label">Password</label>
                 <input type="password" class="form-control" id="password">
             </div>
-            <div>
-                <button type="submit" class="btn btn-dark" id="signin">Sign in</button>
+            <div class="row w-100 mb-3">
+                <div class="col-sm-7">
+                    <div class="mb-3 d-flex justify-content-around">
+                        <button type="submit" class="btn btn-dark" id="signin">Sign in</button>
+                        <a class = "link_style mt-2" href="{% url 'RegisterUserPage' %}">Don't have an account?</a>
+                    </div>
+                </div>
+                <div class="col-sm-5"></div>
             </div>
         </div>
     </div>

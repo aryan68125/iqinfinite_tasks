@@ -1,0 +1,20 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{{ title }}
+{% block title %}
+{% endblock title %}
+
+{% block content %}
+<script>
+
+</script>
+
+<div class="container">
+    <h3>This is the home page</h3>
+    <div id = "user_information_container">
+
+    </div>
+</div>
+<script src="{% static 'js/auth_user/home_page.js' %}"></script>
+<!-- <link href="{% static 'css/auth_user/login_page.css' %}" rel="stylesheet"/> -->
+{% endblock content %}
