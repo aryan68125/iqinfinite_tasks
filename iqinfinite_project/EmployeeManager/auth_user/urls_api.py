@@ -17,5 +17,7 @@ urlpatterns = [
     path('RegisterUser/',RegisterUser.as_view(),name="RegisterUser"),
     path('ReadUserRoles/',ReadUserRoles.as_view(),name="ReadUserRoles"),
     path('VerifyOTPResendOTP/',VerifyOTPResendOTP.as_view(),name="VerifyOTPResendOTP"),
-    
+    path('LoginSameOrigin/',LoginSameOrigin.as_view(),name="LoginSameOrigin"),
+    path('LogoutSameOrigin/',LogoutSameOrigin.as_view(),name="LogoutSameOrigin"),
+    path('ForgotPassword/',ForgotPassword.as_view(),name="ForgotPassword"),
 ]

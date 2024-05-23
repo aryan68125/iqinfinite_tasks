@@ -34,6 +34,12 @@ def login_page(request):
         return render(request,'auth_user/login_page.html')
     else:
         return redirect('HomePage')
+    
+def forgot_password(request):
+    if not request.user.is_authenticated:
+        return render(request,'auth_user/forgot_password_page.html')
+    else:
+        return redirect('HomePage')
 
 # class HomePage(TemplateView):
 #     template_name = 'auth_user/home_page.html'

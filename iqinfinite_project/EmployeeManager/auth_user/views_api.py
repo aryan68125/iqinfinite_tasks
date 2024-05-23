@@ -1,4 +1,13 @@
+#database related imports
 from django.db import IntegrityError
+
+#django auth related imports
+from django.contrib.auth import authenticate
+from django.contrib.auth import login as login_user
+from django.contrib.auth import logout as logout_user
+#reset User password related imports
+from django.utils.encoding import smart_str, force_bytes,DjangoUnicodeDecodeError
+from django.utils.http import urlsafe_base64_decode,urlsafe_base64_encode
 
 #django rest framework related imports
 from rest_framework.response import Response
@@ -192,6 +201,45 @@ project on which that fetch api is hitting the api)
 '''
 class LoginSameOrigin(APIView):
     def post(self,request):
+        print(request.data)
+        serializer = LoginUserSerializer(data = request.data)
+        if serializer.is_valid():
+            username = request.data['username']
+            password = request.data['password']
+            print(f"username = {username} :: password = {password}")
+            user = authenticate(username=username,password=password)
+            if user:
+                if user.is_superuser==True:
+                    return Response({'status':200,'user_role_id':1, 'user_role_name':'admin'},status=200)
+                else:
+                    userprofile = UserProfile.objects.get(user = user.id)
+                    role_db_object = userprofile.role
+                    login_user(request,user)
+                    return Response({'status':200,'user_role_id':role_db_object.id,'user_role_name':role_db_object.role_name},status=200)
+            else:
+                return Response({'status':500,'error':'User not found'},status=500)
+        else:
+            # NOTE TODO TAKE NOTES ON HOW TO CHECK FOR KEYS IN A DICTIONARY CONTAINING SERIALIZER ERRORS TODO NOTE
+            if 'username' in serializer.errors:
+                print(f"username == {serializer.errors['username']}")
+                return Response({'status':400,'error':serializer.errors['username']},status=400)
+            elif 'password' in serializer.errors:
+                print(f"password_error == {serializer.errors['password']}")
+                return Response({'status':400,'error':serializer.errors['password']},status=400)
+            else:
+                return Response({'status':400,'error':serializer.errors},status=400)
+'''
+This class handles the logout of the user when the request originates from the same origin 
+(i.e : If you use fetch api from a js file attched to a html file rendered by the django
+project on which that fetch api is hitting the api)
+'''
+class LogoutSameOrigin(APIView):
+    def get(self,request):
+        print("Logout button pressed")
+        logout_user(request)
+        return Response({'status':200,'msg':"Logout button pressed"},status=200)
+    
+class ForgotPassword(APIView):
+    def post(self,request):
         pass
-
 # COMPLETE USER AUTHENTICATION ENDS

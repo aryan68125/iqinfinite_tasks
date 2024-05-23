@@ -24,15 +24,15 @@ $('body').on('click','#signin',function(){
     collect_form_Data()
 })
 function collect_form_Data(){
-    var email = $('#email').val()
+    var username = $('#username').val()
     var password = $('#password').val()
     var data = {
-        email:email,
+        username:username,
         password:password
     }
     console.log(data)
     fetch(
-        url,{
+        LoginSameOrigin_url,{
             method:'POST',
             headers:{
                 Accept:'application/json',
@@ -45,6 +45,7 @@ function collect_form_Data(){
     .then(data=>{
         if(data.status==200){
             reset_form()
+            console.log(data)
             Swal.fire({
                 position: "top-end",
                 icon: "success",
@@ -52,7 +53,7 @@ function collect_form_Data(){
                 showConfirmButton: false,
                 timer: 1500,
               });
-            //   window.location.href=home_page
+              window.location.href=home_page_url
         }
         else{
             var error_msg = data.error

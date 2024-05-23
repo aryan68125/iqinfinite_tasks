@@ -3,12 +3,6 @@ from rest_framework.serializers import ModelSerializer, Serializer
 from django.contrib.auth.models import User
 from auth_user.models import *
 
-# CUSTOM VALIDATION FOR USER PROFILE SERIALIZER STARTS
-# def validate_user_role(value):
-#     if value == -1:
-#         raise serializers.ValidationError("User role can not be empty \n Select the user role and try again.")
-# CUSTOM VALIDATION FOR USER PROFILE SERIALIZER ENDS
-
 class CreateUserSerializer(serializers.ModelSerializer):
     password2 = serializers.CharField(write_only=True)
 
@@ -39,13 +33,25 @@ class UserRoleSerializer(serializers.ModelSerializer):
         fields = ['id','role_name']
 
 class VerifyOTPSerializer(serializers.Serializer):
-    otp = serializers.CharField(max_length=200)
+    otp = serializers.IntegerField()
     def validate_otp(self,value):
-        if value == "":
+        if not value:
+            # this block is not working because on failiure the message below is not shown
             raise serializers.ValidationError("OTP can't be empty")
+        # else:
+              # # This block is working because on failiure the message below is shown
+        #     if value > 5:
+        #         raise serializers.ValidationError("value should not be greater than 5")
         return value
     
 class LoginUserSerializer(serializers.Serializer):
     username = serializers.CharField(max_length=100)
     password = serializers.CharField(max_length=255)
-    
+    def validate(self,data):
+        username = data.get('username')
+        password = data.get('password')
+        if username.lower() == "":
+            raise serializers.ValidationError("Username must not be empty")
+        if password.lower() =="":
+            raise serializers.ValidationError("Password must not be empty")
+        return data
