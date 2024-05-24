@@ -1,5 +1,5 @@
 $('body').ready(function(){
-    console.log("forgot password page js ready!")
+    console.log("Reset password page JS ready!!")
 })
 
 // GET CSRF TOKEN FROM THE BROWSER'S COOCKIE STARTS
@@ -20,28 +20,26 @@ function getCookie(name) {
   }
 // GET CSRF TOKEN FROM THE BROWSER'S COOCKIE ENDS
 
-$('body').on('click','#send_button',function(){
-    collect_form_data()
-})
-function collect_form_data(){
-    var email = $('#email').val()
+function get_form_data(){
+    var password = $('#password').val()
+    var password2 = $('#password2').val()
     var data = {
-        email:email
+        password:password,
+        password2:password2
     }
     fetch(
-        ForgotPasswordSameOrigin_url,{
+        url,{
             method:'POST',
-            headers: {
+            headers:{
                 Accept:'application/json',
                 'Content-Type':'application/json',
-                'X-CSRFToken':getCookie("csrftoken")
+                'X-CRFToken':getCookie("csrftoken")
             },
             body:JSON.stringify(data)
         }
     ).then(response=>response.json())
     .then(data=>{
         if (data.status==200){
-            console.log(data.context)
             var msg = data.msg
             Swal.fire({
                 position: "top-end",

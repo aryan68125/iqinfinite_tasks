@@ -5,6 +5,7 @@ from django.db import IntegrityError
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as login_user
 from django.contrib.auth import logout as logout_user
+from django.shortcuts import render
 #reset User password related imports
 from django.utils.encoding import smart_str, force_bytes,DjangoUnicodeDecodeError
 from django.utils.http import urlsafe_base64_decode,urlsafe_base64_encode
@@ -156,6 +157,7 @@ class RegisterUser(APIView):
                 if User_backup != {}:
                     User_backup['user'].delete()
                 return Response({'status':400, 'error': "Password do not match"},status=400)
+            
 '''cross origin api'''    
 class VerifyOTPResendOTP(APIView):
     #VERIFY OTP
@@ -204,6 +206,7 @@ This class handles the login of the user when the request originates from the sa
 (i.e : If you use fetch api from a js file attched to a html file rendered by the django
 project on which that fetch api is hitting the api)
 '''
+'''same origin'''
 class LoginSameOrigin(APIView):
     def post(self,request):
         print(request.data)
@@ -238,6 +241,7 @@ This class handles the logout of the user when the request originates from the s
 (i.e : If you use fetch api from a js file attched to a html file rendered by the django
 project on which that fetch api is hitting the api)
 '''
+'''same origin'''
 class LogoutSameOrigin(APIView):
     def get(self,request):
         print("Logout button pressed")
@@ -295,9 +299,73 @@ class PasswordTokenCheck(APIView):
             if not PasswordResetTokenGenerator().check_token(user,token):
                 return Response({'status':500,'error':'token mis-match'},status=500)
             else:
-                user.set_password(request.data('password1'))
-                user.save()
-                return Response({'status':200,'msg':'Password reset success'},status=200)
+
+                return Response({'status':200,'msg':'Password reset success','uid':uid,'token':token},status=200)
+        except DjangoUnicodeDecodeError as identifier:
+            if not PasswordResetTokenGenerator().check_token(user):
+                return Response({'status':500,'error':'Token is not valid please try a new one'},status=500)
+
+'''
+This class handles the ForgotPassword when reseting the password of the user when the request originates from the same origin 
+(i.e : If you use fetch api from a js file attched to a html file rendered by the django
+project on which that fetch api is hitting the api)
+'''
+'''same origin'''
+class ForgotPasswordSameOrigin(APIView):
+    def post(self,request):
+        print(request.data)
+        serializer = ForgotPasswordSerializers(data = request.data)
+        if serializer.is_valid():
+            email = request.data['email']
+            print(email)
+            try:
+                user = User.objects.get(email = email)
+                uid= urlsafe_base64_encode(force_bytes(user.id))
+                print(f"encoded uid : {uid}")
+                token = PasswordResetTokenGenerator().make_token(user)
+                print(f"password reset token : {token}")
+                # NOTE make this link dynamic '''http://127.0.0.1:8000/''' NOTE 
+                current_site = get_current_site(request).domain
+                relaive_link = reverse('PasswordTokenCheckSameOrigin',kwargs={'uid':uid,'token':token})
+                link = f'http://{current_site}/{relaive_link}' #this link will open the  reset_password page
+                print(f"generated reset password link : {link}")
+
+                #send otp via email here
+                # Prepare email
+                lint_to_send = link
+                email_addr = user.email
+                username = user.username
+                subject = f"{username} please reset your password"
+                message = f"Reset Password by clicking this link : {lint_to_send}"
+                recipient_list = [email_addr]
+
+                send_email_task.delay(subject, message, EMAIL_HOST_USER, recipient_list)
+                return Response({'status':200,'context':email,'msg':'Reset password link sent to you email'},status=200)
+            except User.DoesNotExist:
+                return Response({'status':500,'error':'User does not exist'},status=500)
+            except Exception as e:
+                return Response({'status':500,'error':str(e)},status=500)
+        else:
+            print(serializer.errors)
+            if 'email' in serializer.errors:
+                return Response({'status':400,'error':serializer.errors['email'][0]},status=400)
+            else:
+                return Response({'status':400,'error':'Comething went wrong'},status=400)
+'''
+This class handles the PasswordTokenCheck when reseting the password of the user when the request originates from the same origin 
+(i.e : If you use fetch api from a js file attched to a html file rendered by the django
+project on which that fetch api is hitting the api)
+'''
+'''same origin'''
+class PasswordTokenCheckSameOrigin(APIView):
+    def get(self,request,uid,token):
+        try:
+            id = smart_str(urlsafe_base64_decode(uid))
+            user = User.objects.get(id = id)
+            if not PasswordResetTokenGenerator().check_token(user,token):
+                return Response({'status':500,'error':'token mis-match'},status=500)
+            else:
+                return render(request, 'auth_user/reset_password_page.html', {'uid': uid, 'token': token})
         except DjangoUnicodeDecodeError as identifier:
             if not PasswordResetTokenGenerator().check_token(user):
                 return Response({'status':500,'error':'Token is not valid please try a new one'},status=500)
