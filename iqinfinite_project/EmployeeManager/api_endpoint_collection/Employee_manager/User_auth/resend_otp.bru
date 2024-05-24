@@ -1,0 +1,16 @@
+meta {
+  name: resend_otp
+  type: http
+  seq: 3
+}
+
+get {
+  url: http://127.0.0.1:8000/auth_api/VerifyOTPResendOTP/
+  body: multipartForm
+  auth: none
+}
+
+headers {
+  Accept: application/json
+  Content-Type: application/json
+}

@@ -41,7 +41,7 @@ def forgot_password_page(request):
     else:
         return redirect('HomePage')
     
-def reset_password_page(request,uid,token):
+def reset_password_page(request):
     if not request.user.is_authenticated:
 
         return render(request,'auth_user/reset_password_page.html')

@@ -1,5 +1,7 @@
 $('body').ready(function(){
     console.log("Reset password page JS ready!!")
+    // $('#token').hide()
+    // $('#uid').hide()
 })
 
 // GET CSRF TOKEN FROM THE BROWSER'S COOCKIE STARTS
@@ -19,17 +21,23 @@ function getCookie(name) {
     return cookieValue;
   }
 // GET CSRF TOKEN FROM THE BROWSER'S COOCKIE ENDS
-
+$('body').on('click','#confirm_button',function(){
+    get_form_data()
+})
 function get_form_data(){
     var password = $('#password').val()
     var password2 = $('#password2').val()
+    var token = $('#token').text()
+    var uid = $('#uid').text()
     var data = {
         password:password,
-        password2:password2
+        password2:password2,
+        uid:uid,
+        token:token
     }
     fetch(
         ResetPassword_url,{
-            method:'POST',
+            method:'PATCH',
             headers:{
                 Accept:'application/json',
                 'Content-Type':'application/json',

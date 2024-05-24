@@ -65,24 +65,27 @@ class ForgotPasswordSerializers(serializers.Serializer):
         return value
 
 class ResetPasswordSerializer(serializers.Serializer):
-    password1 = serializers.CharField(max_length=50)
+    password = serializers.CharField(max_length=50)
     password2 = serializers.CharField(max_length=50)
+    uid = serializers.CharField(max_length=255)
+    token = serializers.CharField(max_length = 255)
     def validate(self,data):
-        password1 = data.get('password1')
+        password = data.get('password')
         password2 = data.get('password2')
-        if password1 != password2:
+
+        if password != password2:
             raise serializers.ValidationError("Password do not match")
         
         # Check if password has minimum 6 characters
-        if len(password1) < 6:
+        if len(password) < 6:
             raise serializers.ValidationError("Password must be greater than 6 characters")
         
         # Check if password contains at least one letter, one number, and one "@" character
-        if not re.search(r'[a-zA-Z]', password1):
+        if not re.search(r'[a-zA-Z]', password):
             raise serializers.ValidationError("Password must contain alphabets")
-        if not re.search(r'\d', password1):
+        if not re.search(r'\d', password):
             raise serializers.ValidationError("Password must contain numbers")
-        if not re.search(r'[@]', password1):
+        if not re.search(r'[@]', password):
             raise serializers.ValidationError("Password must contain @")
         return data
     

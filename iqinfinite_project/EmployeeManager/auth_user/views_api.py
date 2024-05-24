@@ -59,6 +59,7 @@ class ReadUserRoles(APIView):
 # GET USER ROLES FROM DB ENDS
 
 # COMPLETE USER AUTHENTICATION STARTS
+# USER REGISTER APIS STARTS
 OTP_backup = {}
 Email_Data_backup = {}
 User_backup = {}
@@ -200,7 +201,9 @@ class VerifyOTPResendOTP(APIView):
             return Response({'status':200,'msg':'Email sent'},status=200)
         except Exception as e:
             return Response({'status':500,'error': str(e)},status=500)
+# USER REGISTER APIS ENDS
 
+# USER LOGIN/LOGOUT APIS STARTS
 '''
 This class handles the login of the user when the request originates from the same origin 
 (i.e : If you use fetch api from a js file attched to a html file rendered by the django
@@ -247,7 +250,9 @@ class LogoutSameOrigin(APIView):
         print("Logout button pressed")
         logout_user(request)
         return Response({'status':200,'msg':"Logout button pressed"},status=200)
-
+# USER LOGIN/LOGOUT APIS ENDS
+    
+# USER FORGOT PASSWORD APIS STARTS
 '''cross origin api'''    
 class ForgotPassword(APIView):
     def post(self,request):
@@ -295,12 +300,15 @@ class PasswordTokenCheck(APIView):
     def get(self,request,uid,token):
         try:
             id = smart_str(urlsafe_base64_decode(uid))
-            user = User.objects.get(id = id)
-            if not PasswordResetTokenGenerator().check_token(user,token):
-                return Response({'status':500,'error':'token mis-match'},status=500)
-            else:
-
-                return Response({'status':200,'msg':'Password reset success','uid':uid,'token':token},status=200)
+            try:
+                user = User.objects.get(id = id)
+                if not PasswordResetTokenGenerator().check_token(user,token):
+                    return Response({'status':500,'error':'token mis-match'},status=500)
+                else:
+    
+                    return Response({'status':200,'msg':'Password reset success','uid':uid,'token':token},status=200)
+            except User.DoesNotExist:
+                return Response({'status':404,'error':'User does not exist'},status=404)
         except DjangoUnicodeDecodeError as identifier:
             if not PasswordResetTokenGenerator().check_token(user):
                 return Response({'status':500,'error':'Token is not valid please try a new one'},status=500)
@@ -373,8 +381,38 @@ class PasswordTokenCheckSameOrigin(APIView):
 '''cross origin'''
 class ResetPassword(APIView):
     def patch(self,request):
-        # TODO create a serializer for this api view start video from 35:22 
+        serializer = ResetPasswordSerializer(data=request.data)
         # TODO video link : https://github.com/aryan68125/iqinfinite_tasks/tree/e9d5b6be2ccdc6193723c306dc2f61ea774889ed/iqinfinite_project/EmployeeManager	
         # TODO django_framework 101 page no 305
-        pass
+        print(f"before serializer is valid : {request.data}")
+        if serializer.is_valid():
+            uid = request.data['uid']
+            token = request.data['token']
+            try:
+                id = smart_str(urlsafe_base64_decode(uid))
+                user = User.objects.get(id = id)
+                print(f"after serializer is valid : {request.data}")
+                if not PasswordResetTokenGenerator().check_token(user,token):
+                    return Response({'status':500,'error':'Token mis-match try again with a new reset link'},status=500)
+                else:
+                    user.set_password(request.data['password'])
+                    user.save()
+                    return Response({'status':200,'msg':'Password reset'},status=200)
+            except DjangoUnicodeDecodeError as identifier:
+                if not PasswordResetTokenGenerator().check_token(user):
+                    return Response({'status':500,'error':'Token is not valid please try a new one'},status=500)
+        else:
+            print(serializer.errors)
+            if 'password' in serializer.errors:
+                return Response({'status':400,'error':serializer.errors['password']},status=400)
+            if 'password2' in serializer.errors:
+                return Response({'status':400,'error':serializer.errors['password2']},status=400)
+            if 'uid' in serializer.errors:
+                return Response({'status':400,'error':serializer.errors['uid']},status=400)
+            if 'token' in serializer.errors:
+                return Response({'status':400,'error':serializer.errors['token']},status=400)
+            if 'non_field_errors' in serializer.errors:
+                return Response({'status':400,'error':serializer.errors['non_field_errors']},status=400)
+# USER FORGOT PASSWORD APIS ENDS
+
 # COMPLETE USER AUTHENTICATION ENDS

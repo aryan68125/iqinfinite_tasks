@@ -1,0 +1,24 @@
+meta {
+  name: register_user
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://127.0.0.1:8000/auth_api/RegisterUser/
+  body: multipartForm
+  auth: none
+}
+
+headers {
+  accept: application/json
+  Content-Type: application/json
+}
+
+body:multipart-form {
+  email: yodina7646@fincainc.com
+  username: yodina
+  password: Aditya@268859
+  password2: Aditya@268859
+  role: 1
+}
