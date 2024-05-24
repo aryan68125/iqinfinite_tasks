@@ -370,6 +370,7 @@ class PasswordTokenCheckSameOrigin(APIView):
             if not PasswordResetTokenGenerator().check_token(user):
                 return Response({'status':500,'error':'Token is not valid please try a new one'},status=500)
 
+'''cross origin'''
 class ResetPassword(APIView):
     def patch(self,request):
         # TODO create a serializer for this api view start video from 35:22 

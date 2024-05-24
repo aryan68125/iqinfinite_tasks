@@ -28,7 +28,7 @@ function get_form_data(){
         password2:password2
     }
     fetch(
-        url,{
+        ResetPassword_url,{
             method:'POST',
             headers:{
                 Accept:'application/json',

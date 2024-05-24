@@ -17,10 +17,13 @@ urlpatterns = [
     path('RegisterUser/',RegisterUser.as_view(),name="RegisterUser"),
     path('ReadUserRoles/',ReadUserRoles.as_view(),name="ReadUserRoles"),
     path('VerifyOTPResendOTP/',VerifyOTPResendOTP.as_view(),name="VerifyOTPResendOTP"),
-    path('LoginSameOrigin/',LoginSameOrigin.as_view(),name="LoginSameOrigin"),
-    path('LogoutSameOrigin/',LogoutSameOrigin.as_view(),name="LogoutSameOrigin"),
+
     path('ForgotPassword/',ForgotPassword.as_view(),name="ForgotPassword"),
     path('PasswordTokenCheck/<uid>/<token>/',PasswordTokenCheck.as_view(),name="PasswordTokenCheck"),
+    path('ResetPassword/',ResetPassword.as_view(),name="ResetPassword"),
+
+    path('LoginSameOrigin/',LoginSameOrigin.as_view(),name="LoginSameOrigin"),
+    path('LogoutSameOrigin/',LogoutSameOrigin.as_view(),name="LogoutSameOrigin"),
     path('ForgotPasswordSameOrigin/',ForgotPasswordSameOrigin.as_view(),name="ForgotPasswordSameOrigin"),
     path('PasswordTokenCheckSameOrigin/<uid>/<token>/',PasswordTokenCheckSameOrigin.as_view(),name="PasswordTokenCheckSameOrigin"),
 ]

@@ -64,7 +64,7 @@ class ForgotPasswordSerializers(serializers.Serializer):
             raise serializers.ValidationError("Email field can not be Empty")
         return value
 
-class PasswordTokenCheckSerializer(serializers.Serializer):
+class ResetPasswordSerializer(serializers.Serializer):
     password1 = serializers.CharField(max_length=50)
     password2 = serializers.CharField(max_length=50)
     def validate(self,data):
@@ -85,3 +85,4 @@ class PasswordTokenCheckSerializer(serializers.Serializer):
         if not re.search(r'[@]', password1):
             raise serializers.ValidationError("Password must contain @")
         return data
+    
