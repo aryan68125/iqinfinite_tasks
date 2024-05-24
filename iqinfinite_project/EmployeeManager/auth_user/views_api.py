@@ -18,7 +18,12 @@ from django.urls import reverse
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.views import APIView
+# for cross-origin api support
 from rest_framework_simplejwt.authentication import JWTAuthentication
+#for same-origin api support for fetch api clients
+from rest_framework.authentication import SessionAuthentication
+# for logging out users using JWT for cross-origin logout api
+from rest_framework_simplejwt.tokens import RefreshToken
 
 # utitlities related imports
 import re
@@ -250,6 +255,20 @@ class LogoutSameOrigin(APIView):
         print("Logout button pressed")
         logout_user(request)
         return Response({'status':200,'msg':"Logout button pressed"},status=200)
+    
+'''cross origin'''
+# from rest_framework_simplejwt.tokens import RefreshToken
+class LogoutView(APIView):
+    authentication_classes = (JWTAuthentication,)
+    permission_classes = (IsAuthenticated,)
+    def post(self, request):
+         try:
+              refresh_token = request.data["refresh_token"]
+              token = RefreshToken(refresh_token)
+              token.blacklist()
+              return Response({'status':205,'msg':'user logged out refresh token reset'},status=205)
+         except Exception as e:
+              return Response({'status':400,'error':str(e)},status=400)
 # USER LOGIN/LOGOUT APIS ENDS
     
 # USER FORGOT PASSWORD APIS STARTS
@@ -416,3 +435,70 @@ class ResetPassword(APIView):
 # USER FORGOT PASSWORD APIS ENDS
 
 # COMPLETE USER AUTHENTICATION ENDS
+
+# TESTING USER LOGIN VIA HOMEPAGE DUMMY API START
+class HomeLoginTester(APIView):
+    authentication_classes = (JWTAuthentication,SessionAuthentication)
+    permission_classes = [IsAuthenticated,]
+    def get(self,request):
+        if request.user.id:
+            user_id = request.user.id
+            print(f"cross-origin api call client bruno : {user_id}")
+            try:
+                user = User.objects.get(id=user_id)
+                username = user.username
+                email = user.email
+                user_profile = UserProfile.objects.get(user=user)
+                user_role = user_profile.role.role_name
+                user_data = {
+                    'username':username,
+                    'email':email,
+                    'user_role':user_role,
+                }
+                return Response({'status':200,'msg':'User successfully logged in to Home page tester api','user_data':user_data},status=200)
+            except User.DoesNotExist:
+                return Response({'status':404,'error':'User not found'},status=404) 
+            except UserProfile.DoesNotExist:
+                user = User.objects.get(id=user_id)
+                username = user.username
+                email = user.email
+                if user.id == 29:
+                    user_data = {
+                        'username':username,
+                        'email':email,
+                        'role':'admin'
+                    }
+                    return Response({'status':200,'msg':'User successfully logged in to Home page tester api','user_data':user_data},status=200) 
+                else:
+                    return Response({'status':404,'error':'User profile not found'},status=404)
+        else:
+            user_id = request.data['user_id']
+            print(f"same-origin api call client fetch api : {user_id}")
+            try:
+                user = User.objects.get(id=user_id)
+                username = user.username
+                email = user.email
+                user_profile = UserProfile.objects.get(user=user)
+                user_role = user_profile.role.role_name
+                user_data = {
+                    'username':username,
+                    'email':email,
+                    'user_role':user_role,
+                }
+                return Response({'status':200,'msg':'User successfully logged in to Home page tester api','user_data':user_data},status=200)
+            except User.DoesNotExist:
+                return Response({'status':404,'error':'User not found'},status=404) 
+            except UserProfile.DoesNotExist:
+                user = User.objects.get(id=user_id)
+                username = user.username
+                email = user.email
+                if user.id == 29:
+                    user_data = {
+                        'username':username,
+                        'email':email,
+                        'role':'admin'
+                    }
+                    return Response({'status':200,'msg':'User successfully logged in to Home page tester api','user_data':user_data},status=200) 
+                else:
+                    return Response({'status':404,'error':'User profile not found'},status=404)
+# TESTING USER LOGIN VIA HOMEPAGE DUMMY API ENDS

@@ -1,0 +1,15 @@
+meta {
+  name: home_api_test_login
+  type: http
+  seq: 8
+}
+
+get {
+  url: http://127.0.0.1:8000/auth_api/HomeLoginTester/
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzE2NTU1MjI2LCJpYXQiOjE3MTY1NTM4MTQsImp0aSI6IjM1OTQ1NDQwZDMxMDQyNmJhNWFmZDRkYjdhZjFlNWY3IiwidXNlcl9pZCI6MTIyfQ.ljrf2hJ4rM5GJ4hsR7uqyheng4T_3l54Plp1uvUFvlo
+}

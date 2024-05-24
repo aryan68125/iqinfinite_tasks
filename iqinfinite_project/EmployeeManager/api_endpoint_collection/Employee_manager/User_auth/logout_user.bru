@@ -1,0 +1,24 @@
+meta {
+  name: logout_user
+  type: http
+  seq: 9
+}
+
+post {
+  url: http://127.0.0.1:8000/auth_api/LogoutView/
+  body: multipartForm
+  auth: bearer
+}
+
+headers {
+  Accept: application/json
+  Content-type: application/json
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzE2NTQ5MzcwLCJpYXQiOjE3MTY1NDkwNDAsImp0aSI6ImQ1OGY5YTNkMTVmODQ5NWNiNGVkYTU0OGQwZTEwNjlmIiwidXNlcl9pZCI6MTIwfQ.8oIubCiCTKI7cjpBjAErNllE3a33z1JeqEwQVdeHOoE
+}
+
+body:multipart-form {
+  refresh_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTcxNjYzNDkzNywiaWF0IjoxNzE2NTQ4NTM3LCJqdGkiOiJmYzQ5MGM5ZGVjOWQ0ZmQ2YjZkMzg5NmViZDY2ODNkMSIsInVzZXJfaWQiOjEyMH0.zb_0b0VJVJbWkTHyApYBTBfUGjFIgehKkUaQYLKGIe8
+}

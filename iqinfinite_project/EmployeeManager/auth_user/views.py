@@ -56,7 +56,11 @@ def reset_password_page(request):
 
 def home_page(request):
     if request.user.is_authenticated:
-        return render(request,'auth_user/home_page.html')
+        user_id = request.user.id
+        data = {
+            'user_id':user_id
+        }
+        return render(request,'auth_user/home_page.html',{'context':data})
     else:
         return redirect('LoginPage')
     

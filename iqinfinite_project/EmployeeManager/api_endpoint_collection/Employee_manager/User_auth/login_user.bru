@@ -1,0 +1,21 @@
+meta {
+  name: login_user
+  type: http
+  seq: 7
+}
+
+post {
+  url: http://127.0.0.1:8000/auth_api/api/token/
+  body: multipartForm
+  auth: none
+}
+
+headers {
+  Accept: application/json
+  Content-Type: application/json
+}
+
+body:multipart-form {
+  username: yodina
+  password: Aditya@268859
+}
