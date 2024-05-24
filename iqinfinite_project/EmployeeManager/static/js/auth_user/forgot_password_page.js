@@ -50,6 +50,7 @@ function collect_form_data(){
                 showConfirmButton: false,
                 timer: 1500
               });
+              window.location.href = LoginPage_url
         }
         else{
             var error_msg = data.error

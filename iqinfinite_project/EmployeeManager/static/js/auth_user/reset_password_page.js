@@ -1,7 +1,7 @@
 $('body').ready(function(){
     console.log("Reset password page JS ready!!")
-    // $('#token').hide()
-    // $('#uid').hide()
+    $('#token').hide()
+    $('#uid').hide()
 })
 
 // GET CSRF TOKEN FROM THE BROWSER'S COOCKIE STARTS
@@ -56,6 +56,7 @@ function get_form_data(){
                 showConfirmButton: false,
                 timer: 1500
               });
+              window.location.href = LoginPage_url
         }
         else{
             var error_msg = data.error
