@@ -234,7 +234,7 @@ class LoginSameOrigin(APIView):
                     login_user(request,user)
                     return Response({'status':200,'user_role_id':role_db_object.id,'user_role_name':role_db_object.role_name},status=200)
             else:
-                return Response({'status':500,'error':'User not found'},status=500)
+                return Response({'status':500,'error':'Username or Password not correct'},status=500)
         else:
             # NOTE TODO TAKE NOTES ON HOW TO CHECK FOR KEYS IN A DICTIONARY CONTAINING SERIALIZER ERRORS TODO NOTE
             if 'username' in serializer.errors:
@@ -410,14 +410,17 @@ class ResetPassword(APIView):
             token = request.data['token']
             try:
                 id = smart_str(urlsafe_base64_decode(uid))
-                user = User.objects.get(id = id)
-                print(f"after serializer is valid : {request.data}")
-                if not PasswordResetTokenGenerator().check_token(user,token):
-                    return Response({'status':500,'error':'Token mis-match try again with a new reset link'},status=500)
-                else:
-                    user.set_password(request.data['password'])
-                    user.save()
-                    return Response({'status':200,'msg':'Password reset'},status=200)
+                try:
+                    user = User.objects.get(id = id)
+                    print(f"after serializer is valid : {request.data}")
+                    if not PasswordResetTokenGenerator().check_token(user,token):
+                        return Response({'status':500,'error':'Token mis-match try again with a new reset link'},status=500)
+                    else:
+                        user.set_password(request.data['password'])
+                        user.save()
+                        return Response({'status':200,'msg':'Password reset'},status=200)
+                except User.DoesNotExist:
+                    return Response({'status':404,'error':'User does not exist'},status=404)
             except DjangoUnicodeDecodeError as identifier:
                 if not PasswordResetTokenGenerator().check_token(user):
                     return Response({'status':500,'error':'Token is not valid please try a new one'},status=500)
