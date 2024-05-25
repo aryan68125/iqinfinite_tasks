@@ -56,6 +56,7 @@ def is_valid_password(password):
 # CUSTOM USER PASSWORD VALIDATION ENDS
 
 # GET USER ROLES FROM DB STARTS
+'''cross origin api'''   
 class ReadUserRoles(APIView):
     def get(self,request):
         user_role = UserRole.objects.all()
@@ -437,6 +438,9 @@ class ResetPassword(APIView):
 # COMPLETE USER AUTHENTICATION ENDS
 
 # TESTING USER LOGIN VIA HOMEPAGE DUMMY API START
+'''
+supports cross-origin and same-origin requests
+'''
 class HomeLoginTester(APIView):
     authentication_classes = (JWTAuthentication,SessionAuthentication)
     permission_classes = [IsAuthenticated,]
