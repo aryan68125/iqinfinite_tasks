@@ -29,3 +29,4 @@ urlpatterns = [
     path('ForgotPasswordSameOrigin/',ForgotPasswordSameOrigin.as_view(),name="ForgotPasswordSameOrigin"),
     path('PasswordTokenCheckSameOrigin/<uid>/<token>/',PasswordTokenCheckSameOrigin.as_view(),name="PasswordTokenCheckSameOrigin"),
 ]
+
