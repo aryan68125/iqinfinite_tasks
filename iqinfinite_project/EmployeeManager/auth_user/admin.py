@@ -7,5 +7,5 @@ class UserRoleAdmin(admin.ModelAdmin ):
 
 @admin.register(UserProfile)
 class UserProfileAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user', 'role', 'created_by', 'created_at', 'updated_at','is_deleted', 'is_blocked')
+    list_display = ('id', 'user', 'role', 'created_by', 'created_at', 'updated_by' ,'updated_at','is_deleted', 'is_blocked')
 

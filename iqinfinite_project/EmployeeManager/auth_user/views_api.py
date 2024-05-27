@@ -59,9 +59,12 @@ def is_valid_password(password):
 '''cross origin api'''   
 class ReadUserRoles(APIView):
     def get(self,request):
-        user_role = UserRole.objects.exclude(id=4)
-        serializer = UserRoleSerializer(user_role,many=True)
-        return Response({'status':200,'data':serializer.data},status=200)
+        try:
+            user_role = UserRole.objects.exclude(id=4)
+            serializer = UserRoleSerializer(user_role,many=True)
+            return Response({'status':200,'data':serializer.data},status=200)
+        except Exception as e:
+            return Response({'status':500,'error':str(e)},status=500)
 # GET USER ROLES FROM DB ENDS
 
 # COMPLETE USER AUTHENTICATION STARTS

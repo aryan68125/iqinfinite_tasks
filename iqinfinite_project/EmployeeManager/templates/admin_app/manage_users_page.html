@@ -11,8 +11,10 @@
     var register_user_url = '{% url "RegisterUser" %}';
     var read_user_role_url = '{% url "ReadUserRoles" %}';
     var VerifyOTPResendOTP_url = '{% url "VerifyOTPResendOTP" %}';
-</script>
 
+    var GetAllUsers_url = '{% url "GetAllUsers" %}';
+</script>
+<script src="//cdn.datatables.net/2.0.7/js/dataTables.min.js"></script>
 <div class="container">
     
     <div class="card my-1">
@@ -42,13 +44,10 @@
         <!--update user related ui rendered via js-->
 
     </div>
-    <div class="card">
-        <div class="card-body">
-          Update user UI elements
-        </div>
-    </div>
+
     <!--Update Users related UI ENDS-->
 </div>
+<link href="//cdn.datatables.net/2.0.7/css/dataTables.dataTables.min.css" rel="stylesheet"/>
 <link href="{% static 'css/admin_app/manage_user_page.css' %}" rel="stylesheet"/>
 <script src="{% static 'js/admin_app/manage_user_page.js' %}"></script>
 <!-- <link href="{% static 'css/auth_user/login_page.css' %}" rel="stylesheet"/> -->

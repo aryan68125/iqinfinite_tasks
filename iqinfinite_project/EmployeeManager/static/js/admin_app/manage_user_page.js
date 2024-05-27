@@ -256,6 +256,7 @@ function resend_otp(){
     ).then(response=>response.json())
     .then(data=>{
         if (data.status==200){
+            $('#Verify_otp_ui').empty()
             Swal.fire({
                 position: "top-end",
                 icon: "success",
@@ -352,9 +353,10 @@ $('body').on('click','#update_users',function(){
         console.log('Verify_otp_ui is empty.');
         $('#Add_Users_UI').empty()
         show_update_users_related_content()
+        get_all_users_from_db()
     } else {
         console.log('Verify_otp_ui is not empty.');
-        error_msg = "First verify otp before trying to add another user"
+        error_msg = "First verify otp before trying to update user"
         Swal.fire({
             position: "top-end",
             icon: "error",
@@ -364,17 +366,53 @@ $('body').on('click','#update_users',function(){
           });
     }
 })
+function get_all_users_from_db(){
+    fetch(
+        GetAllUsers_url,{
+            method:'GET',
+            headers:{
+                Accept:'application/json',
+                'Content-Type':'accplication/json',
+                'X-CSRFToken':getCookie("csrftoken")
+            }
+        }
+    ).then(response=>response.json())
+    .then(data=>{
+        if(data.status==200){
+            console.log(data.data)
+            $('#usersTable').DataTable({
+                data: data.data,
+                columns: [
+                    { title: 'User Name', data: 'username' },
+                    { title: 'Email', data: 'email' }
+                ]
+            });
+        }
+        else{
+            error_msg = "data.error"
+            Swal.fire({
+                position: "top-end",
+                icon: "error",
+                title: error_msg,
+                showConfirmButton: false,
+                timer: 1500
+            });
+        }
+    })
+}
 function show_update_users_related_content(){
     console.log("Update users related content")
 
     $('#update_user_ui').empty()
     $('#update_user_ui').append(
         `
-        <div class="card">
-            <div class="card-body">
-              Update user UI elements
+            <div class="card">
+                <div class="card-body">
+                  <div>
+                     <table id="usersTable"></table>
+                  </div>
+                </div>
             </div>
-        </div>
         `
     )
 }
