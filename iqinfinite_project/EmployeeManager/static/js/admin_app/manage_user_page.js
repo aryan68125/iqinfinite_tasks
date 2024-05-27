@@ -2,6 +2,7 @@ $('body').ready(function(){
     console.log("This is manage_user_page js ")
     $('#Add_Users_UI').empty()
     $('#Verify_otp_ui').empty()
+    $('#update_user_ui').empty()
 })
 
 // GET CSRF TOKEN FROM THE BROWSER'S COOCKIE STARTS
@@ -26,6 +27,7 @@ function getCookie(name) {
 $('body').on('click','#add_users',function(){
     if ($('#Verify_otp_ui').is(':empty')) {
         console.log('Verify_otp_ui is empty.');
+        $('#update_user_ui').empty()
         show_add_users_related_content()
     } else {
         console.log('Verify_otp_ui is not empty.');
@@ -346,10 +348,34 @@ function reset_form(){
 
 // Update users STARTS
 $('body').on('click','#update_users',function(){
-    show_update_users_related_content()
-    $('#Add_Users_UI').empty()
+    if ($('#Verify_otp_ui').is(':empty')) {
+        console.log('Verify_otp_ui is empty.');
+        $('#Add_Users_UI').empty()
+        show_update_users_related_content()
+    } else {
+        console.log('Verify_otp_ui is not empty.');
+        error_msg = "First verify otp before trying to add another user"
+        Swal.fire({
+            position: "top-end",
+            icon: "error",
+            title: error_msg,
+            showConfirmButton: false,
+            timer: 1500
+          });
+    }
 })
 function show_update_users_related_content(){
     console.log("Update users related content")
+
+    $('#update_user_ui').empty()
+    $('#update_user_ui').append(
+        `
+        <div class="card">
+            <div class="card-body">
+              Update user UI elements
+            </div>
+        </div>
+        `
+    )
 }
 // Update users ENDS
