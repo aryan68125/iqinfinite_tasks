@@ -469,10 +469,12 @@ class HomeLoginTester(APIView):
                 try:
                     user_profile = UserProfile.objects.get(user=user)
                     user_role = user_profile.role.role_name
+                    user_role_id = user_profile.role.id
                     user_data = {
                         'username':username,
                         'email':email,
                         'user_role':user_role,
+                        'user_role_id':user_role_id,
                     }
                     print(f"user_data homeLoginTester : {user_data}")
                     return Response({'status':200,'msg':'User successfully logged in to Home page tester api','user_data':user_data},status=200)
@@ -484,7 +486,7 @@ class HomeLoginTester(APIView):
                         user_data = {
                             'username':username,
                             'email':email,
-                            'role':'admin'
+                            'user_role':user_role,
                         }
                         return Response({'status':200,'msg':'User successfully logged in to Home page tester api','user_data':user_data},status=200) 
                     else:

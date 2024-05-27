@@ -1,0 +1,18 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{{ title }}
+{% block title %}
+{% endblock title %}
+
+{% block content %}
+
+<script>
+    
+</script>
+
+<div class="container">
+    <h3>This is the Manage tasks page for admin user</h3>
+</div>
+<script src="{% static 'js/admin_app/manage_tasks_page.js' %}"></script>
+<!-- <link href="{% static 'css/auth_user/login_page.css' %}" rel="stylesheet"/> -->
+{% endblock content %}

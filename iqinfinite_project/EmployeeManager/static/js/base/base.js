@@ -1,6 +1,7 @@
 $('body').ready(function(){
     console.log("Base js is active")
     $('#user_id').hide()
+
     display_user_data()
 })
 
@@ -68,6 +69,7 @@ function display_user_data(){
             console.log(data.user_data.email)
             console.log(data.user_data.user_role)
             set_user_name(data.user_data.username, data.user_data.user_role)
+            create_nav_bar(data.user_data.user_role_id)
         }
         else{
             var error_msg = data.error
@@ -87,4 +89,70 @@ function set_user_name(username, user_role){
     <p class="mt-1 mx-1">${username}</p>
     <p class="mt-1 mx-1">(${user_role})</p>
     `)
+}
+function create_nav_bar(role_id){
+    $('#nav_bar_content').empty()
+    if(role_id == 3){
+        //role MANAGER
+        console.log(role_id)
+            $('#nav_bar_content').append(
+            `
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                  <a class="nav-link" aria-current="page" href="#">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#">Manage Users</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#">Manage Tasks</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#">Manager Settings</a>
+                </li>
+            </ul>
+        `
+    )
+    }
+    else if (role_id == 2){
+        //role HR
+        console.log(role_id)
+        $('#nav_bar_content').append(
+            `
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                  <a class="nav-link" aria-current="page" href="#">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#">Manage Users</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#">Manage Tasks</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#">Hr Settings</a>
+                </li>
+            </ul>
+        `
+    )
+    }
+    else if (role_id == 1){
+        //role Employee
+        console.log(role_id)
+        $('#nav_bar_content').append(
+            `
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                  <a class="nav-link" aria-current="page" href="#">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#">Manage Tasks</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#">Employee Settings</a>
+                </li>
+            </ul>
+        `
+    )
+    }
 }

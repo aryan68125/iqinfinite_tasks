@@ -1,4 +1,3 @@
-nav ul li a:hover{
-    color:#FFFFFF;
-    text-decoration:none;
-    }
+.nav-link:hover .dropdown-menu{
+    display: block !important;
+}

@@ -3,6 +3,7 @@ from django.views.generic import TemplateView
 
 #import models:
 from django.contrib.auth.models import User
+from auth_user.models import UserProfile
 
 # Permissions
 from django.contrib.auth.decorators import login_required
@@ -57,14 +58,20 @@ def reset_password_page(request):
 #     def dispatch(self, *args, **kwargs):
 #         return super().dispatch(*args, **kwargs)
 
+'''
+TODO -> Re-write this function in such a way that it shows content based on the user role 
+'''
 def home_page(request):
     if request.user.is_authenticated:
         if request.user.is_superuser:
             user_id = request.user.id
-            data = {
-                'user_id':user_id
-            }
             user = User.objects.get(id=user_id)
+            user_profile = UserProfile.objects.get(user=user)
+            role_id = user_profile.role.id
+            data = {
+                'user_id':user_id,
+                'role_id':role_id
+            }
             print(f"home_page function to render home page user {user} is super user")
             return render(request,'auth_user/home_page.html',{'context':data})
         else:
