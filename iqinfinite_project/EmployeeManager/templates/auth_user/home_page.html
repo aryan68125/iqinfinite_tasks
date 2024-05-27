@@ -11,8 +11,32 @@
 </script>
 
 <div class="container">
-    <h3>This is the home page</h3>
+    <!--Content related to ADMIN STARTS-->
+    {% if context.user.is_superuser %}
+        <h3>This is the home page for admin user</h3>
+    {% endif %}
+    <!--Content related to ADMIN ENDS-->
+    
+    <!--Content related to MANAGER STARTS-->
+    {% if context.user_profile.role.id == 3 %}
+        <h3>This is the home page for manager</h3>
+    {% endif %}
+    <!--Content related to MANAGER ENDS-->
+    
+    <!--Content related to HR STARTS-->
+    {% if context.user_profile.role.id == 2 %}
+        <h3>This is the home page for hr</h3>
+    {% endif %}
+    <!--Content related to HR ENDS-->
+    
+    <!--Content related to EMPLOYEE STARTS-->
+    {% if context.user_profile.role.id == 1 %}
+        <h3>This is the home page for employee</h3>
+    {% endif %}
+    <!--Content related to EMPLOYEE ENDS-->
+    
 </div>
+
 <script src="{% static 'js/auth_user/home_page.js' %}"></script>
 <!-- <link href="{% static 'css/auth_user/login_page.css' %}" rel="stylesheet"/> -->
 {% endblock content %}

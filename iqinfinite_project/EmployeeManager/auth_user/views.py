@@ -69,15 +69,18 @@ def home_page(request):
             user_profile = UserProfile.objects.get(user=user)
             role_id = user_profile.role.id
             data = {
-                'user_id':user_id,
-                'role_id':role_id
+                'user':user,
+                'user_profile':user_profile
             }
             print(f"home_page function to render home page user {user} is super user")
             return render(request,'auth_user/home_page.html',{'context':data})
         else:
             user_id = request.user.id
+            user = User.objects.get(id=user_id)
+            user_profile = UserProfile.objects.get(user=user)
             data = {
-                'user_id':user_id
+                'user':user,
+                'user_profile':user_profile
             }
             user = User.objects.get(id=user_id)
             print(f"home_page function to render home page user {user}")

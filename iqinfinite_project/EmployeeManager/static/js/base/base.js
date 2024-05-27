@@ -99,7 +99,7 @@ function create_nav_bar(role_id){
             `
             <ul class="navbar-nav">
                 <li class="nav-item">
-                  <a class="nav-link" aria-current="page" href="#">Dashboard</a>
+                  <a class="nav-link" aria-current="page" href="${home_page_url_var}">Dashboard</a>
                 </li>
                 <li class="nav-item">
                   <a class="nav-link" href="#">Manage Users</a>
@@ -121,7 +121,7 @@ function create_nav_bar(role_id){
             `
             <ul class="navbar-nav">
                 <li class="nav-item">
-                  <a class="nav-link" aria-current="page" href="#">Dashboard</a>
+                  <a class="nav-link" aria-current="page" href="${home_page_url_var}">Dashboard</a>
                 </li>
                 <li class="nav-item">
                   <a class="nav-link" href="#">Manage Users</a>
@@ -139,11 +139,12 @@ function create_nav_bar(role_id){
     else if (role_id == 1){
         //role Employee
         console.log(role_id)
+        var home_page_url_var = home_page_url
         $('#nav_bar_content').append(
             `
             <ul class="navbar-nav">
                 <li class="nav-item">
-                  <a class="nav-link" aria-current="page" href="#">Dashboard</a>
+                  <a class="nav-link" aria-current="page" href="${home_page_url_var}">Dashboard</a>
                 </li>
                 <li class="nav-item">
                   <a class="nav-link" href="#">Manage Tasks</a>

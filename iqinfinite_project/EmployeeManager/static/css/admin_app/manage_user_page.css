@@ -1,0 +1,6 @@
+.title_bar_options_card_body_inner_div{
+    display:flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-around !important;
+}
