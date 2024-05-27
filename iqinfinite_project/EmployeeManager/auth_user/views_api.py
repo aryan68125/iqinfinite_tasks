@@ -85,79 +85,84 @@ class RegisterUser(APIView):
             # register user if user does not exist
             if password1 == password2:
                 if is_valid_password(password1):
-                    if serializer.is_valid():
-                        user = serializer.save()
-                        User_backup.clear()
-                        User_backup.update({'user':user})
-                        print(f"backed up user : {User_backup}")
-                        role_id = request.data.get('role')
-                        print(f"role_id : {role_id}")
-                        if not role_id == "default":
-                            role = UserRole.objects.get(id=role_id)
-                            data = {
-                                'user':user.id,
-                                'role':role_id,
-                                'role_name':str(role.role_name),
-                            }
-                            user_profile_serializer = UserProfileSerializer(data = data)
-                            if user_profile_serializer.is_valid(raise_exception=True):
-                                user_profile_serializer.save()
-        
-                                # generate otp
-                                otp = random.randint(0,999999999)
-                                OTP_backup.clear()
-                                OTP_backup.update({"otp":otp})
-                                print(f"Saved OTP : {OTP_backup}")
-        
-                                # send email 
-                                recipient_email_address = user.email
-                                username = user.username
-                                user_role_id = role_id
-                                Email_Data_backup.clear()
-                                Email_Data_backup.update(
-                                    {
-                                        'username':username,
-                                        'email':recipient_email_address,
-                                        'role':user_role_id
-                                    }
-                                )
-                                print(f"Saved User DATA : {Email_Data_backup}")
-                                
-                                try:
-                                    email_addr = Email_Data_backup['email']
-                                    subject = f"{Email_Data_backup['username']} please verify your email address"
-                                    message = f"verify your otp : {OTP_backup['otp']}"
-                                    recipient_list = [email_addr]
-                                    send_email_task.delay(subject, message, EMAIL_HOST_USER, recipient_list)
-                                    email_addr = ""
-                                    return Response({'status':200,'msg':'Email sent'},status=200)
-                                except Exception as e:
-                                    return Response({'status':500,'error': str(e)},status=500)
+                    try:
+                        user_db = User.objects.get(username = request.data['username'])
+                        if user_db:
+                            return Response({'status':500,'error':"username taken"},status=500)
+                    except User.DoesNotExist:
+                        if serializer.is_valid():
+                            user = serializer.save()
+                            User_backup.clear()
+                            User_backup.update({'user':user})
+                            print(f"backed up user : {User_backup}")
+                            role_id = request.data.get('role')
+                            print(f"role_id : {role_id}")
+                            if not role_id == "default":
+                                role = UserRole.objects.get(id=role_id)
+                                data = {
+                                    'user':user.id,
+                                    'role':role_id,
+                                    'role_name':str(role.role_name),
+                                }
+                                user_profile_serializer = UserProfileSerializer(data = data)
+                                if user_profile_serializer.is_valid(raise_exception=True):
+                                    user_profile_serializer.save()
+            
+                                    # generate otp
+                                    otp = random.randint(0,999999999)
+                                    OTP_backup.clear()
+                                    OTP_backup.update({"otp":otp})
+                                    print(f"Saved OTP : {OTP_backup}")
+            
+                                    # send email 
+                                    recipient_email_address = user.email
+                                    username = user.username
+                                    user_role_id = role_id
+                                    Email_Data_backup.clear()
+                                    Email_Data_backup.update(
+                                        {
+                                            'username':username,
+                                            'email':recipient_email_address,
+                                            'role':user_role_id
+                                        }
+                                    )
+                                    print(f"Saved User DATA : {Email_Data_backup}")
+                                    
+                                    try:
+                                        email_addr = Email_Data_backup['email']
+                                        subject = f"{Email_Data_backup['username']} please verify your email address"
+                                        message = f"verify your otp : {OTP_backup['otp']}"
+                                        recipient_list = [email_addr]
+                                        send_email_task.delay(subject, message, EMAIL_HOST_USER, recipient_list)
+                                        email_addr = ""
+                                        return Response({'status':200,'msg':'Email sent'},status=200)
+                                    except Exception as e:
+                                        return Response({'status':500,'error': str(e)},status=500)
+                                else:
+                                    if User_backup != {}:
+                                        User_backup['user'].delete()
+                                    return Response({'status':400,'error':str(user_profile_serializer.errors)},status=400)
                             else:
                                 if User_backup != {}:
                                     User_backup['user'].delete()
-                                return Response({'status':400,'error':str(user_profile_serializer.errors)},status=400)
+                                return Response({'status':400,'error':'User role not selected'},status=400)
                         else:
                             if User_backup != {}:
                                 User_backup['user'].delete()
-                            return Response({'status':400,'error':'User role not selected'},status=400)
-                    else:
-                        if User_backup != {}:
-                            User_backup['user'].delete()
-                        # email_error_message = serializer.errors.get('email', [''])[0]
-                        email_error_message = serializer.errors.get('email', [])
-                        # username_error_message = serializer.errors.get('username', [''])[0]
-                        username_error_message = serializer.errors.get('username', [])
-                        if email_error_message:
-                            username_error_message = ""
-                            return Response({'status': 400, 'error': email_error_message}, status=400)
-                        elif username_error_message:
-                            email_error_message = ""
-                            return Response({'status': 400, 'error': username_error_message}, status=400)
-                        else:
-                            email_error_message = ""
-                            username_error_message = ""
-                            return Response({'status': 500, 'error': 'Unexpected error'}, status=500)
+                            # email_error_message = serializer.errors.get('email', [''])[0]
+                            email_error_message = serializer.errors.get('email', [])
+                            # username_error_message = serializer.errors.get('username', [''])[0]
+                            username_error_message = serializer.errors.get('username', [])
+                            if email_error_message:
+                                username_error_message = ""
+                                return Response({'status': 400, 'error': email_error_message}, status=400)
+                            elif username_error_message:
+                                email_error_message = ""
+                                return Response({'status': 400, 'error': username_error_message}, status=400)
+                            else:
+                                email_error_message = ""
+                                username_error_message = ""
+                                return Response({'status': 500, 'error': 'Unexpected error'}, status=500)
                 else:
                     return Response({'status':400,'error':'Invalid password : \n 1. password must be greater than 6 characters \n 2. It must contain characters , numbers , and special characters like @'},status=400)
             else:

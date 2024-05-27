@@ -10,11 +10,9 @@
     
     var register_user_url = '{% url "RegisterUser" %}';
     var read_user_role_url = '{% url "ReadUserRoles" %}';
-    var verify_otp_page_url = '{% url "VerifyOtpPage" %}';
-
+    var VerifyOTPResendOTP_url = '{% url "VerifyOTPResendOTP" %}';
 </script>
 
-<link src="css/admin_app/manage_user_page.css" rel="stylesheet"/>
 <div class="container">
     
     <div class="card my-1">
@@ -28,54 +26,19 @@
     </div>
 
     <!--ADD USERS UI CONTENT STARTS-->
-    <div class="card my-1">
-        <div class="card-body">
-            <div class="title_bar_options_card_body_inner_div">
-                <div><h5>Add Users</h5></div>
-            </div>
-            <div class="row">
-                <div class="col-sm-12 col-md-4 col-lg-3">
-                    <div class="mb-3">
-                        <label for="user_name" class="form-label">User Name</label>
-                        <input type="text" class="form-control" id="user_name" aria-describedby="username">
-                    </div>
-                </div>
-                <div class="col-sm-12 col-md-4 col-lg-3">
-                    <div class="mb-3">
-                        <label for="email" class="form-label">Email address</label>
-                        <input type="email" class="form-control" id="email" aria-describedby="emailHelp">
-                        <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
-                    </div>
-                </div>
-                <div class="col-sm-12 col-md-4 col-lg-3">
-                    <div class="mb-3">
-                        <label for="password1" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="password1">
-                    </div>
-                </div>
-                <div class="col-sm-12 col-md-4 col-lg-3">
-                    <div class="mb-3">
-                        <label for="password2" class="form-label">Re-type Password</label>
-                        <input type="password" class="form-control" id="password2">
-                    </div>        
-                </div>
-                <div class="col-sm-12 col-md-4 col-lg-3">
-                    <div class="mb-3">
-                        <select class="form-group mx-2" style="width:97%" id="role">
-                            <!--Render the options using javascript -->
-                        </select>
-                    </div>
-                </div>
-                <div class="col-sm-12 col-md-4 col-lg-3">
-                    <button type="button" class="btn btn-dark" id="sign_up">Sign up</button>
-                </div>
-            </div>
-        </div>
+    <div id="Add_Users_UI">
+        <!--Render html ui elements using js-->
     </div>
     <!--ADD USERS UI CONTENT ENDS-->
-    
+
+    <!--Verify Otp UI STARTS-->
+    <div class = "display_flex_style" id="Verify_otp_ui">
+
+    </div>
+    <!--Verify Otp UI ENDS-->    
+
 </div>
+<link href="{% static 'css/admin_app/manage_user_page.css' %}" rel="stylesheet"/>
 <script src="{% static 'js/admin_app/manage_user_page.js' %}"></script>
-<link src="" rel="stylesheet"/>
 <!-- <link href="{% static 'css/auth_user/login_page.css' %}" rel="stylesheet"/> -->
 {% endblock content %}

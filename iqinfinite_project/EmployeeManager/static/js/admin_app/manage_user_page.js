@@ -1,6 +1,9 @@
 $('body').ready(function(){
     console.log("This is manage_user_page js ")
+    $('#Add_Users_UI').empty()
+    $('#Verify_otp_ui').empty()
 })
+
 // GET CSRF TOKEN FROM THE BROWSER'S COOCKIE STARTS
 function getCookie(name) {
     let cookieValue = null;
@@ -21,15 +24,76 @@ function getCookie(name) {
 
 // >>>>>>>>>>Add users STARTS<<<<<<<<<<<<<<
 $('body').on('click','#add_users',function(){
-    show_add_users_related_content()
+    if ($('#Verify_otp_ui').is(':empty')) {
+        console.log('Verify_otp_ui is empty.');
+        show_add_users_related_content()
+    } else {
+        console.log('Verify_otp_ui is not empty.');
+        error_msg = "First verify otp before trying to add another user"
+        Swal.fire({
+            position: "top-end",
+            icon: "error",
+            title: error_msg,
+            showConfirmButton: false,
+            timer: 1500
+          });
+    }
+    
+    get_user_role_from_db()
 })
 function show_add_users_related_content(){
     console.log("Add users related content")
+    // TODO generate the entire html form to add users here 
+    $('#Add_Users_UI').empty()
+    $('#Add_Users_UI').append(
+        `
+        <div class="card my-1">
+            <div class="card-body">
+                <div class="title_bar_options_card_body_inner_div">
+                    <div><h5>Add Users</h5></div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-md-4 col-lg-3">
+                        <div class="mb-3">
+                            <label for="user_name" class="form-label">User Name</label>
+                            <input type="text" class="form-control" id="user_name" aria-describedby="username">
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-4 col-lg-3">
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email address</label>
+                            <input type="email" class="form-control" id="email" aria-describedby="emailHelp">
+                            <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-4 col-lg-3">
+                        <div class="mb-3">
+                            <label for="password1" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="password1">
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-4 col-lg-3">
+                        <div class="mb-3">
+                            <label for="password2" class="form-label">Re-type Password</label>
+                            <input type="password" class="form-control" id="password2">
+                        </div>        
+                    </div>
+                    <div class="col-sm-12 col-md-4 col-lg-3">
+                        <div class="mb-3">
+                            <select class="form-group mx-2" style="width:97%" id="role">
+                                <!--Render the options using javascript -->
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-4 col-lg-3">
+                        <button type="button" class="btn btn-dark" id="sign_up">Add User</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        `
+    )
 }
-
-$('body').ready(function(){
-    console.log('Register user page javascript is here')
-})
 
 //GET DATA OF THE USER FROM THE FORM AND SEND IT TO THE BACKEND STARTS
 $('body').on('click','#sign_up' ,function(){
@@ -70,7 +134,10 @@ function collect_form_data(){
                 showConfirmButton: false,
                 timer: 1500,
               });
-              window.location.href=verify_otp_page_url
+            //   window.location.href=verify_otp_page_url //change here 
+            //display verify otp ui when the status returns 200
+            display_verify_otp_ui()
+            $('#Add_Users_UI').empty()
         }
         else{
             console.log(data)
@@ -88,10 +155,132 @@ function collect_form_data(){
 }
 //GET DATA OF THE USER FROM THE FORM AND SEND IT TO THE BACKEND ENDS
 
-//GET DATA ABOUT USER ROLES FROM THE BACKEND AND SHOW IT IN THE DROP-DOWN STARTS
-$('body').ready(function(){
-    get_user_role_from_db()
+//DISPLAY VERIFY OTP UI AND VERIFY OTP LOGIC STARTS
+function display_verify_otp_ui(){
+    $('#Verify_otp_ui').empty()
+    $('#Verify_otp_ui').append(`
+        <div class="card w-50">
+            <div class="card-body">
+                <div><h3 class="verify_otp">Verify OTP</h3></div>
+                <div class="mb-3">
+                    <label for="otp" class="form-label">Enter OTP</label>
+                    <input type="text" class="form-control" id="otp" aria-describedby="otp">
+                </div>
+                <div class="w-100 display_flex_style_button">
+                    <div class="mx-1">
+                        <button type="submit" class="btn btn-dark" id="verify_button">Verify</button>
+                    </div>
+                    <div class="mx-1">
+                        <button type="submit" class="btn btn-dark" id="resend_otp">Re-send OTP</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `)
+}
+
+//GET FORM DATA STARTS
+$('body').on('click','#verify_button', function(){
+    get_form_data()
 })
+function get_form_data(){
+    var otp = $('#otp').val()
+    var data = {
+        'otp':otp,
+    }
+    //FETCH API STARTS
+    fetch(
+        VerifyOTPResendOTP_url,{
+            method:'POST',
+            headers:{
+                Accept:'application/json',
+                'Content-Type':'application/json',
+                'X-CSRFToken':getCookie("csrftoken")
+            },
+            body:JSON.stringify(data)
+        }
+    ).then(response=>response.json())
+    .then(data=>{
+        if(data.status==200){
+            Swal.fire({
+                position: "top-end",
+                icon: "success",
+                title: data.msg,
+                showConfirmButton: false,
+                timer: 1500,
+              });
+            //reset form 
+            //redirect user to login page
+            // window.location.href=login_page_url
+            //hide the verify otp ui when status 200
+            $('#Verify_otp_ui').empty()
+            show_add_users_related_content()
+            get_user_role_from_db()
+        }
+        else{
+            //show validation errors handled in backend here
+            //show other types of  exceptions here
+            var error_msg = data.error
+            Swal.fire({
+                position: "top-end",
+                icon: "error",
+                title: error_msg,
+                showConfirmButton: false,
+                timer: 1500
+              });
+        }
+    })
+    //FETCH API ENDS
+}
+//GET FORM DATA ENDS
+
+//RESEND OTP STARTS
+$('body').on('click','#resend_otp',function(){
+    resend_otp()
+})
+function resend_otp(){
+    //reset form
+    reset_form()
+    //resend otp via fetch
+    fetch(
+        VerifyOTPResendOTP_url,{
+            method:'GET',
+            headers:{
+                Accept:'application/json',
+                'Content-Type':'application/json',
+                'X-CSRFToken':getCookie("csrftoken")
+            }
+        }
+    ).then(response=>response.json())
+    .then(data=>{
+        if (data.status==200){
+            Swal.fire({
+                position: "top-end",
+                icon: "success",
+                title: data.msg,
+                showConfirmButton: false,
+                timer: 1500,
+              });
+        }
+        else{
+            var error_msg = data.error
+            Swal.fire({
+                position: "top-end",
+                icon: "error",
+                title: error_msg,
+                showConfirmButton: false,
+                timer: 1500
+              });
+        }
+    })
+}
+function reset_form(){
+    $('#otp').val("")
+}
+//RESEND OTP ENDS
+//DISPLAY VERIFY OTP UI AND VERIFY OTP LOGIC ENDS
+
+//GET DATA ABOUT USER ROLES FROM THE BACKEND AND SHOW IT IN THE DROP-DOWN STARTS
 function get_user_role_from_db(){
     fetch(read_user_role_url,{
         method : 'GET',
@@ -158,6 +347,7 @@ function reset_form(){
 // Update users STARTS
 $('body').on('click','#update_users',function(){
     show_update_users_related_content()
+    $('#Add_Users_UI').empty()
 })
 function show_update_users_related_content(){
     console.log("Update users related content")
