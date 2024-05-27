@@ -5,7 +5,7 @@ from django.db import IntegrityError
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as login_user
 from django.contrib.auth import logout as logout_user
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 #reset User password related imports
 from django.utils.encoding import smart_str, force_bytes,DjangoUnicodeDecodeError
 from django.utils.http import urlsafe_base64_decode,urlsafe_base64_encode
@@ -223,11 +223,14 @@ class LoginSameOrigin(APIView):
         if serializer.is_valid():
             username = request.data['username']
             password = request.data['password']
-            print(f"username = {username} :: password = {password}")
+            print(f"LoginSameOrigin :-> username = {username} :: password = {password}")
             user = authenticate(username=username,password=password)
             if user:
                 if user.is_superuser==True:
-                    return Response({'status':200,'user_role_id':1, 'user_role_name':'admin'},status=200)
+                    userprofile = UserProfile.objects.get(user = user.id)
+                    role_db_object = userprofile.role
+                    login_user(request,user)
+                    return Response({'status':200,'user_role_id':role_db_object.id,'user_role_name':role_db_object.role_name},status=200)
                 else:
                     userprofile = UserProfile.objects.get(user = user.id)
                     role_db_object = userprofile.role
@@ -445,9 +448,17 @@ class ResetPassword(APIView):
 supports cross-origin and same-origin requests
 '''
 class HomeLoginTester(APIView):
+    '''
+    For cross origin api calls use auth class JWTAuthentication
+    for same origin api calls like fetch , ajax, axios use SessionAuthentication
+    once you incoude this authentication classes 
+    example: authentication_classes = (JWTAuthentication,SessionAuthentication)
+    your api is ready to support cross and same origin api calls 
+    '''
     authentication_classes = (JWTAuthentication,SessionAuthentication)
     permission_classes = [IsAuthenticated,]
     def get(self,request):
+        '''cross origin api call'''
         if request.user.id:
             user_id = request.user.id
             print(f"cross-origin api call client bruno : {user_id}")
@@ -455,57 +466,30 @@ class HomeLoginTester(APIView):
                 user = User.objects.get(id=user_id)
                 username = user.username
                 email = user.email
-                user_profile = UserProfile.objects.get(user=user)
-                user_role = user_profile.role.role_name
-                user_data = {
-                    'username':username,
-                    'email':email,
-                    'user_role':user_role,
-                }
-                return Response({'status':200,'msg':'User successfully logged in to Home page tester api','user_data':user_data},status=200)
-            except User.DoesNotExist:
-                return Response({'status':404,'error':'User not found'},status=404) 
-            except UserProfile.DoesNotExist:
-                user = User.objects.get(id=user_id)
-                username = user.username
-                email = user.email
-                if user.id == 29:
+                try:
+                    user_profile = UserProfile.objects.get(user=user)
+                    user_role = user_profile.role.role_name
                     user_data = {
                         'username':username,
                         'email':email,
-                        'role':'admin'
+                        'user_role':user_role,
                     }
-                    return Response({'status':200,'msg':'User successfully logged in to Home page tester api','user_data':user_data},status=200) 
-                else:
-                    return Response({'status':404,'error':'User profile not found'},status=404)
-        else:
-            user_id = request.data['user_id']
-            print(f"same-origin api call client fetch api : {user_id}")
-            try:
-                user = User.objects.get(id=user_id)
-                username = user.username
-                email = user.email
-                user_profile = UserProfile.objects.get(user=user)
-                user_role = user_profile.role.role_name
-                user_data = {
-                    'username':username,
-                    'email':email,
-                    'user_role':user_role,
-                }
-                return Response({'status':200,'msg':'User successfully logged in to Home page tester api','user_data':user_data},status=200)
+                    print(f"user_data homeLoginTester : {user_data}")
+                    return Response({'status':200,'msg':'User successfully logged in to Home page tester api','user_data':user_data},status=200)
+                except UserProfile.DoesNotExist:
+                    user = User.objects.get(id=user_id)
+                    username = user.username
+                    email = user.email
+                    if user.id == 29:
+                        user_data = {
+                            'username':username,
+                            'email':email,
+                            'role':'admin'
+                        }
+                        return Response({'status':200,'msg':'User successfully logged in to Home page tester api','user_data':user_data},status=200) 
+                    else:
+                        return Response({'status':404,'error':'User profile not found'},status=404)
             except User.DoesNotExist:
                 return Response({'status':404,'error':'User not found'},status=404) 
-            except UserProfile.DoesNotExist:
-                user = User.objects.get(id=user_id)
-                username = user.username
-                email = user.email
-                if user.id == 29:
-                    user_data = {
-                        'username':username,
-                        'email':email,
-                        'role':'admin'
-                    }
-                    return Response({'status':200,'msg':'User successfully logged in to Home page tester api','user_data':user_data},status=200) 
-                else:
-                    return Response({'status':404,'error':'User profile not found'},status=404)
+
 # TESTING USER LOGIN VIA HOMEPAGE DUMMY API ENDS

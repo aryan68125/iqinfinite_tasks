@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt.token_blacklist',
     'corsheaders',
     'auth_user',
+    'admin_app',
 ]
 '''
 CELERY REALTED SETTINGS 
@@ -107,6 +108,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # or other backend you use
 
 ROOT_URLCONF = 'EmployeeManager.urls'
 

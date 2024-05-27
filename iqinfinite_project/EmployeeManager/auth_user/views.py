@@ -1,6 +1,9 @@
 from django.shortcuts import render,redirect
 from django.views.generic import TemplateView
 
+#import models:
+from django.contrib.auth.models import User
+
 # Permissions
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
@@ -56,11 +59,23 @@ def reset_password_page(request):
 
 def home_page(request):
     if request.user.is_authenticated:
-        user_id = request.user.id
-        data = {
-            'user_id':user_id
-        }
-        return render(request,'auth_user/home_page.html',{'context':data})
+        if request.user.is_superuser:
+            user_id = request.user.id
+            data = {
+                'user_id':user_id
+            }
+            user = User.objects.get(id=user_id)
+            print(f"home_page function to render home page user {user} is super user")
+            return render(request,'auth_user/home_page.html',{'context':data})
+        else:
+            user_id = request.user.id
+            data = {
+                'user_id':user_id
+            }
+            user = User.objects.get(id=user_id)
+            print(f"home_page function to render home page user {user}")
+            return render(request,'auth_user/home_page.html',{'context':data})
     else:
+        print(f"home_page function to render home page user : user not authenticated")
         return redirect('LoginPage')
     
