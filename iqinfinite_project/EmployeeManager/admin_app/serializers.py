@@ -7,13 +7,15 @@ import re
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
-        fields = ['id','user', 'role','role_name']
-# TODO work on this serializer
+        fields = ['id', 'role', 'role_name','is_deleted','is_blocked','created_by','updated_by','created_at','updated_at']
+
 class GetAllUsersSerializers(serializers.ModelSerializer):
-    user_profile = UserProfileSerializer(source='user.profile', read_only=True)
+    # here source = 'profile ' because in user profile model --> user = models.OneToOneField(User,on_delete=models.CASCADE,related_name='profile')
+    user_profile = UserProfileSerializer(source='profile', read_only=True)
+
     class Meta:
-        model=User
-        fields = ['id','username', 'email', 'user_profile']
+        model = User
+        fields = ['id', 'username', 'email', 'user_profile']
 
     def to_representation(self, instance):
         data = super().to_representation(instance)

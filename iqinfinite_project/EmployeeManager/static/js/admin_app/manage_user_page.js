@@ -380,11 +380,20 @@ function get_all_users_from_db(){
     .then(data=>{
         if(data.status==200){
             console.log(data.data)
+            console.log(data.data[0].user_profile.role_name)
             $('#usersTable').DataTable({
                 data: data.data,
                 columns: [
+                    { title: 'User ID', data: 'id' },
                     { title: 'User Name', data: 'username' },
-                    { title: 'Email', data: 'email' }
+                    { title: 'Email', data: 'email' },
+                    { title: 'Role Name', data: 'user_profile.role_name' },
+                    { title: 'Created By', data: 'user_profile.created_by' },
+                    { title: 'Updated By', data: 'user_profile.updated_by' },
+                    { title: 'Is Deleted', data: 'user_profile.is_deleted' },
+                    { title: 'Is Blocked', data: 'user_profile.is_blocked' },
+                    { title: 'Created At', data: 'user_profile.created_at' },
+                    { title: 'Updated At', data: 'user_profile.updated_at' }
                 ]
             });
         }
