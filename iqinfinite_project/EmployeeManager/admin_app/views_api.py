@@ -41,8 +41,39 @@ from admin_app.serializers import *
 cross origin
 '''
 class GetAllUsers(APIView):
+    authentication_classes = (JWTAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, IsAdminUser)
     def get(self,request):
         user = User.objects.exclude(is_superuser = True)
         serializer = GetAllUsersSerializers(user,many=True)
         return Response({'status':200,'data':serializer.data},status=200)
-        
+
+'''
+cross origin
+'''
+class SetUserIsActive(APIView):
+    authentication_classes = (JWTAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, IsAdminUser)
+    def patch(self,request):
+        serializer = SetUserIsActiveSerializer(data=request.data)
+        if serializer.is_valid():
+            print(f"user_pk from font-end : {request.data['user_pk']}")
+            user_pk = int(request.data['user_pk'])
+            user = User.objects.get(id=user_pk)
+            print(f"SetUserIsActive User object : {user}")
+            print(f"SetUserIsActive user.is_active status before update: {user.is_active}")
+            user.is_active = not user.is_active
+            user.save()
+            user_profile = UserProfile.objects.get(user=user)
+            print(f"SetUserIsActive user_profile.is_active status before update: {user_profile.is_active}")
+            user_profile.is_active = user.is_active
+            user_profile.save()
+            print(f"SetUserIsActive user.is_active status after update: {user.is_active}")
+            print(f"SetUserIsActive user_profile.is_active status after update: {user_profile.is_active}")
+            return Response({'status':200,'msg':'User active status updated'},status=200)
+        else:
+            print(f"SetUserIsActive serializer.errors : {serializer.errors}")
+            if 'user_pk' in serializer.errors:
+                return Response({'status':400,'error':serializer.errors['user_pk']},status=400)
+            else:
+                return Response({'status':400,'error':serializer.errors},status=400)

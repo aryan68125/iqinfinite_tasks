@@ -1,0 +1,24 @@
+meta {
+  name: SetUserIsActive
+  type: http
+  seq: 2
+}
+
+patch {
+  url: http://127.0.0.1:8000/admin_app/api/SetUserIsActive/
+  body: multipartForm
+  auth: bearer
+}
+
+headers {
+  Accept: application/json
+  Content-Type: application/json
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzE2ODkzNjA2LCJpYXQiOjE3MTY4OTAwODYsImp0aSI6IjJiMjI5YjY3MGFhNjQ1YTVhNDZhN2FmMzc1ZGI3NjcyIiwidXNlcl9pZCI6Mjl9.oQv_xUUiaFiuv58wxTB-McbbymWNd8-06UyimqzsolE
+}
+
+body:multipart-form {
+  user_pk: 173
+}

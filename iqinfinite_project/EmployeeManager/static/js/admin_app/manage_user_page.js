@@ -381,6 +381,11 @@ function get_all_users_from_db(){
         if(data.status==200){
             console.log(data.data)
             console.log(data.data[0].user_profile.role_name)
+            // TODO Add icons in the DataTable for showing is_deleted and is active fields
+            // TODO add a column that holds the icon to delete or retore user based on it's current delete status
+            // TODO add a column to permanently delete user 
+            // TODO add a column to block user and show a button to block and unblock based on user's block status
+
             $('#usersTable').DataTable({
                 data: data.data,
                 columns: [
@@ -390,15 +395,40 @@ function get_all_users_from_db(){
                     { title: 'Role Name', data: 'user_profile.role_name' },
                     { title: 'Created By', data: 'user_profile.created_by' },
                     { title: 'Updated By', data: 'user_profile.updated_by' },
-                    { title: 'Is Deleted', data: 'user_profile.is_deleted' },
-                    { title: 'Is Active', data: 'user_profile.is_active' },
+                    {
+                        title: 'Is Deleted',
+                        data: 'user_profile.is_deleted',
+                        render: function(data, type, row) {
+                            if (data == true) {
+                                return '<button class="btn btn-light border border-dark userDeleteButton"><i class="text-success fa-solid fa-check"></i></button>';
+                            } else {
+                                return '<button class="btn btn-light border border-dark userDeleteButton"><i class="text-danger fa-solid fa-xmark"></i></button>';
+                            }
+                        }
+                    },
+                    { 
+                        title: 'Is Active', 
+                        data: 'user_profile.is_active',
+                        render: function(data, type, row) {
+                            if (data == true) {
+                                return '<button class="btn btn-light border border-dark userActiveButton"><i class="text-success fa-solid fa-check"></i></button>';
+                            } else {
+                                return '<button class="btn btn-light border border-dark userActiveButton"><i class="text-danger fa-solid fa-xmark"></i></button>';
+                            }
+                        }
+                    },
                     { title: 'Created At', data: 'user_profile.created_at' },
                     { title: 'Updated At', data: 'user_profile.updated_at' }
                 ]
             });
+
+            // CLICK EVENT LISTENER ON BUTTONS IN DATA_TABALE STARTS 
+            userActiveButton()
+            userDeleteButton()
+            // CLICK EVENT LISTENER ON BUTTONS IN DATA_TABALE ENDS 
         }
         else{
-            error_msg = "data.error"
+            error_msg = data.error
             Swal.fire({
                 position: "top-end",
                 icon: "error",
@@ -409,6 +439,63 @@ function get_all_users_from_db(){
         }
     })
 }
+// CLICK EVENT LISTENER ON BUTTONS IN DATA_TABALE STARTS 
+//event listner function for is_active
+function userActiveButton(){
+    // Add event listener for is_active button clicks STARTS
+    $('#usersTable').on('click', '.userActiveButton', function() {
+        var table = $('#usersTable').DataTable();
+        var data = table.row($(this).closest('tr')).data();
+        var userId = data.id;
+        console.log('is_active column User ID:', userId);
+        var data = {
+            user_pk:userId
+        }
+        fetch(
+            SetUserIsActive_url,{
+                method:'PATCH',
+                headers:{
+                    Accept:'application/json',
+                    'Content-Type':'application/json',
+                    'X-CSRFToken':getCookie("csrftoken")
+                },
+                body:JSON.stringify(data)
+            }
+        ).then(response=>response.json())
+        .then(data=>{
+            if(data.status==200){
+                $('#Add_Users_UI').empty()
+                $('#update_user_ui').empty()
+                show_update_users_related_content()
+                get_all_users_from_db()
+            }
+            else{
+                error_msg = data.error
+                Swal.fire({
+                    position: "top-end",
+                    icon: "error",
+                    title: error_msg,
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            }
+        })
+    });
+    // Add event listener for is_active button clicks ENDS
+}
+
+//event listner function for is_deleted
+function userDeleteButton(){
+    // Add event listener for is_deleted button clicks STARTS
+    $('#usersTable').on('click', '.userDeleteButton', function() {
+        var table = $('#usersTable').DataTable();
+        var data = table.row($(this).closest('tr')).data();
+        var userId = data.id;
+        console.log('is_deleted column User ID:', userId);
+    });
+    // Add event listener for is_deleted button clicks ENDS
+}
+// CLICK EVENT LISTENER ON BUTTONS IN DATA_TABALE ENDS 
 function show_update_users_related_content(){
     console.log("Update users related content")
 

@@ -7,7 +7,7 @@ meta {
 post {
   url: http://127.0.0.1:8000/auth_api/RegisterUser/
   body: multipartForm
-  auth: none
+  auth: bearer
 }
 
 headers {
@@ -15,10 +15,14 @@ headers {
   Content-Type: application/json
 }
 
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzE2ODg4MTMwLCJpYXQiOjE3MTY4ODcyMzAsImp0aSI6ImJjN2ExZGZjZjNiYzQ3NzJiZThjZjExMzhhMWU3ZmM1IiwidXNlcl9pZCI6Mjl9.alFNn-iOTAfRR8OhNR8v5xTVWvEXgfIYkHyLk9XRTiI
+}
+
 body:multipart-form {
-  email: yodina7646@fincainc.com
-  username: yodina
+  email: akansha@gmail.com
+  username: akansha
   password: Aditya@268859
   password2: Aditya@268859
-  role: 1
+  role: 2
 }

@@ -7,10 +7,14 @@ meta {
 get {
   url: http://127.0.0.1:8000/auth_api/VerifyOTPResendOTP/
   body: multipartForm
-  auth: none
+  auth: bearer
 }
 
 headers {
   Accept: application/json
   Content-Type: application/json
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzE2ODg4MTMwLCJpYXQiOjE3MTY4ODcyMzAsImp0aSI6ImJjN2ExZGZjZjNiYzQ3NzJiZThjZjExMzhhMWU3ZmM1IiwidXNlcl9pZCI6Mjl9.alFNn-iOTAfRR8OhNR8v5xTVWvEXgfIYkHyLk9XRTiI
 }

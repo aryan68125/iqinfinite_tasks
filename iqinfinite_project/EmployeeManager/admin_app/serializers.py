@@ -19,5 +19,12 @@ class GetAllUsersSerializers(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
-        print(data)  # Print serialized data for debugging
+        # print(data)  # Print serialized data for debugging
+        return data
+    
+class SetUserIsActiveSerializer(serializers.Serializer):
+    user_pk = serializers.IntegerField()
+    def validate(self,data):
+        if data.get('user_pk') <= 0:
+            raise serializers.ValidationError("primary key for User cannot be zero or a negative number")
         return data
