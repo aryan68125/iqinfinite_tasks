@@ -400,9 +400,9 @@ function get_all_users_from_db(){
                         data: 'user_profile.is_deleted',
                         render: function(data, type, row) {
                             if (data == true) {
-                                return '<button class="btn btn-light border border-dark userDeleteButton"><i class="text-success fa-solid fa-check"></i></button>';
+                                return '<button class="btn btn-light border border-dark userDeleteButton"><i class="text-primary fa-solid fa-trash-can-arrow-up"></i></button>';
                             } else {
-                                return '<button class="btn btn-light border border-dark userDeleteButton"><i class="text-danger fa-solid fa-xmark"></i></button>';
+                                return '<button class="btn btn-light border border-dark userDeleteButton"><i class="text-danger fa-solid fa-trash"></i></button>';
                             }
                         }
                     },
@@ -492,6 +492,38 @@ function userDeleteButton(){
         var data = table.row($(this).closest('tr')).data();
         var userId = data.id;
         console.log('is_deleted column User ID:', userId);
+        var data = {
+            user_pk:userId
+        }
+        fetch(
+            SetUserIsDeleted_url,{
+                method:'PATCH',
+                headers:{
+                    Accept:'application/json',
+                    'Content-Type':'application/json',
+                    'X-CSRFToken':getCookie("csrftoken")
+                },
+                body:JSON.stringify(data)
+            }
+        ).then(response=>response.json())
+        .then(data=>{
+            if(data.status==200){
+                $('#Add_Users_UI').empty()
+                $('#update_user_ui').empty()
+                show_update_users_related_content()
+                get_all_users_from_db()
+            }
+            else{
+                error_msg = data.error
+                Swal.fire({
+                    position: "top-end",
+                    icon: "error",
+                    title: error_msg,
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            }
+        })
     });
     // Add event listener for is_deleted button clicks ENDS
 }
