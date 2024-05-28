@@ -3,4 +3,5 @@ from admin_app.views_api import *
 urlpatterns = [
     path('GetAllUsers/',GetAllUsers.as_view(),name="GetAllUsers"),
     path('SetUserIsActive/',SetUserIsActive.as_view(),name="SetUserIsActive"),
+    path('SetUserIsDeleted/',SetUserIsDeleted.as_view(),name="SetUserIsDeleted"),
 ]

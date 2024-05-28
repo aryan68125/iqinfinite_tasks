@@ -28,3 +28,11 @@ class SetUserIsActiveSerializer(serializers.Serializer):
         if data.get('user_pk') <= 0:
             raise serializers.ValidationError("primary key for User cannot be zero or a negative number")
         return data
+
+class SetUserIsDeletedSerializer(serializers.Serializer):
+    user_pk = serializers.IntegerField()
+    def validate(self,data):
+        if data.get('user_pk') <=0:
+            raise serializers.ValidationError("primary key for User cannot be zero or a negative number")
+        return data
+    

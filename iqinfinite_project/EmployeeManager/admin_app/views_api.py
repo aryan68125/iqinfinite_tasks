@@ -81,3 +81,28 @@ class SetUserIsActive(APIView):
             else:
                 return Response({'status':400,'error':serializer.errors},status=400)
 
+class SetUserIsDeleted(APIView):
+    authentication_classes = (JWTAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, IsAdminUser)
+    def patch(self, request):
+        serializer = SetUserIsDeletedSerializer(data=request.data)
+        if serializer.is_valid():
+            try:
+                print(f"user_pk from font-end : {request.data['user_pk']}")
+                user_pk = int(request.data['user_pk'])
+                user = User.objects.get(id=user_pk)
+                user_profile = UserProfile.objects.get(user=user)
+                print(f"SetUserIsDeleted is_deleted before update : {user_profile.is_deleted}")
+                #toggle between is_deleted = True and is_deleted = False
+                user_profile.is_deleted = not user_profile.is_deleted
+                user_profile.save()
+                print(f"SetUserIsDeleted is_deleted after update : {user_profile.is_deleted}")
+                return Response({'status':200,'msg':'User delete status updated'},status=200)
+            except Exception as e:
+                return Response({'status':500,'error':str(e)},status=500)
+        else:
+            print(f"SetUserIsDeleted serializer.errors : {serializer.errors}")
+            if 'user_pk' in serializer.errors:
+                return Response({'status':400,'error':serializer.errors},status=400)
+            else:
+                return Response({'status':400,'error':serializer.errors},status=400)
