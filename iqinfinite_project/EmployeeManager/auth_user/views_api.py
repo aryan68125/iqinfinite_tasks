@@ -27,6 +27,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 # utitlities related imports
 import re
+from datetime import date
 
 # email related imports
 import random
@@ -58,6 +59,8 @@ def is_valid_password(password):
 # GET USER ROLES FROM DB STARTS
 '''cross origin api'''   
 class ReadUserRoles(APIView):
+    authentication_classes = (JWTAuthentication,SessionAuthentication)
+    permission_classes = (IsAuthenticated, IsAdminUser)
     def get(self,request):
         try:
             user_role = UserRole.objects.exclude(id=4)
@@ -74,6 +77,8 @@ Email_Data_backup = {}
 User_backup = {}
 '''cross origin api'''    
 class RegisterUser(APIView):
+    authentication_classes = (JWTAuthentication,SessionAuthentication)
+    permission_classes = (IsAuthenticated, IsAdminUser)
     def post(self,request):
         serializer = CreateUserSerializer(data=request.data)
         print(request.data)
@@ -102,10 +107,17 @@ class RegisterUser(APIView):
                             print(f"role_id : {role_id}")
                             if not role_id == "default":
                                 role = UserRole.objects.get(id=role_id)
+                                print(f"currently logged in user: {request.user.id}")
                                 data = {
-                                    'user':user.id,
-                                    'role':role_id,
-                                    'role_name':str(role.role_name),
+                                      'user': user.id,
+                                      'role': role_id,
+                                      'role_name': str(role.role_name),
+                                      'created_by': request.user.id,  # Set the creator
+                                      'updated_by': request.user.id,  # Set the updater
+                                      'is_deleted':False,
+                                      'is_active':user.is_active,
+                                      'created_at':date.today(),
+                                      'updated_at':date.today()
                                 }
                                 user_profile_serializer = UserProfileSerializer(data = data)
                                 if user_profile_serializer.is_valid(raise_exception=True):
@@ -175,6 +187,8 @@ class RegisterUser(APIView):
             
 '''cross origin api'''    
 class VerifyOTPResendOTP(APIView):
+    authentication_classes = (JWTAuthentication,SessionAuthentication)
+    permission_classes = (IsAuthenticated, IsAdminUser)
     #VERIFY OTP
     def post(self,request):
         verify_otp_serializer = VerifyOTPSerializer(data = request.data)
@@ -188,6 +202,15 @@ class VerifyOTPResendOTP(APIView):
                         print(f"otp matched :-> front-end otp : {request.data['otp']} :: backup_otp backend {backup_otp}")
                         user.is_active = True
                         user.save()
+                        #update is_active in user_profile model
+                        user_db = User.objects.get(username=username)
+                        data = {
+                            'is_active':user_db.is_active
+                        }
+                        user_profile = UserProfile.objects.get(user=user_db)
+                        user_profile = UserProfileSerializer(user_profile,data=data,partial=True)
+                        if user_profile.is_valid():
+                            user_profile.save()
                         # activate the user account :: set is_active to True
                         return Response({'status':200,'msg':'otp verified'},status=200)
                     else:

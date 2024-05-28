@@ -391,7 +391,7 @@ function get_all_users_from_db(){
                     { title: 'Created By', data: 'user_profile.created_by' },
                     { title: 'Updated By', data: 'user_profile.updated_by' },
                     { title: 'Is Deleted', data: 'user_profile.is_deleted' },
-                    { title: 'Is Blocked', data: 'user_profile.is_blocked' },
+                    { title: 'Is Active', data: 'user_profile.is_active' },
                     { title: 'Created At', data: 'user_profile.created_at' },
                     { title: 'Updated At', data: 'user_profile.updated_at' }
                 ]
@@ -417,6 +417,9 @@ function show_update_users_related_content(){
         `
             <div class="card">
                 <div class="card-body">
+                  <div>
+                    <h5>User Data:</h5>
+                  </div>
                   <div>
                      <table id="usersTable"></table>
                   </div>
