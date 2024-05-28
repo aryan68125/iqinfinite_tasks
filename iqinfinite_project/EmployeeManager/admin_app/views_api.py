@@ -95,6 +95,9 @@ class SetUserIsDeleted(APIView):
                 print(f"SetUserIsDeleted is_deleted before update : {user_profile.is_deleted}")
                 #toggle between is_deleted = True and is_deleted = False
                 user_profile.is_deleted = not user_profile.is_deleted
+                user.is_active = not user_profile.is_deleted
+                user.save()
+                user_profile.is_active = user.is_active
                 user_profile.save()
                 print(f"SetUserIsDeleted is_deleted after update : {user_profile.is_deleted}")
                 return Response({'status':200,'msg':'User delete status updated'},status=200)

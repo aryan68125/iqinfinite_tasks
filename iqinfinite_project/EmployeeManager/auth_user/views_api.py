@@ -256,19 +256,23 @@ class LoginSameOrigin(APIView):
             password = request.data['password']
             print(f"LoginSameOrigin :-> username = {username} :: password = {password}")
             user = authenticate(username=username,password=password)
-            if user:
-                if user.is_superuser==True:
-                    userprofile = UserProfile.objects.get(user = user.id)
-                    role_db_object = userprofile.role
-                    login_user(request,user)
-                    return Response({'status':200,'user_role_id':role_db_object.id,'user_role_name':role_db_object.role_name},status=200)
+            user_db = User.objects.get(username=username)
+            if user_db.is_active == True:
+                if user:
+                    if user.is_superuser==True:
+                        userprofile = UserProfile.objects.get(user = user.id)
+                        role_db_object = userprofile.role
+                        login_user(request,user)
+                        return Response({'status':200,'user_role_id':role_db_object.id,'user_role_name':role_db_object.role_name},status=200)
+                    else:
+                        userprofile = UserProfile.objects.get(user = user.id)
+                        role_db_object = userprofile.role
+                        login_user(request,user)
+                        return Response({'status':200,'user_role_id':role_db_object.id,'user_role_name':role_db_object.role_name},status=200)
                 else:
-                    userprofile = UserProfile.objects.get(user = user.id)
-                    role_db_object = userprofile.role
-                    login_user(request,user)
-                    return Response({'status':200,'user_role_id':role_db_object.id,'user_role_name':role_db_object.role_name},status=200)
+                    return Response({'status':500,'error':'Username or Password not correct'},status=500)
             else:
-                return Response({'status':500,'error':'Username or Password not correct'},status=500)
+                return Response({'status':500,'error':'Your account is blocked'},status=500)
         else:
             # NOTE TODO TAKE NOTES ON HOW TO CHECK FOR KEYS IN A DICTIONARY CONTAINING SERIALIZER ERRORS TODO NOTE
             if 'username' in serializer.errors:
