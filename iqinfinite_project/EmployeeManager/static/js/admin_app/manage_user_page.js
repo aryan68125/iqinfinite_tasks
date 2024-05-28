@@ -347,7 +347,7 @@ function reset_form(){
 
 
 
-// Update users STARTS
+// >>>>>>>>>>>>>>>>Update users STARTS<<<<<<<<<<<<<<<<<<<<<<
 $('body').on('click','#update_users',function(){
     if ($('#Verify_otp_ui').is(':empty')) {
         console.log('Verify_otp_ui is empty.');
@@ -515,4 +515,4 @@ function show_update_users_related_content(){
         `
     )
 }
-// Update users ENDS
+// >>>>>>>>>>>>>>>>>>>>>>Update users ENDS<<<<<<<<<<<<<<<<<<<<<<<<<
