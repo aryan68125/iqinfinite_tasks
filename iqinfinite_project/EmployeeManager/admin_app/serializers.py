@@ -16,7 +16,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'role_name']
+        fields = ['id', 'username', 'first_name', 'last_name', 'role_name']
 
 class UserProfileSerializer(serializers.ModelSerializer):
     created_by = UserSerializer(read_only=True)
@@ -31,7 +31,7 @@ class GetAllUsersSerializers(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'user_profile']
+        fields = ['id', 'username', 'first_name', 'last_name', 'email', 'user_profile']
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
