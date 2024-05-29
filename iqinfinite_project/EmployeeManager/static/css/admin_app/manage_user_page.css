@@ -13,6 +13,7 @@
     align-items: space-around;
 }
 .update_user_ui_style{
-    transform: translateY(-13%);
-    height:55%;
+    transform: translateY(-11%);
+    max-height:54%;
+    min-height:53%;
 }

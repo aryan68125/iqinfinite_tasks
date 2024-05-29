@@ -4,7 +4,23 @@ from django.contrib.auth.models import User
 from auth_user.models import *
 import re
 
+class UserSerializer(serializers.ModelSerializer):
+    '''
+    class UserProfile(models.Model):
+        user = models.OneToOneField(User,on_delete=models.CASCADE,related_name='profile')
+        
+        here role_name = source='profile.role_name' means It's refering to the UserProfile model 
+        since the related_name = 'profile'
+    '''
+    role_name = serializers.CharField(source='profile.role_name', read_only=True)
+
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'role_name']
+
 class UserProfileSerializer(serializers.ModelSerializer):
+    created_by = UserSerializer(read_only=True)
+    updated_by = UserSerializer(read_only=True)
     class Meta:
         model = UserProfile
         fields = ['id', 'role', 'role_name','is_deleted','is_active','created_by','updated_by','created_at','updated_at']

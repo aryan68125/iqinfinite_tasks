@@ -380,7 +380,10 @@ function get_all_users_from_db(){
     .then(data=>{
         if(data.status==200){
             console.log(data.data)
-            console.log(data.data[0].user_profile.role_name)
+            // console.log(data.data[0])
+            // console.log(data.data[0].user_profile)
+            // console.log(data.data[0].user_profile.created_by)
+            // console.log(data.data[0].user_profile.updated_by)
             // TODO Add icons in the DataTable for showing is_deleted and is active fields
             // TODO add a column that holds the icon to delete or retore user based on it's current delete status
             // TODO add a column to permanently delete user 
@@ -393,8 +396,8 @@ function get_all_users_from_db(){
                     { title: 'User Name', data: 'username' },
                     { title: 'Email', data: 'email' },
                     { title: 'Role Name', data: 'user_profile.role_name' },
-                    { title: 'Created By', data: 'user_profile.created_by' },
-                    { title: 'Updated By', data: 'user_profile.updated_by' },
+                    { title: 'Created By', data: 'user_profile.created_by.username' },
+                    { title: 'Updated By', data: 'user_profile.updated_by.username' },
                     {
                         title: 'Is Deleted',
                         data: 'user_profile.is_deleted',
@@ -425,6 +428,7 @@ function get_all_users_from_db(){
             // CLICK EVENT LISTENER ON BUTTONS IN DATA_TABALE STARTS 
             userActiveButton()
             userDeleteButton()
+            data_table_row_click_event_handler()
             // CLICK EVENT LISTENER ON BUTTONS IN DATA_TABALE ENDS 
         }
         else{
@@ -527,7 +531,83 @@ function userDeleteButton(){
     });
     // Add event listener for is_deleted button clicks ENDS
 }
+
+// // Add click event listener to rows STARTS
+// function data_table_row_click_event_handler(){
+    
+//     $('#usersTable tbody').on('click', 'tr', function() {
+//         var table = $('#usersTable').DataTable();
+//         $('#usersTable tbody tr').css('background-color', '');
+
+//         // Add the background color to the clicked row
+//         $(this).css('background-color', 'lightgrey');
+
+//         var data = table.row(this).data();
+//         var userId = data.id;
+//         var username = data.username
+//         var email = data.email
+//         var user_role_name = data.user_profile.role_name
+//         var data = {
+//             userId : userId,
+//             username:username,
+//             email:email,
+//             user_role_name:user_role_name
+//         }
+//         console.log('Row click User ID :', data)
+//     });
+//     // Add click event listener to rows ENDS
+// }
+// // Add click event listener to rows STARTS
+
+// Add click event listener to rows STARTS
+function data_table_row_click_event_handler(){
+    
+    $('#usersTable tbody').on('click', 'tr', function() {
+        var table = $('#usersTable').DataTable();
+        $('#usersTable tbody tr').css('background-color', '');
+
+        // Add the background color to the clicked row
+        $(this).css('background-color', 'lightgrey');
+
+        var data = table.row(this).data();
+        var userId = data.id;
+        var username = data.username
+        var email = data.email
+        var user_role_name = data.user_profile.role_name
+        var data = {
+            userId : userId,
+            username:username,
+            email:email,
+            user_role_name:user_role_name
+        }
+        console.log('Row click User ID :', data)
+        
+        //empty the DataTable UI
+        $('#update_user_ui').empty()
+        //add a user update form UI
+        $('#update_user_ui').append(
+            `
+                <div class="card" id="user_update_form_card">
+                    <div class="card-body">
+                        <div class="my-3" style="display:flex">
+                            <button class="btn btn-dark mx-2" id="user_update_form_back_button"><i class="fa-solid fa-arrow-left"></i></button>
+                            <h5 class="mx-2">Update User:</h5>
+                        </div>
+                        <div class="my-3">
+                            <p>Update user form here</p>
+                        </div>
+                    </div>
+                </div>
+            `
+        )
+        check_user_update_form_card_exists()
+        
+    });
+    // Add click event listener to rows ENDS
+}
+// Add click event listener to rows STARTS
 // CLICK EVENT LISTENER ON BUTTONS IN DATA_TABALE ENDS 
+
 function show_update_users_related_content(){
     console.log("Update users related content")
 
@@ -546,5 +626,29 @@ function show_update_users_related_content(){
             </div>
         `
     )
+
+    check_user_update_form_card_exists()
 }
+
+//Check if the Update user form exists on the screen or not {user_update_form_card} STARTS
+function check_user_update_form_card_exists(){
+    if ($('#update_user_ui').find('#user_update_form_card').length > 0) {
+        console.log('#update_user_ui contains #user_update_form_card');
+        //apply backend logic for the user update form here if the form exist
+    } else {
+        console.log('#update_user_ui does not contain #user_update_form_card');
+    }
+}
+//Check if the Update user form exists on the screen or not {user_update_form_card} ENDS
 // >>>>>>>>>>>>>>>>>>>>>>Update users ENDS<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+
+
+
+
+
+
+

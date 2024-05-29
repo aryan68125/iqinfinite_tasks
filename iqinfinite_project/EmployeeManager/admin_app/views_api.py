@@ -38,7 +38,7 @@ from auth_user.tasks import *
 from admin_app.serializers import *
 
 '''
-cross origin
+cross origin and same-origin
 '''
 class GetAllUsers(APIView):
     authentication_classes = (JWTAuthentication, SessionAuthentication)
@@ -49,7 +49,7 @@ class GetAllUsers(APIView):
         return Response({'status':200,'data':serializer.data},status=200)
 
 '''
-cross origin
+cross origin and same-origin
 '''
 class SetUserIsActive(APIView):
     authentication_classes = (JWTAuthentication, SessionAuthentication)
@@ -80,7 +80,9 @@ class SetUserIsActive(APIView):
                 return Response({'status':400,'error':serializer.errors['user_pk']},status=400)
             else:
                 return Response({'status':400,'error':serializer.errors},status=400)
-
+'''
+cross-origin and same-origin
+'''
 class SetUserIsDeleted(APIView):
     authentication_classes = (JWTAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated, IsAdminUser)
