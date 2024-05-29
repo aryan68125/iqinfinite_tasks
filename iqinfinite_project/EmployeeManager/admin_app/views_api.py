@@ -39,14 +39,21 @@ from admin_app.serializers import *
 
 '''
 cross origin and same-origin
+This api view has two urls it can get one user if userId is provided and if userId is not provided then it will
+get all the users from the database
 '''
-class GetAllUsers(APIView):
+class GetAllUsersOrOneUser(APIView):
     authentication_classes = (JWTAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated, IsAdminUser)
-    def get(self,request):
-        user = User.objects.exclude(is_superuser = True)
-        serializer = GetAllUsersSerializers(user,many=True)
-        return Response({'status':200,'data':serializer.data},status=200)
+    def get(self,request,userId=-1):
+        if not userId == -1:
+            user = User.objects.get(id=userId)
+            serializer = GetAllUsersSerializers(user)
+            return Response({'status': 200, 'data': serializer.data}, status=200)
+        else:
+            user = User.objects.exclude(is_superuser = True)
+            serializer = GetAllUsersSerializers(user,many=True)
+            return Response({'status':200,'data':serializer.data},status=200)
 
 '''
 cross origin and same-origin

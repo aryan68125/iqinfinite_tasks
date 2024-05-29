@@ -532,33 +532,6 @@ function userDeleteButton(){
     // Add event listener for is_deleted button clicks ENDS
 }
 
-// // Add click event listener to rows STARTS
-// function data_table_row_click_event_handler(){
-    
-//     $('#usersTable tbody').on('click', 'tr', function() {
-//         var table = $('#usersTable').DataTable();
-//         $('#usersTable tbody tr').css('background-color', '');
-
-//         // Add the background color to the clicked row
-//         $(this).css('background-color', 'lightgrey');
-
-//         var data = table.row(this).data();
-//         var userId = data.id;
-//         var username = data.username
-//         var email = data.email
-//         var user_role_name = data.user_profile.role_name
-//         var data = {
-//             userId : userId,
-//             username:username,
-//             email:email,
-//             user_role_name:user_role_name
-//         }
-//         console.log('Row click User ID :', data)
-//     });
-//     // Add click event listener to rows ENDS
-// }
-// // Add click event listener to rows STARTS
-
 // Add click event listener to rows STARTS
 function data_table_row_click_event_handler(){
     
@@ -571,41 +544,45 @@ function data_table_row_click_event_handler(){
 
         var data = table.row(this).data();
         var userId = data.id;
-        var username = data.username
-        var email = data.email
-        var user_role_name = data.user_profile.role_name
-        var data = {
-            userId : userId,
-            username:username,
-            email:email,
-            user_role_name:user_role_name
-        }
+
+        //get on user from DB via api call
         console.log('Row click User ID :', data)
-        
-        //empty the DataTable UI
-        $('#update_user_ui').empty()
-        //add a user update form UI
-        $('#update_user_ui').append(
-            `
-                <div class="card" id="user_update_form_card">
-                    <div class="card-body">
-                        <div class="my-3" style="display:flex">
-                            <button class="btn btn-dark mx-2" id="user_update_form_back_button"><i class="fa-solid fa-arrow-left"></i></button>
-                            <h5 class="mx-2">Update User:</h5>
-                        </div>
-                        <div class="my-3">
-                            <p>Update user form here</p>
-                        </div>
-                    </div>
-                </div>
-            `
-        )
-        check_user_update_form_card_exists()
+
+        fetch(
+            `/admin_app/api/GetOneUser/${userId}/`,
+            {
+                method:'GET',
+                headers:{
+                    Accept:'application/json',
+                    'Content-Type':'application/json',
+                    'X-CSRFToken':getCookie("csrftoken")
+                },
+            }
+        ).then(response=>response.json())
+        .then(data=>{
+            if(data.status==200){
+                // if status==200
+                $('#user_data_table_card').hide()
+                $('#user_update_form_card').show()
+                check_user_update_form_card_hidden()
+                console.log(data)
+            }
+            else{
+                error_msg = data.error
+                Swal.fire({
+                    position: "top-end",
+                    icon: "error",
+                    title: error_msg,
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            }
+        })
         
     });
-    // Add click event listener to rows ENDS
+    
 }
-// Add click event listener to rows STARTS
+// Add click event listener to rows ENDS
 // CLICK EVENT LISTENER ON BUTTONS IN DATA_TABALE ENDS 
 
 function show_update_users_related_content(){
@@ -614,7 +591,7 @@ function show_update_users_related_content(){
     $('#update_user_ui').empty()
     $('#update_user_ui').append(
         `
-            <div class="card">
+            <div class="card" id="user_data_table_card">
                 <div class="card-body">
                   <div>
                     <h5>User Data:</h5>
@@ -624,19 +601,42 @@ function show_update_users_related_content(){
                   </div>
                 </div>
             </div>
+
+            <div class="card" id="user_update_form_card">
+                <div class="card-body">
+                    <div class="my-3" style="display:flex">
+                        <button class="btn btn-dark mx-2" id="user_update_form_back_button"><i class="fa-solid fa-arrow-left"></i></button>
+                        <h5 class="mx-2">Update User:</h5>
+                    </div>
+                    <div class="my-3">
+                        <p>Update user form here</p>
+                    </div>
+                </div>
+            </div>
         `
     )
-
-    check_user_update_form_card_exists()
+    $('#user_update_form_card').hide()
+    check_user_update_form_card_hidden()
 }
 
 //Check if the Update user form exists on the screen or not {user_update_form_card} STARTS
-function check_user_update_form_card_exists(){
-    if ($('#update_user_ui').find('#user_update_form_card').length > 0) {
-        console.log('#update_user_ui contains #user_update_form_card');
-        //apply backend logic for the user update form here if the form exist
+function check_user_update_form_card_hidden(){
+    if ($('#user_update_form_card').is(':hidden')) {
+        // The element with ID 'user_update_form_card' is hidden
+        console.log('The user_update_form_card is hidden');
     } else {
-        console.log('#update_user_ui does not contain #user_update_form_card');
+        // The element with ID 'user_update_form_card' is visible
+        console.log('The user_update_form_card is visible');
+        //apply backend logic for the user update form here if the form exist
+        //LOGIC FOR THE BACK BUTTON #user_update_form_back_button STARTS
+        $('body').on('click','#user_update_form_back_button',function(){
+            $('#user_update_form_card').hide()
+            $('#user_data_table_card').show()
+            // check_user_update_form_card_hidden() FOR DEBUGGING
+
+
+        })
+        //LOGIC FOR THE BACK BUTTON #user_update_form_back_button ENDS
     }
 }
 //Check if the Update user form exists on the screen or not {user_update_form_card} ENDS
