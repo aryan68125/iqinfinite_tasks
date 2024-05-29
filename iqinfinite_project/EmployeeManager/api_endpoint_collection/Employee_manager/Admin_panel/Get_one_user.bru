@@ -1,18 +1,13 @@
 meta {
-  name: Get_all_users
+  name: Get_one_user
   type: http
-  seq: 1
+  seq: 4
 }
 
 get {
-  url: http://127.0.0.1:8000/admin_app/api/GetAllUsers
-  body: multipartForm
+  url: http://127.0.0.1:8000/admin_app/api/GetOneUser/171/
+  body: none
   auth: bearer
-}
-
-headers {
-  Accept: application/json
-  Content-Type: application/json
 }
 
 auth:bearer {
