@@ -354,6 +354,8 @@ $('body').on('click','#update_users',function(){
         $('#Add_Users_UI').empty()
         show_update_users_related_content()
         get_all_users_from_db()
+        //populate the role_selector drop down menu
+        get_all_user_roles_update_user_form() 
     } else {
         console.log('Verify_otp_ui is not empty.');
         error_msg = "First verify otp before trying to update user"
@@ -535,67 +537,67 @@ function userDeleteButton(){
 }
 
 //ADD a LONG CLICK event on each row of the DataTable STARTS (ARCHIVE DO NOT DELETE)
-function handleRowLongClick(row) {
-    var table = $('#usersTable').DataTable();
-    var data = table.row(row).data();
-    var userId = data.id;
-    console.log('Long click User ID:', userId);
-    // Perform desired action on long click
-    fetch(
-        `/admin_app/api/GetOneUser/${userId}/`,
-        {
-            method:'GET',
-            headers:{
-                Accept:'application/json',
-                'Content-Type':'application/json',
-                'X-CSRFToken':getCookie("csrftoken")
-            },
-        }
-    ).then(response=>response.json())
-    .then(data=>{
-        if(data.status==200){
-            // if status==200
-            $('#user_data_table_card').hide()
-            $('#user_update_form_card').show()
-            check_user_update_form_card_hidden()
-            console.log(data)
-            var user_id = data.data.id
-            var username = data.data.username
-            var first_name = data.data.first_name
-            var last_name = data.data.last_name
-            var email = data.data.email
-            var user_role_id = data.data.user_profile.role
-            // console.log(user_id)
+// function handleRowLongClick(row) {
+//     var table = $('#usersTable').DataTable();
+//     var data = table.row(row).data();
+//     var userId = data.id;
+//     console.log('Long click User ID:', userId);
+//     // Perform desired action on long click
+//     fetch(
+//         `/admin_app/api/GetOneUser/${userId}/`,
+//         {
+//             method:'GET',
+//             headers:{
+//                 Accept:'application/json',
+//                 'Content-Type':'application/json',
+//                 'X-CSRFToken':getCookie("csrftoken")
+//             },
+//         }
+//     ).then(response=>response.json())
+//     .then(data=>{
+//         if(data.status==200){
+//             // if status==200
+//             $('#user_data_table_card').hide()
+//             $('#user_update_form_card').show()
+//             check_user_update_form_card_hidden()
+//             console.log(data)
+//             var user_id = data.data.id
+//             var username = data.data.username
+//             var first_name = data.data.first_name
+//             var last_name = data.data.last_name
+//             var email = data.data.email
+//             var user_role_id = data.data.user_profile.role
+//             // console.log(user_id)
 
-            // populate the form in user_update_form_card 
-            //show user id and username in here using text span_user_id_user_name
-            set_user_data_into_the_update_user_form(user_id, username, first_name, last_name, email,user_role_id) // This function populate the form 
-            //populate the role_selector drop down menu
-            get_all_user_roles_update_user_form()
-        }
-        else{
-            error_msg = data.error
-            Swal.fire({
-                position: "top-end",
-                icon: "error",
-                title: error_msg,
-                showConfirmButton: false,
-                timer: 1500
-            });
-        }
-    })
-}
+//             // populate the form in user_update_form_card 
+//             //show user id and username in here using text span_user_id_user_name
+//             set_user_data_into_the_update_user_form(user_id, username, first_name, last_name, email,user_role_id) // This function populate the form 
+//             //populate the role_selector drop down menu
+//             get_all_user_roles_update_user_form()
+//         }
+//         else{
+//             error_msg = data.error
+//             Swal.fire({
+//                 position: "top-end",
+//                 icon: "error",
+//                 title: error_msg,
+//                 showConfirmButton: false,
+//                 timer: 1500
+//             });
+//         }
+//     })
+// }
 
-var timer;
-var longClickDuration = 1500; // 1.5 second
-function data_table_row_long_click_event_handler(){
-    $('#usersTable tbody').on('mousedown', 'tr', function() {
-        var that = this;
-        timer = setTimeout(function() {
-            handleRowLongClick(that);
-        }, longClickDuration);
-    });
-}
+// var timer;
+// var longClickDuration = 1500; // 1.5 second
+// function data_table_row_long_click_event_handler(){
+//     $('#usersTable tbody').on('mousedown', 'tr', function() {
+//         var that = this;
+//         timer = setTimeout(function() {
+//             handleRowLongClick(that);
+//         }, longClickDuration);
+//     });
+// }
 //ADD a LONG CLICK event on each row of the DataTable ENDS (ARCHIVE DO NOT DELETE)
 
 // Add click event listener to rows STARTS   (ARCHIVE NOTE DO NOT DELETE)
@@ -703,13 +705,13 @@ function data_table_row_double_click_event_handler(){
                 var last_name = data.data.last_name
                 var email = data.data.email
                 var user_role_id = data.data.user_profile.role
-                // console.log(user_id)
+                // console.log(user_role_id)
 
                 // populate the form in user_update_form_card 
-                //show user id and username in here using text span_user_id_user_name
-                set_user_data_into_the_update_user_form(user_id, username, first_name, last_name, email,user_role_id) // This function populate the form 
                 //populate the role_selector drop down menu
-                get_all_user_roles_update_user_form()
+                // get_all_user_roles_update_user_form() //---> FIX THIS BAWASEER HERE
+                //show user id and username in here using text span_user_id_user_name
+                set_user_data_into_the_update_user_form(user_id, username, first_name, last_name, email, user_role_id) // This function populate the form 
             }
             else{
                 error_msg = data.error
@@ -780,14 +782,8 @@ function show_update_users_related_content(){
                             </div>
                         </div>
                         <div class="col-sm-12 col-md-4 col-lg-3">
-                            <div class="mb-3">
-                                <label for="role_name" class="form-label">User Role:</label>
-                                <input type="text" class="form-control" id="role_name" aria-describedby="emailHelp">
-                            </div>
-                        </div>
-                        <div class="col-sm-12 col-md-4 col-lg-3">
-                            <div class="mb-3">
-                                <select class="form-group mx-2" style="width:97%" id="role_user_update_form_dropdown">
+                            <div class="mb-3 mt-1">
+                                <select class="form-group mx-2 mt-4" style="width:97%; height:40px;" id="role_user_update_form_dropdown">
                                     <!--Render the options using javascript -->
                                 </select>
                             </div>
@@ -820,12 +816,13 @@ function check_user_update_form_card_hidden(){
     } else {
         // The element with ID 'user_update_form_card' is visible
         console.log('The user_update_form_card is visible');
+        
         //apply backend logic for the user update form here if the form exist
         //LOGIC FOR THE BACK BUTTON #user_update_form_back_button STARTS
         $('body').on('click','#user_update_form_back_button',function(){
             //this function resets form and hide the form and shows the data_table 
             reset_form_and_go_back_function()
-            // check_user_update_form_card_hidden() FOR DEBUGGING
+            // check_user_update_form_card_hidden()
         })
         //LOGIC FOR THE BACK BUTTON #user_update_form_back_button ENDS
 
@@ -850,13 +847,13 @@ function get_user_data_from_update_user_form(){
     first_name = $('#first_name').val()
     last_name = $('#last_name').val()
     email = $('#email').val()
-    role_name = $('#role_name').val()
+    role_id = $('#role_user_update_form_dropdown').val()
     var data = {
         username:username,
         first_name:first_name,
         last_name:last_name,
         email:email,
-        role_name:role_name
+        role_id:role_id
     }
     console.log("get_user_data_from_the_form :",data)
 }
@@ -864,11 +861,11 @@ function reset_form_and_go_back_function(){
     $('#user_update_form_card').hide()
     $('#user_data_table_card').show()
     $('#span_user_id_user_name').text("")
-    username = $('#username').val("")
-    first_name = $('#first_name').val("")
-    last_name = $('#last_name').val("")
-    email = $('#email').val("")
-    role_name = $('#role_user_update_form_dropdown').val("default")
+    $('#username').val("")
+    $('#first_name').val("")
+    $('#last_name').val("")
+    $('#email').val("")
+    $('#role_user_update_form_dropdown').val("default")
 }
 //GET THE VALUES FROM THE UPDATE USER DATA FORM ENDS 
 
@@ -876,11 +873,15 @@ function reset_form_and_go_back_function(){
 function set_user_data_into_the_update_user_form(user_id, username_, first_name_, last_name_, email_, user_role_id_){
     var set_title = `(UID: ${user_id} / Username: ${username_})`
     $('#span_user_id_user_name').text(set_title)
-    username = $('#username').val(username_)
-    first_name = $('#first_name').val(first_name_)
-    last_name = $('#last_name').val(last_name_)
-    email = $('#email').val(email_)
-    role_name = $('#role_user_update_form_dropdown').val(user_role_id_)
+    $('#username').val(username_)
+    $('#first_name').val(first_name_)
+    $('#last_name').val(last_name_)
+    $('#email').val(email_)
+
+    console.log("set_user_data_into_the_update_user_form role id : ",  user_role_id_) //DEBUGGING
+
+    $('#role_user_update_form_dropdown').val(user_role_id_); 
+    // document.getElementById('role_user_update_form_dropdown').value = userRoleId;
 }
 //CALL THIS FUNCTION WHEN TABLE ROW IS CLICKED : SET THE VALUES IN THE UPDATE USER FORM ENDS
 //call the api that fetches all the user roles
@@ -895,8 +896,9 @@ function get_all_user_roles_update_user_form(){
     }).then(response=>response.json())
     .then(data=>{
         if (data.status==200){
-            console.log(data)
-            console.log(data.data)
+            console.log("get_all_user_roles_update_user_form : ",data)
+            // console.log(data.data)
+            $('#role_user_update_form_dropdown').empty()
             $('#role_user_update_form_dropdown').append(`
             <option value="default">--SELECT ROLE--</option>
             `)
@@ -904,6 +906,7 @@ function get_all_user_roles_update_user_form(){
                 // console.log(data.data[i])
                 // console.log(data.data[i].id)
                 // console.log(data.data[i].role_name)
+                console.log("render the options in the role select dropdown count : ",i )
                 render_options_for_role_user_update_form_dropdown(data.data[i].id,data.data[i].role_name)
             }
         }
@@ -920,7 +923,7 @@ function get_all_user_roles_update_user_form(){
     })
 }
 function render_options_for_role_user_update_form_dropdown(role_id,role_name){
-    $('#role_user_update_form_dropdown').empty()
+    console.log("render_options_for_role_user_update_form_dropdown id :: value :-", role_id,role_name)
     $('#role_user_update_form_dropdown').append(`
         <option value="${role_id}">${role_name}</option>
     `)
