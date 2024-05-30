@@ -348,14 +348,18 @@ function reset_form(){
 
 
 // >>>>>>>>>>>>>>>>Update users STARTS<<<<<<<<<<<<<<<<<<<<<<
+function generate_update_user_UI()
+{
+    $('#Add_Users_UI').empty()
+    show_update_users_related_content()
+    get_all_users_from_db()
+    //populate the role_selector drop down menu
+    get_all_user_roles_update_user_form() 
+}
 $('body').on('click','#update_users',function(){
     if ($('#Verify_otp_ui').is(':empty')) {
         console.log('Verify_otp_ui is empty.');
-        $('#Add_Users_UI').empty()
-        show_update_users_related_content()
-        get_all_users_from_db()
-        //populate the role_selector drop down menu
-        get_all_user_roles_update_user_form() 
+        generate_update_user_UI()
     } else {
         console.log('Verify_otp_ui is not empty.');
         error_msg = "First verify otp before trying to update user"
@@ -381,16 +385,7 @@ function get_all_users_from_db(){
     ).then(response=>response.json())
     .then(data=>{
         if(data.status==200){
-            console.log(data.data)
-            // console.log(data.data[0])
-            // console.log(data.data[0].user_profile)
-            // console.log(data.data[0].user_profile.created_by)
-            // console.log(data.data[0].user_profile.updated_by)
-            // TODO Add icons in the DataTable for showing is_deleted and is active fields
-            // TODO add a column that holds the icon to delete or retore user based on it's current delete status
-            // TODO add a column to permanently delete user 
-            // TODO add a column to block user and show a button to block and unblock based on user's block status
-
+            console.log("GET ALL users")
             $('#usersTable').DataTable({
                 data: data.data,
                 columns: [
@@ -424,16 +419,17 @@ function get_all_users_from_db(){
                     },
                     { title: 'Created At', data: 'user_profile.created_at' },
                     { title: 'Updated At', data: 'user_profile.updated_at' }
-                ]
+                ],
+                responsive: true // Enable responsiveness
             });
 
-            // CLICK EVENT LISTENER ON BUTTONS IN DATA_TABALE STARTS 
-            userActiveButton()
-            userDeleteButton()
+            // CLICK EVENT LISTENER ON BUTTONS IN DATA_TABALE STARTS TESTING >>
+            // userActiveButton()
+            // userDeleteButton()
             // data_table_row_click_event_handler()
             // data_table_row_long_click_event_handler()
             data_table_row_double_click_event_handler()
-            // CLICK EVENT LISTENER ON BUTTONS IN DATA_TABALE ENDS 
+            // CLICK EVENT LISTENER ON BUTTONS IN DATA_TABALE ENDS TESTING >>
         }
         else{
             error_msg = data.error
@@ -447,6 +443,7 @@ function get_all_users_from_db(){
         }
     })
 }
+
 // CLICK EVENT LISTENER ON BUTTONS IN DATA_TABALE STARTS 
 //event listner function for is_active
 function userActiveButton(){
@@ -475,7 +472,11 @@ function userActiveButton(){
                 $('#Add_Users_UI').empty()
                 $('#update_user_ui').empty()
                 show_update_users_related_content()
-                get_all_users_from_db()
+                if ($.fn.DataTable.isDataTable('#usersTable')) {
+                    $('#usersTable').DataTable().clear().destroy();
+                }
+                // get_all_users_from_db()'
+                // refreshDataTable() //EXPERIMENTAL
             }
             else{
                 error_msg = data.error
@@ -519,7 +520,11 @@ function userDeleteButton(){
                 $('#Add_Users_UI').empty()
                 $('#update_user_ui').empty()
                 show_update_users_related_content()
-                get_all_users_from_db()
+                if ($.fn.DataTable.isDataTable('#usersTable')) {
+                    $('#usersTable').DataTable().clear().destroy();
+                }
+                // get_all_users_from_db()
+                // refreshDataTable() //EXPERIMENTAL
             }
             else{
                 error_msg = data.error
@@ -705,13 +710,15 @@ function data_table_row_double_click_event_handler(){
                 var last_name = data.data.last_name
                 var email = data.data.email
                 var user_role_id = data.data.user_profile.role
+                var user_is_active = data.data.user_profile.is_active
+                var user_is_deleted = data.data.user_profile.is_deleted
                 // console.log(user_role_id)
 
                 // populate the form in user_update_form_card 
                 //populate the role_selector drop down menu
                 // get_all_user_roles_update_user_form() //---> FIX THIS BAWASEER HERE
                 //show user id and username in here using text span_user_id_user_name
-                set_user_data_into_the_update_user_form(user_id, username, first_name, last_name, email, user_role_id) // This function populate the form 
+                set_user_data_into_the_update_user_form(user_id, username, first_name, last_name, email, user_role_id, user_is_active, user_is_deleted) // This function populate the form 
             }
             else{
                 error_msg = data.error
@@ -788,6 +795,18 @@ function show_update_users_related_content(){
                                 </select>
                             </div>
                         </div>
+                        <div class="col-sm-12 col-md-4 col-lg-3">
+                            <div class="mb-3 mt-4" style="display:flex">
+                                <div class="mx-1">
+                                    <label for="delete_user" class="form-label">Delete User</label>
+                                    <input type="checkbox" id="delete_user" class="mx-3"/>
+                                </div>
+                                <div class="mx-1">
+                                    <label for="block_user" class="form-label">Block User</label>
+                                    <input type="checkbox" id="block_user" class="mx-3"/>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="row">
                         <div class="col-sm-12 col-md-4 col-lg-3">
@@ -805,8 +824,33 @@ function show_update_users_related_content(){
         `
     )
     $('#user_update_form_card').hide()
+    update_form_button_click_event_listener()
     check_user_update_form_card_hidden()
 }
+
+// UPDATE FORM CLICK EVENT LISTENER STARTS
+function update_form_button_click_event_listener()
+{
+        //LOGIC FOR THE BACK BUTTON #user_update_form_back_button STARTS
+        $('body').on('click','#user_update_form_back_button',function(){
+            //this function resets form and hide the form and shows the data_table 
+            reset_form_and_go_back_function()
+        })
+        //LOGIC FOR THE BACK BUTTON #user_update_form_back_button ENDS
+        //LOGIC to add click event listener for save changes with the id = update_user_data_button button STARTS
+        $('body').on('click','#update_user_data_button',function(){
+            console.log("#update_user_data_button saved changes clicked")
+            get_user_data_from_update_user_form()
+            reset_form_and_go_back_function()
+        })
+        //LOGIC to add click event listener for save changes with the id = update_user_data_button button ENDS
+        //LOGIC to add click event listener for save changes with the id = update_user_data_button button STARTS
+        $('body').on('click','#update_user_password_button',function(){
+            console.log("#update_user_password_button change password clicked")
+        })
+        //LOGIC to add click event listener for save changes with the id = update_user_data_button button ENDS
+}
+// UPDATE FORM CLICK EVENT LISTENER ENDS
 
 //Check if the Update user form exists on the screen or not {user_update_form_card} STARTS
 function check_user_update_form_card_hidden(){
@@ -818,28 +862,10 @@ function check_user_update_form_card_hidden(){
         console.log('The user_update_form_card is visible');
         
         //apply backend logic for the user update form here if the form exist
-        //LOGIC FOR THE BACK BUTTON #user_update_form_back_button STARTS
-        $('body').on('click','#user_update_form_back_button',function(){
-            //this function resets form and hide the form and shows the data_table 
-            reset_form_and_go_back_function()
-            // check_user_update_form_card_hidden()
-        })
-        //LOGIC FOR THE BACK BUTTON #user_update_form_back_button ENDS
 
-        //LOGIC to add click event listener for save changes with the id = update_user_data_button button STARTS
-        $('body').on('click','#update_user_data_button',function(){
-            console.log("#update_user_data_button saved changes clicked")
-            get_user_data_from_update_user_form()
-        })
-        //LOGIC to add click event listener for save changes with the id = update_user_data_button button ENDS
-
-        //LOGIC to add click event listener for save changes with the id = update_user_data_button button STARTS
-        $('body').on('click','#update_user_password_button',function(){
-            console.log("#update_user_password_button change password clicked")
-        })
-        //LOGIC to add click event listener for save changes with the id = update_user_data_button button ENDS
     }
 }
+
 //GET THE VALUES FROM THE UPDATE USER DATA FORM STARTS 
 function extractNumberFromString(str) {
     // Use regular expression to match the number in the string
@@ -858,13 +884,30 @@ function get_user_data_from_update_user_form(){
     var last_name = $('#last_name').val()
     var email = $('#email').val()
     var role_id = $('#role_user_update_form_dropdown').val()
+    if ($('#delete_user').is(":checked"))
+        {
+          var is_deleted = true
+        }
+    else{
+        var is_deleted = false
+    }
+    if (!$('#block_user').is(":checked"))
+        {
+            var is_active = true
+        }
+    else{
+        var is_active = false
+    }
+
     var data = {
         user_id:user_id,
         username:username,
         first_name:first_name,
         last_name:last_name,
         email:email,
-        role_id:role_id
+        role_id:role_id,
+        is_active:is_active,
+        is_deleted:is_deleted
     }
     console.log("get_user_data_from_the_form :",data)
 
@@ -895,26 +938,45 @@ function get_user_data_from_update_user_form(){
         }
     })
 }
+// Function to refresh the DataTable
+function refreshDataTable() {
+    // Destroy the existing DataTable instance
+    if ($.fn.DataTable.isDataTable('#usersTable')) {
+        $('#usersTable').DataTable().clear().destroy();
+    }
+
+    // Fetch and reinitialize the DataTable
+    get_all_users_from_db();
+}
 function reset_form_and_go_back_function(){
     $('#user_update_form_card').hide()
     $('#user_data_table_card').show()
+    refreshDataTable() // EXPERIMENTAL
     $('#span_user_id_user_name').text("")
     $('#username').val("")
     $('#first_name').val("")
     $('#last_name').val("")
     $('#email').val("")
+    $("#delete_user").attr("checked", false);
+    $("#block_user").attr("checked", false);
     $('#role_user_update_form_dropdown').val("default")
 }
 //GET THE VALUES FROM THE UPDATE USER DATA FORM ENDS 
 
 //CALL THIS FUNCTION WHEN TABLE ROW IS CLICKED : SET THE VALUES IN THE UPDATE USER FORM STARTS
-function set_user_data_into_the_update_user_form(user_id, username_, first_name_, last_name_, email_, user_role_id_){
+function set_user_data_into_the_update_user_form(user_id, username_, first_name_, last_name_, email_, user_role_id_, user_is_active, user_is_deleted){
     var set_title = `(UID: ${user_id} / Username: ${username_})`
     $('#span_user_id_user_name').text(set_title)
     $('#username').val(username_)
     $('#first_name').val(first_name_)
     $('#last_name').val(last_name_)
     $('#email').val(email_)
+    if (user_is_deleted == true){
+        $("#delete_user").attr("checked", true);
+    }
+    if (user_is_active!=true){
+        $("#block_user").attr("checked", true);
+    }
 
     console.log("set_user_data_into_the_update_user_form role id : ",  user_role_id_) //DEBUGGING
 
@@ -940,9 +1002,6 @@ function get_all_user_roles_update_user_form(){
             <option value="default">--SELECT ROLE--</option>
             `)
             for(i=0;i<data.data.length;i++){
-                // console.log(data.data[i])
-                // console.log(data.data[i].id)
-                // console.log(data.data[i].role_name)
                 console.log("render the options in the role select dropdown count : ",i )
                 render_options_for_role_user_update_form_dropdown(data.data[i].id,data.data[i].role_name)
             }

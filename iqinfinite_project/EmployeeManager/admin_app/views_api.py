@@ -63,9 +63,13 @@ class GetAllUsersOrOneUserOrUpdateUser(APIView):
         user_role_model = UserRole.objects.get(id=request.data['role_id'])
         role_name_var = user_role_model.role_name
         role_id = request.data['role_id']
+        is_active = request.data['is_active']
+        is_deleted = request.data['is_deleted']
         data = {
             'role':role_id,
-            'role_name':role_name_var
+            'role_name':role_name_var,
+            'is_active':is_active,
+            'is_deleted':is_deleted
         }
         user_profile_serialzier = UpdateUserProfileSeirlaizer(user_profile,data=data,partial=True)
         print(f'GetAllUsersOrOneUserOrUpdateUser <-::-> user_name = {user.username} : {user_profile.role}')

@@ -44,7 +44,7 @@ class GetAllUsersSerializers(serializers.ModelSerializer):
 class UpdateUserProfileSeirlaizer(serializers.ModelSerializer):
     class Meta:
         model=UserProfile
-        fields = ['user','role','role_name']
+        fields = ['user','role','role_name','is_active','is_deleted']
 
 class UpdateUserSerializer(serializers.ModelSerializer):
     class Meta:
