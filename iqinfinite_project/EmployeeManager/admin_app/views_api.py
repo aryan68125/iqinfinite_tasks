@@ -42,7 +42,7 @@ cross origin and same-origin
 This api view has two urls it can get one user if userId is provided and if userId is not provided then it will
 get all the users from the database
 '''
-class GetAllUsersOrOneUser(APIView):
+class GetAllUsersOrOneUserOrUpdateUser(APIView):
     authentication_classes = (JWTAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated, IsAdminUser)
     def get(self,request,userId=-1):
@@ -54,7 +54,31 @@ class GetAllUsersOrOneUser(APIView):
             user = User.objects.exclude(is_superuser = True)
             serializer = GetAllUsersSerializers(user,many=True)
             return Response({'status':200,'data':serializer.data},status=200)
+    def patch(self,request):
+        user_id = request.data['user_id']
+        user = User.objects.get(id=user_id)
+        user_serializer = UpdateUserSerializer(user,data=request.data,partial=True)
+        user_profile = UserProfile.objects.get(user=user.id)
 
+        user_role_model = UserRole.objects.get(id=request.data['role_id'])
+        role_name_var = user_role_model.role_name
+        role_id = request.data['role_id']
+        data = {
+            'role':role_id,
+            'role_name':role_name_var
+        }
+        user_profile_serialzier = UpdateUserProfileSeirlaizer(user_profile,data=data,partial=True)
+        print(f'GetAllUsersOrOneUserOrUpdateUser <-::-> user_name = {user.username} : {user_profile.role}')
+        if user_serializer.is_valid() and user_profile_serialzier.is_valid():
+            user_serializer.save()
+            user_profile_serialzier.save()
+            return Response({'status':200,'msg':'User updated!'},status=200)
+        else:
+            error = {
+                'user_serializer':user_serializer.errors,
+                'user_profile_serialzier':user_profile_serialzier.errors,
+            }
+            return Response({'status':400,'error':error},status=400)
 '''
 cross origin and same-origin
 '''

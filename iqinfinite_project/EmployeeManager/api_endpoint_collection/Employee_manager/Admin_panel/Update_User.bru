@@ -1,11 +1,11 @@
 meta {
-  name: Get_all_users
+  name: Update_User
   type: http
-  seq: 1
+  seq: 5
 }
 
-get {
-  url: http://127.0.0.1:8000/admin_app/api/GetAllUsers
+patch {
+  url: http://127.0.0.1:8000/admin_app/api/UpdateUser/
   body: multipartForm
   auth: bearer
 }
@@ -17,4 +17,13 @@ headers {
 
 auth:bearer {
   token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzE3MDU0MDM3LCJpYXQiOjE3MTcwNTIxOTgsImp0aSI6IjQ4Y2VlZWRlMDRkNDQ4NDJiMWYwMTRlMTg2ZWQ2OWVjIiwidXNlcl9pZCI6Mjl9.wOFqeShEBe3V3q9xWUrEcf6bcPTxXczUr3UpQzTC0ho
+}
+
+body:multipart-form {
+  user_id: 170
+  username: yodina
+  first_name: Yodina
+  last_name: Brijwasi
+  email: yodina@gmail.com
+  role_id: 3
 }

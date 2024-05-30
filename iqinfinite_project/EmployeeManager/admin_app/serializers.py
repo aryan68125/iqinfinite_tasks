@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from auth_user.models import *
 import re
 
+# READ ONLY API STARTS
 class UserSerializer(serializers.ModelSerializer):
     '''
     class UserProfile(models.Model):
@@ -37,7 +38,20 @@ class GetAllUsersSerializers(serializers.ModelSerializer):
         data = super().to_representation(instance)
         # print(data)  # Print serialized data for debugging
         return data
-    
+# READ ONLY API ENDS
+
+# UPDATE USER FORM RELATED SERIALIZERS 
+class UpdateUserProfileSeirlaizer(serializers.ModelSerializer):
+    class Meta:
+        model=UserProfile
+        fields = ['user','role','role_name']
+
+class UpdateUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'first_name', 'last_name', 'email']    
+# UPDATE USER FORM RELATED SERIALIZERS 
+
 class SetUserIsActiveSerializer(serializers.Serializer):
     user_pk = serializers.IntegerField()
     def validate(self,data):

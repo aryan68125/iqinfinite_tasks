@@ -841,14 +841,25 @@ function check_user_update_form_card_hidden(){
     }
 }
 //GET THE VALUES FROM THE UPDATE USER DATA FORM STARTS 
+function extractNumberFromString(str) {
+    // Use regular expression to match the number in the string
+    var match = str.match(/\(UID: (\d+) \/ Username:/);
+    if (match && match[1]) {
+        return parseInt(match[1], 10);
+    }
+    return null; // Return null if no match is found
+}
 function get_user_data_from_update_user_form(){
     //collect all data from the form
-    username = $('#username').val()
-    first_name = $('#first_name').val()
-    last_name = $('#last_name').val()
-    email = $('#email').val()
-    role_id = $('#role_user_update_form_dropdown').val()
+    var inputString = $('#span_user_id_user_name').text()
+    var user_id = extractNumberFromString(inputString);
+    var username = $('#username').val()
+    var first_name = $('#first_name').val()
+    var last_name = $('#last_name').val()
+    var email = $('#email').val()
+    var role_id = $('#role_user_update_form_dropdown').val()
     var data = {
+        user_id:user_id,
         username:username,
         first_name:first_name,
         last_name:last_name,
@@ -856,6 +867,33 @@ function get_user_data_from_update_user_form(){
         role_id:role_id
     }
     console.log("get_user_data_from_the_form :",data)
+
+    fetch(
+        UpdateUser_url,{
+            method:'PATCH',
+            headers:{
+                Accept:'application/json',
+                'Content-Type':'application/json',
+                'X-CSRFToken':getCookie("csrftoken")
+            },
+            body:JSON.stringify(data)
+        }
+    ).then(response=>response.json())
+    .then(data=>{
+        if(data.status==200){
+            console.log(data)
+        }
+        else{
+            error_msg = data.error
+            Swal.fire({
+                position: "top-end",
+                icon: "error",
+                title: error_msg,
+                showConfirmButton: false,
+                timer: 1500
+            });            
+        }
+    })
 }
 function reset_form_and_go_back_function(){
     $('#user_update_form_card').hide()
@@ -881,7 +919,6 @@ function set_user_data_into_the_update_user_form(user_id, username_, first_name_
     console.log("set_user_data_into_the_update_user_form role id : ",  user_role_id_) //DEBUGGING
 
     $('#role_user_update_form_dropdown').val(user_role_id_); 
-    // document.getElementById('role_user_update_form_dropdown').value = userRoleId;
 }
 //CALL THIS FUNCTION WHEN TABLE ROW IS CLICKED : SET THE VALUES IN THE UPDATE USER FORM ENDS
 //call the api that fetches all the user roles
