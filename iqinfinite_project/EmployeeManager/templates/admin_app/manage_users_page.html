@@ -16,6 +16,7 @@
     var SetUserIsActive_url = '{% url "SetUserIsActive" %}';
     var SetUserIsDeleted_url = '{% url "SetUserIsDeleted" %}';
     var UpdateUser_url = '{% url "UpdateUser" %}';
+    var ChangeUserPassword_url = '{% url "ChangeUserPassword" %}'
 </script>
 <script src="//cdn.datatables.net/2.0.7/js/dataTables.min.js"></script>
 <div class="container">
@@ -47,7 +48,6 @@
         <!--update user related ui rendered via js-->
     </div>
     <!--Update Users related UI ENDS-->
-
 </div>
 <link href="//cdn.datatables.net/2.0.7/css/dataTables.dataTables.min.css" rel="stylesheet"/>
 <link href="{% static 'css/admin_app/manage_user_page.css' %}" rel="stylesheet"/>

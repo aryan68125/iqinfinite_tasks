@@ -6,4 +6,5 @@ urlpatterns = [
     path('UpdateUser/', GetAllUsersOrOneUserOrUpdateUser.as_view(), name='UpdateUser'),
     path('SetUserIsActive/',SetUserIsActive.as_view(),name="SetUserIsActive"),
     path('SetUserIsDeleted/',SetUserIsDeleted.as_view(),name="SetUserIsDeleted"),
+    path('ChangeUserPassword/',ChangeUserPassword.as_view(),name="ChangeUserPassword"),
 ]

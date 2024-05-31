@@ -47,44 +47,50 @@ class GetAllUsersOrOneUserOrUpdateUser(APIView):
     permission_classes = (IsAuthenticated, IsAdminUser)
     def get(self,request,userId=-1):
         if not userId == -1:
-            user = User.objects.get(id=userId)
-            serializer = GetAllUsersSerializers(user)
-            return Response({'status': 200, 'data': serializer.data}, status=200)
+            try:
+               user = User.objects.get(id=userId)
+               serializer = GetAllUsersSerializers(user)
+               return Response({'status': 200, 'data': serializer.data}, status=200)
+            except Exception as e: 
+                return Response({'status':500,'error':str(e)},status=500)
         else:
             user = User.objects.exclude(is_superuser = True)
             serializer = GetAllUsersSerializers(user,many=True)
             return Response({'status':200,'data':serializer.data},status=200)
     def patch(self,request):
         user_id = request.data['user_id']
-        user = User.objects.get(id=user_id)
-        user_serializer = UpdateUserSerializer(user,data=request.data,partial=True)
-        user_profile = UserProfile.objects.get(user=user.id)
-
-        user_role_model = UserRole.objects.get(id=request.data['role_id'])
-        role_name_var = user_role_model.role_name
-        role_id = request.data['role_id']
-        is_deleted = request.data['is_deleted']
-        data = {
-            'role':role_id,
-            'role_name':role_name_var,
-            'is_deleted':is_deleted
-        }
-        user_profile_serialzier = UpdateUserProfileSeirlaizer(user_profile,data=data,partial=True)
-        print(f'GetAllUsersOrOneUserOrUpdateUser <-::-> user_name = {user.username} : {user_profile.role}')
-        if user_serializer.is_valid() and user_profile_serialzier.is_valid():
-            user_serializer.save()
-            user_profile_serialzier.save()
-            user.is_active = not user_profile.is_deleted
-            user_profile.is_active = user.is_active
-            user.save()
-            user_profile.save()
-            return Response({'status':200,'msg':'User updated!'},status=200)
-        else:
-            error = {
-                'user_serializer':user_serializer.errors,
-                'user_profile_serialzier':user_profile_serialzier.errors,
+        try:
+            user = User.objects.get(id=user_id)
+            user_serializer = UpdateUserSerializer(user,data=request.data,partial=True)
+            user_profile = UserProfile.objects.get(user=user.id)
+    
+            user_role_model = UserRole.objects.get(id=request.data['role_id'])
+            role_name_var = user_role_model.role_name
+            role_id = request.data['role_id']
+            is_deleted = request.data['is_deleted']
+            data = {
+                'role':role_id,
+                'role_name':role_name_var,
+                'is_deleted':is_deleted
             }
-            return Response({'status':400,'error':error},status=400)
+            user_profile_serialzier = UpdateUserProfileSeirlaizer(user_profile,data=data,partial=True)
+            print(f'GetAllUsersOrOneUserOrUpdateUser <-::-> user_name = {user.username} : {user_profile.role}')
+            if user_serializer.is_valid() and user_profile_serialzier.is_valid():
+                user_serializer.save()
+                user_profile_serialzier.save()
+                user.is_active = not user_profile.is_deleted
+                user_profile.is_active = user.is_active
+                user.save()
+                user_profile.save()
+                return Response({'status':200,'msg':'User updated!'},status=200)
+            else:
+                error = {
+                    'user_serializer':user_serializer.errors,
+                    'user_profile_serialzier':user_profile_serialzier.errors,
+                }
+                return Response({'status':400,'error':error},status=400)
+        except Exception as e:
+            return Response({'status':500,'error':str(e)},status=500)
 '''
 cross origin and same-origin
 '''
@@ -148,3 +154,22 @@ class SetUserIsDeleted(APIView):
                 return Response({'status':400,'error':serializer.errors},status=400)
             else:
                 return Response({'status':400,'error':serializer.errors},status=400)
+            
+class ChangeUserPassword(APIView):
+    authentication_classes = (JWTAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, IsAdminUser)
+    def patch(self,request):
+        user_id = request.data['user_id']
+        user = User.objects.get(id=user_id)
+        serializers = ChangeUserPasswordSerializer(user,data=request.data,partial=False)
+        if serializers.is_valid(): 
+            serializers.save()
+            return Response({'status':200,'msg':'Password Changed!'},status=200)
+        else:
+            print(f"ChangeUserPassword :: {serializers.errors}")
+            if 'non_field_errors' in serializers.errors:
+                return Response({'status':400,'error':serializers.errors['non_field_errors']},status=400)
+            if 'password' in serializers.errors or 'password2' in serializers.errors:
+                return Response({'status':400,'error':serializers.errors['password']},status=400) 
+            return Response({'status':400,'error':serializers.errors},status=400)
+            
