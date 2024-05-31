@@ -757,70 +757,66 @@ function show_update_users_related_content(){
             </div>
 
             <div class="card user_update_form_card" id="user_update_form_card">
-            <div class="card-body">
-                <div class="my-3" style="display:flex">
-                    <button class="btn btn-dark mx-2" id="user_update_form_back_button"><i class="fa-solid fa-arrow-left"></i></button>
-                    <h5 class="mx-2">Update User: <span id="span_user_id_user_name"></span></h5>
-                </div>
-                <div class="my-3">
-                    <div class="row">
-                        <div class="col-sm-12 col-md-4 col-lg-3">
-                            <div class="mb-3">
-                                <label for="username" class="form-label">Username:</label>
-                                <input type="text" class="form-control" id="username" aria-describedby="emailHelp">
-                            </div>
-                        </div>
-                        <div class="col-sm-12 col-md-4 col-lg-3">
-                            <div class="mb-3">
-                                <label for="first_name" class="form-label">First Name:</label>
-                                <input type="text" class="form-control" id="first_name" aria-describedby="emailHelp">
-                            </div>
-                        </div>
-                        <div class="col-sm-12 col-md-4 col-lg-3">
-                            <div class="mb-3">
-                                <label for="last_name" class="form-label">Last Name:</label>
-                                <input type="text" class="form-control" id="last_name" aria-describedby="emailHelp">
-                            </div>
-                        </div>
-                        <div class="col-sm-12 col-md-4 col-lg-3">
-                            <div class="mb-3">
-                                <label for="email" class="form-label">Email</label>
-                                <input type="email" class="form-control" id="email" aria-describedby="emailHelp">
-                            </div>
-                        </div>
-                        <div class="col-sm-12 col-md-4 col-lg-3">
-                            <div class="mb-3 mt-1">
-                                <select class="form-group mx-2 mt-4" style="width:97%; height:40px;" id="role_user_update_form_dropdown">
-                                    <!--Render the options using javascript -->
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-sm-12 col-md-4 col-lg-3">
-                            <div class="mb-3 mt-4" style="display:flex">
-                                <div class="mx-1">
-                                    <label for="delete_user" class="form-label">Delete User</label>
-                                    <input type="checkbox" id="delete_user" class="mx-3"/>
-                                </div>
-                                <div class="mx-1">
-                                    <label for="block_user" class="form-label">Block User</label>
-                                    <input type="checkbox" id="block_user" class="mx-3"/>
-                                </div>
-                            </div>
-                        </div>
+                <div class="card-body">
+                    <div class="my-3" style="display:flex">
+                        <button class="btn btn-dark mx-2" id="user_update_form_back_button"><i class="fa-solid fa-arrow-left"></i></button>
+                        <h5 class="mx-2">Update User: <span id="span_user_id_user_name"></span></h5>
                     </div>
-                    <div class="row">
-                        <div class="col-sm-12 col-md-4 col-lg-3">
-                            <div class="mb-3" style="display:flex;">
-                                <!--save user data button-->
-                                <button class="btn btn-dark mx-2 mt-2" id="update_user_data_button">Save changes</button>
-                                <!--change user password button-->
-                                <button class="btn btn-dark mx-2 mt-2" id="update_user_password_button">Change password</button>
+                    <div class="my-3">
+                        <div class="row">
+                            <div class="col-sm-12 col-md-4 col-lg-3">
+                                <div class="mb-3">
+                                    <label for="username" class="form-label">Username:</label>
+                                    <input type="text" class="form-control" id="username" aria-describedby="emailHelp">
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-4 col-lg-3">
+                                <div class="mb-3">
+                                    <label for="first_name" class="form-label">First Name:</label>
+                                    <input type="text" class="form-control" id="first_name" aria-describedby="emailHelp">
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-4 col-lg-3">
+                                <div class="mb-3">
+                                    <label for="last_name" class="form-label">Last Name:</label>
+                                    <input type="text" class="form-control" id="last_name" aria-describedby="emailHelp">
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-4 col-lg-3">
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="email" aria-describedby="emailHelp">
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-4 col-lg-3">
+                                <div class="mb-3 mt-1">
+                                    <select class="form-group mx-2 mt-4" style="width:97%; height:40px;" id="role_user_update_form_dropdown">
+                                        <!--Render the options using javascript -->
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-4 col-lg-3">
+                                <div class="mb-3 mt-4" style="display:flex">
+                                    <div class="mx-1 mt-3">
+                                        <label for="delete_user" class="form-label">Delete User</label>
+                                        <input type="checkbox" id="delete_user" class="mx-3"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-4 col-lg-3">
+                                <div class="mb-5" style="display:flex;">
+                                    <!--save user data button-->
+                                    <button class="btn btn-dark mx-2 mt-2" id="update_user_data_button">Save changes</button>
+                                    <!--change user password button-->
+                                    <button class="btn btn-dark mx-2 mt-2" id="update_user_password_button">Change password</button>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
         `
     )
     $('#user_update_form_card').hide()
@@ -891,13 +887,6 @@ function get_user_data_from_update_user_form(){
     else{
         var is_deleted = false
     }
-    if (!$('#block_user').is(":checked"))
-        {
-            var is_active = true
-        }
-    else{
-        var is_active = false
-    }
 
     var data = {
         user_id:user_id,
@@ -906,7 +895,6 @@ function get_user_data_from_update_user_form(){
         last_name:last_name,
         email:email,
         role_id:role_id,
-        is_active:is_active,
         is_deleted:is_deleted
     }
     console.log("get_user_data_from_the_form :",data)
@@ -951,15 +939,14 @@ function refreshDataTable() {
 function reset_form_and_go_back_function(){
     $('#user_update_form_card').hide()
     $('#user_data_table_card').show()
-    refreshDataTable() // EXPERIMENTAL
     $('#span_user_id_user_name').text("")
     $('#username').val("")
     $('#first_name').val("")
     $('#last_name').val("")
     $('#email').val("")
-    $("#delete_user").attr("checked", false);
-    $("#block_user").attr("checked", false);
+    $("#delete_user").prop("checked", false);
     $('#role_user_update_form_dropdown').val("default")
+    refreshDataTable() // EXPERIMENTAL
 }
 //GET THE VALUES FROM THE UPDATE USER DATA FORM ENDS 
 
@@ -972,10 +959,12 @@ function set_user_data_into_the_update_user_form(user_id, username_, first_name_
     $('#last_name').val(last_name_)
     $('#email').val(email_)
     if (user_is_deleted == true){
-        $("#delete_user").attr("checked", true);
+        console.log("user_is_deleted :: ",user_is_deleted)
+        $("#delete_user").prop("checked", true);
     }
-    if (user_is_active!=true){
-        $("#block_user").attr("checked", true);
+    if(user_is_deleted == false){
+        console.log("user_is_deleted :: ",user_is_deleted)
+        $("#delete_user").prop("checked", false);
     }
 
     console.log("set_user_data_into_the_update_user_form role id : ",  user_role_id_) //DEBUGGING

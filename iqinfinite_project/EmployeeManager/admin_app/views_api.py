@@ -63,12 +63,10 @@ class GetAllUsersOrOneUserOrUpdateUser(APIView):
         user_role_model = UserRole.objects.get(id=request.data['role_id'])
         role_name_var = user_role_model.role_name
         role_id = request.data['role_id']
-        is_active = request.data['is_active']
         is_deleted = request.data['is_deleted']
         data = {
             'role':role_id,
             'role_name':role_name_var,
-            'is_active':is_active,
             'is_deleted':is_deleted
         }
         user_profile_serialzier = UpdateUserProfileSeirlaizer(user_profile,data=data,partial=True)
@@ -76,6 +74,10 @@ class GetAllUsersOrOneUserOrUpdateUser(APIView):
         if user_serializer.is_valid() and user_profile_serialzier.is_valid():
             user_serializer.save()
             user_profile_serialzier.save()
+            user.is_active = not user_profile.is_deleted
+            user_profile.is_active = user.is_active
+            user.save()
+            user_profile.save()
             return Response({'status':200,'msg':'User updated!'},status=200)
         else:
             error = {
