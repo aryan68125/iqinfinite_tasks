@@ -37,6 +37,7 @@ from auth_user.tasks import *
 #serilaizers related imports
 from admin_app.serializers import *
 
+# MANAGE USER PAGE RELATED API VIEWS STARTS
 '''
 cross origin and same-origin
 This api view has two urls it can get one user if userId is provided and if userId is not provided then it will
@@ -159,17 +160,21 @@ class ChangeUserPassword(APIView):
     authentication_classes = (JWTAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated, IsAdminUser)
     def patch(self,request):
-        user_id = request.data['user_id']
-        user = User.objects.get(id=user_id)
-        serializers = ChangeUserPasswordSerializer(user,data=request.data,partial=False)
-        if serializers.is_valid(): 
-            serializers.save()
-            return Response({'status':200,'msg':'Password Changed!'},status=200)
-        else:
-            print(f"ChangeUserPassword :: {serializers.errors}")
-            if 'non_field_errors' in serializers.errors:
-                return Response({'status':400,'error':serializers.errors['non_field_errors']},status=400)
-            if 'password' in serializers.errors or 'password2' in serializers.errors:
-                return Response({'status':400,'error':serializers.errors['password']},status=400) 
-            return Response({'status':400,'error':serializers.errors},status=400)
-            
+        try:
+            user_id = request.data['user_id']
+            user = User.objects.get(id=user_id)
+            serializers = ChangeUserPasswordSerializer(user,data=request.data,partial=False)
+            if serializers.is_valid(): 
+                serializers.save()
+                return Response({'status':200,'msg':'Password Changed!'},status=200)
+            else:
+                print(f"ChangeUserPassword :: {serializers.errors}")
+                if 'non_field_errors' in serializers.errors:
+                    return Response({'status':400,'error':serializers.errors['non_field_errors']},status=400)
+                if 'password' in serializers.errors or 'password2' in serializers.errors:
+                    return Response({'status':400,'error':serializers.errors['password']},status=400) 
+                return Response({'status':400,'error':serializers.errors},status=400)
+        except Exception as e:
+            return Response({'status':500,'error':str(e)},status=500)
+# MANAGE USER PAGE RELATED API VIEWS ENDS
+

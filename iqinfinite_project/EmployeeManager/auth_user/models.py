@@ -16,6 +16,7 @@ class UserProfile(models.Model):
     updated_by = models.ForeignKey(User,on_delete=models.CASCADE,related_name='updated_profiles')
     created_at = models.DateField(null=True, blank=True)
     updated_at = models.DateField(null=True, blank=True)
+    superior = models.ForeignKey(User,on_delete=models.CASCADE, related_name = 'superior_officer')
 #  put default value of updated_by and created_by is 29
     # add profile picture imagefield
     def __str__(self):

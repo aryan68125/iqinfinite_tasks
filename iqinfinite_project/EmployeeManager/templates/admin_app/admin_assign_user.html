@@ -1,0 +1,50 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{{ title }}
+{% block title %}
+{% endblock title %}
+
+{% block content %}
+
+<script>
+    var GetAllUsers_url = '{% url "GetAllUsers" %}';
+</script>
+<script src="//cdn.datatables.net/2.0.7/js/dataTables.min.js"></script>
+<div class="container">
+    
+    <div class="card my-1 mb-2">
+        <div class="card-body">
+            <div class="title_bar_options_card_body_inner_div">
+                <div><h3>Assign Users : </h3></div>
+                <button class="btn btn-dark mx-1" id="Assign_Hr_to_Manager_ui_show_button">Assign Hr to Manager</button>
+                <button class="btn btn-dark mx-1" id="Assign_Employee_to_Hr_ui_show_button">Assign Employee to Hr</button>
+            </div>
+        </div>
+    </div>
+
+    <!--ASSIGN HR TO MANAGER UI STARTS-->
+    <div id="Assign_Hr_to_Manager_UI_container">
+        <div class="card">
+            <div class="card-body">
+                UI related to assign hr to manager
+            </div>
+        </div>
+    </div>
+    <!--ASSIGN HR TO MANAGER UI ENDS-->
+
+    <!--ASSIGN EMPLOYEE TO HR UI STARTS-->
+    <div id="Assign_Employee_to_Hr_UI_container">
+        <div class="card">
+            <div class="card-body">
+                UI related to assign employee to hr
+            </div>
+        </div>
+    </div>
+    <!--ASSIGN EMPLOYEE TO HR UI ENDS-->
+
+</div>
+<link href="//cdn.datatables.net/2.0.7/css/dataTables.dataTables.min.css" rel="stylesheet"/>
+<link href="{% static 'css/admin_app/admin_assign_user.css' %}" rel="stylesheet"/>
+<script src="{% static 'js/admin_app/admin_assign_user.js' %}"></script>
+<!-- <link href="{% static 'css/auth_user/login_page.css' %}" rel="stylesheet"/> -->
+{% endblock content %}

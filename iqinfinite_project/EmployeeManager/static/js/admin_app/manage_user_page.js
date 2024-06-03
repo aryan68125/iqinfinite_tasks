@@ -26,7 +26,7 @@ function getCookie(name) {
 // >>>>>>>>>>Add users STARTS<<<<<<<<<<<<<<
 $('body').on('click','#add_users',function(){
     if ($('#Verify_otp_ui').is(':empty')) {
-        console.log('Verify_otp_ui is empty.');
+        console.log('Verify_otp_ui is empty');
         $('#update_user_ui').empty()
         show_add_users_related_content()
     } else {
@@ -386,6 +386,7 @@ function get_all_users_from_db(){
     .then(data=>{
         if(data.status==200){
             console.log("GET ALL users")
+            destroyDataTable()
             $('#usersTable').DataTable({
                 data: data.data,
                 columns: [
@@ -923,33 +924,34 @@ function get_user_data_from_update_user_form(){
         is_deleted:is_deleted
     }
     console.log("get_user_data_from_the_form :",data)
-
-    fetch(
-        UpdateUser_url,{
-            method:'PATCH',
-            headers:{
-                Accept:'application/json',
-                'Content-Type':'application/json',
-                'X-CSRFToken':getCookie("csrftoken")
-            },
-            body:JSON.stringify(data)
-        }
-    ).then(response=>response.json())
-    .then(data=>{
-        if(data.status==200){
-            console.log(data)
-        }
-        else{
-            error_msg = data.error
-            Swal.fire({
-                position: "top-end",
-                icon: "error",
-                title: error_msg,
-                showConfirmButton: false,
-                timer: 1500
-            });            
-        }
-    })
+    if (inputString){
+        fetch(
+            UpdateUser_url,{
+                method:'PATCH',
+                headers:{
+                    Accept:'application/json',
+                    'Content-Type':'application/json',
+                    'X-CSRFToken':getCookie("csrftoken")
+                },
+                body:JSON.stringify(data)
+            }
+        ).then(response=>response.json())
+        .then(data=>{
+            if(data.status==200){
+                console.log(data)
+            }
+            else{
+                error_msg = data.error
+                Swal.fire({
+                    position: "top-end",
+                    icon: "error",
+                    title: error_msg,
+                    showConfirmButton: false,
+                    timer: 1500
+                });            
+            }
+        })
+    }
 }
 // Function to refresh the DataTable
 function refreshDataTable() {
@@ -960,6 +962,13 @@ function refreshDataTable() {
 
     // Fetch and reinitialize the DataTable
     get_all_users_from_db();
+}
+//Function destroy table
+function destroyDataTable() {
+    // Destroy the existing DataTable instance
+    if ($.fn.DataTable.isDataTable('#usersTable')) {
+        $('#usersTable').DataTable().clear().destroy();
+    }
 }
 function reset_form_and_go_back_function(){
     $('#user_update_form_card').hide()
