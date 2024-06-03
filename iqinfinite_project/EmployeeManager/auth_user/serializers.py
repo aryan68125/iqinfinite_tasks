@@ -26,7 +26,7 @@ class CreateUserSerializer(serializers.ModelSerializer):
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
-        fields = ['id', 'user', 'role', 'role_name', 'is_deleted', 'is_active', 'created_by', 'updated_by', 'created_at', 'updated_at']
+        fields = ['id', 'user', 'role', 'role_name', 'is_deleted', 'is_active', 'created_by', 'updated_by', 'created_at', 'updated_at','superior']
         # read_only_fields = ['created_by', 'updated_by']
 
 class UserRoleSerializer(serializers.ModelSerializer):

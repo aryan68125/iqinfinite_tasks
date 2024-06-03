@@ -1,0 +1,20 @@
+meta {
+  name: get_all_managers
+  type: http
+  seq: 1
+}
+
+get {
+  url: http://127.0.0.1:8000/admin_app/api/GetAllManagersListView/
+  body: none
+  auth: bearer
+}
+
+headers {
+  Accept: application/json
+  Content-Type: application/json
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzE3Mzk3NzQ1LCJpYXQiOjE3MTczOTQ4ODAsImp0aSI6ImVlYTVjZDJiNmQ1ZDQ1MjFiNDY1MzgzZDFhZjdkMTA5IiwidXNlcl9pZCI6Mjl9.KVeFoC7c6ssGdTx0-ywwnjVsyo5s-IUY6HpCsJ0gZd4
+}

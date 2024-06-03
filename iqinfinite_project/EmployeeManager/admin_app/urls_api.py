@@ -7,4 +7,8 @@ urlpatterns = [
     path('SetUserIsActive/',SetUserIsActive.as_view(),name="SetUserIsActive"),
     path('SetUserIsDeleted/',SetUserIsDeleted.as_view(),name="SetUserIsDeleted"),
     path('ChangeUserPassword/',ChangeUserPassword.as_view(),name="ChangeUserPassword"),
+
+    path('GetAllManagersListView/',GetAllManagersListView.as_view(),name="GetAllManagersListView"),
+    path('GetAllHrListView/',GetAllHrListView.as_view(),name="GetAllHrListView"),
+    path('AssignHrToManagerView/',AssignHrToManagerView.as_view(),name="AssignHrToManagerView"),
 ]

@@ -117,7 +117,8 @@ class RegisterUser(APIView):
                                       'is_deleted':False,
                                       'is_active':user.is_active,
                                       'created_at':date.today(),
-                                      'updated_at':date.today()
+                                      'updated_at':date.today(),
+                                      'superior':request.user.id,
                                 }
                                 user_profile_serializer = UserProfileSerializer(data = data)
                                 if user_profile_serializer.is_valid(raise_exception=True):

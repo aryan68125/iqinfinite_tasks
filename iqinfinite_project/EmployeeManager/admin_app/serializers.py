@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from auth_user.models import *
 import re
 
+# MANAGE USERS PAGE RELATED SERIALIZERS STARTS
 # READ ONLY API STARTS
 class UserSerializer(serializers.ModelSerializer):
     '''
@@ -22,9 +23,10 @@ class UserSerializer(serializers.ModelSerializer):
 class UserProfileSerializer(serializers.ModelSerializer):
     created_by = UserSerializer(read_only=True)
     updated_by = UserSerializer(read_only=True)
+    superior = UserSerializer()
     class Meta:
         model = UserProfile
-        fields = ['id', 'role', 'role_name','is_deleted','is_active','created_by','updated_by','created_at','updated_at']
+        fields = ['id', 'role', 'role_name','is_deleted','is_active','created_by','updated_by','created_at','updated_at','superior']
 
 class GetAllUsersSerializers(serializers.ModelSerializer):
     # here source = 'profile ' because in user profile model --> user = models.OneToOneField(User,on_delete=models.CASCADE,related_name='profile')
@@ -105,3 +107,33 @@ class ChangeUserPasswordSerializer(serializers.Serializer):
         user_instance.set_password(validated_data['password'])
         user_instance.save()
         return user_instance
+# MANAGE USERS PAGE RELATED SERIALIZERS ENDS
+
+# ASSIGN USERS RELATED SERIALIZERS STARTS
+class GetAllManagerSerializer(serializers.ModelSerializer):
+    user_profile = UserProfileSerializer(source='profile', read_only=True)
+
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'first_name', 'last_name', 'email', 'user_profile']
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        # Print serialized data for debugging if needed
+        return data
+
+class AssignHrToMagager(serializers.Serializer):
+    user_id = serializers.IntegerField()
+    selected_hrs = UserProfileSerializer(many=True)
+    def update(self,validated_data):
+        user_id = validated_data.get('user_id')
+        selected_manager = UserProfile.objects.get(id=user_id)
+        selected_hrs_data = validated_data.get('selected_hrs')
+        for hr in selected_hrs_data:
+            print(f"hr : {hr}")
+            UserProfile.objects.filter(user = hr['id']).update(
+                superior = selected_manager
+            )
+        return validated_data
+
+# ASSIGN USERS RELATED SERIALIZERS ENDS

@@ -1,0 +1,19 @@
+meta {
+  name: SetUserIsDeleted
+  type: http
+  seq: 3
+}
+
+patch {
+  url: http://127.0.0.1:8000/admin_app/api/SetUserIsDeleted/
+  body: multipartForm
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzE3NDA1NjQ5LCJpYXQiOjE3MTczOTY4NDUsImp0aSI6IjljODFiZjMxNGYzZDQ5OTk5MzE3OTQ5YjM3MTQwNDFmIiwidXNlcl9pZCI6Mjl9.Ei27inlRsXAwNmeiB2_7ou6b5fVGsE2Lp-4oh8jKLrI
+}
+
+body:multipart-form {
+  user_pk: 171
+}

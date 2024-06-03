@@ -18,6 +18,7 @@ from django.urls import reverse
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.views import APIView
+from rest_framework.generics import ListAPIView
 # for cross-origin api support
 from rest_framework_simplejwt.authentication import JWTAuthentication
 #for same-origin api support for fetch api clients
@@ -178,3 +179,49 @@ class ChangeUserPassword(APIView):
             return Response({'status':500,'error':str(e)},status=500)
 # MANAGE USER PAGE RELATED API VIEWS ENDS
 
+# ASSIGN HR TO MANAGER STARTS
+class GetAllManagersListView(ListAPIView):
+    serializer_class = GetAllManagerSerializer
+    authentication_classes = (JWTAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, IsAdminUser)
+    def get_queryset(self):
+        # Filter users by the role 'manager' in their profile
+        return User.objects.filter(profile__role=3, is_active=True)
+    
+class GetAllHrListView(ListAPIView):
+    serializer_class = GetAllManagerSerializer
+    authentication_classes = (JWTAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, IsAdminUser)
+    def get_queryset(self):
+        # Filter users by the role 'manager' in their profile
+        return User.objects.filter(profile__role=2, is_active=True)
+    
+# class AssignHrToManagerView(APIView):
+#     authentication_classes = (JWTAuthentication, SessionAuthentication)
+#     permission_classes = (IsAuthenticated, IsAdminUser)
+#     def patch(self,request):
+#         user_id = request.data['user_id']
+#         print(user_id)
+#         selected_manager = User.objects.get(id=user_id)
+#         selected_hrs = request.data['selected_hrs']
+        # for hr in selected_hrs:
+        #     print(f"hr : {hr}")
+        #     UserProfile.objects.filter(user = hr['id']).update(
+        #         superior = selected_manager
+        #     )
+#         return Response({'status':200,'msg':f'Hrs assigned to {selected_manager} (Manager)'},status=200)
+    
+class AssignHrToManagerView(APIView):
+    authentication_classes = (JWTAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, IsAdminUser)
+    def patch(self,request):
+        user_id = request.data['user_id']
+        selected_manager = User.objects.get(id=user_id)
+        serializers = AssignHrToMagager(data=request.data)
+        if serializers.is_valid():
+            serializers.save()
+            return Response({'status':200,'msg':f'Hrs assigned to {selected_manager} (Manager)'},status=200)
+        else:
+            print(serializers.errors)
+            return Response({'status':400,'error':serializers.errors},status=400)
+# ASSIGN HR TO MANAGER ENDS
