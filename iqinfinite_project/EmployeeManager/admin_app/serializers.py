@@ -124,7 +124,7 @@ class GetAllManagerSerializer(serializers.ModelSerializer):
 
 class AssignHrToMagager(serializers.Serializer):
     user_id = serializers.IntegerField()
-    selected_hrs = UserProfileSerializer(many=True)
+    selected_hrs = serializers.CharField(max_length=255)
     def update(self,validated_data):
         user_id = validated_data.get('user_id')
         selected_manager = UserProfile.objects.get(id=user_id)
