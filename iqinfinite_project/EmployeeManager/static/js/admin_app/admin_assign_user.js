@@ -1,6 +1,6 @@
 $('body').ready(function(){
     console.log("admin_assign_user page js ready")
-    // $('#Assign_Hr_to_Manager_UI_container').empty()
+    $('#Assign_Hr_to_Manager_UI_container').empty()
     $('#Assign_Employee_to_Hr_UI_container').empty()
 })
 
@@ -423,12 +423,18 @@ function Assign_Employee_to_Hr_UI_container_function(){
     console.log("Assign_Employee_to_Hr_UI_container rendered")
     $('#Assign_Employee_to_Hr_UI_container').append(
         `
-        <div class="card">
+        <div class="card" id="Hr_data_table_card_assign_employee_to_hr">
             <div class="card-body">
-                UI related to assign employee to hr
+                <div>
+                  <h5>Manager Data:</h5>
+                </div>
+                <div>
+                   <table id="HrTable_assign_employee_to_hr"></table>
+                </div>
             </div>
         </div>
         `
     )
 }
+
 /* Assign_Employee_to_Hr_UI_container RELATED UI LOGIC ENDS */
