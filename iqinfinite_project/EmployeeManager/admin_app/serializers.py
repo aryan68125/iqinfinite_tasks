@@ -18,7 +18,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'first_name', 'last_name', 'role_name']
+        fields = ['id', 'username', 'first_name', 'last_name', 'role_name','is_superuser']
 
 class UserProfileSerializer(serializers.ModelSerializer):
     created_by = UserSerializer(read_only=True)
@@ -122,18 +122,36 @@ class GetAllManagerSerializer(serializers.ModelSerializer):
         # Print serialized data for debugging if needed
         return data
 
-class AssignHrToMagager(serializers.Serializer):
+class AssignHrToMagagerSerializer(serializers.Serializer):
     user_id = serializers.IntegerField()
-    selected_hrs = serializers.CharField(max_length=255)
-    def update(self,validated_data):
+    selected_hrs = serializers.ListField(
+        child=serializers.DictField()
+    )
+
+    def create(self,validated_data):
         user_id = validated_data.get('user_id')
-        selected_manager = UserProfile.objects.get(id=user_id)
         selected_hrs_data = validated_data.get('selected_hrs')
-        for hr in selected_hrs_data:
-            print(f"hr : {hr}")
-            UserProfile.objects.filter(user = hr['id']).update(
-                superior = selected_manager
+        # Update each HR's superior to the selected manager
+        for hr_data in selected_hrs_data:
+            hr_user_id = hr_data['id']
+            UserProfile.objects.filter(user = hr_user_id).update(
+                superior = user_id
             )
         return validated_data
 
+class RemoveHrFromMagagerSerializer(serializers.Serializer):
+    user_id = serializers.IntegerField()
+    removed_hrs = serializers.ListField(
+        child = serializers.DictField()
+    )
+
+    def create(self,validated_data):
+        removed_hrs = validated_data.get('removed_hrs')
+        superuser = User.objects.get(is_superuser = True)
+        for removed_hr in removed_hrs:
+            hr_user_id = removed_hr['id']
+            UserProfile.objects.filter(user = hr_user_id).update(
+                superior = superuser
+            )
+        return validated_data
 # ASSIGN USERS RELATED SERIALIZERS ENDS

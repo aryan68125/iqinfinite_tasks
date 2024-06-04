@@ -23,6 +23,7 @@ function getCookie(name) {
 // GET CSRF TOKEN FROM THE BROWSER'S COOCKIE ENDS
 
 /* Assign_Hr_to_Manager_UI_container RELATED UI LOGIC STARTS */
+/* ASSIGN HRS TO MANAGERS BY SELECTING HRS FROM THE THR TABLE AFTER SELECTING THE MANAGER FROM THE MANAGERS TABLE STARTS */
 $('body').on('click','#Assign_Hr_to_Manager_ui_show_button',function(){
     console.log("Assign_Hr_to_Manager_ui_show_button clicked")
     console.log("Assign_Hr_to_Manager_UI_container UI destroyed")
@@ -131,8 +132,9 @@ function render_form_to_assign_hr(userId, username, role){
                 <div>
                     <table id="HrTable"></table>
                 </div>
-                <div>
-                    <button class="btn btn-dark" id="assign_user">Assign</button>
+                <div style="display:flex">
+                    <button class="btn btn-dark mx-2" id="assign_user">Assign</button>
+                    <button class="btn btn-dark mx-2" id="remove_user">Remove</button>
                 </div>
             </div>
         </div>
@@ -140,6 +142,7 @@ function render_form_to_assign_hr(userId, username, role){
     )
     assign_hr_to_manager_form_back_button_function()
     assign_user_button_click_event_handler()
+    remove_user_button_click_event_handler()
 }
 function assign_hr_to_manager_form_back_button_function(){
     console.log("assign_hr_to_manager_form_back_button_function called")
@@ -162,6 +165,13 @@ function assign_user_button_click_event_handler(){
     $('body').on('click','#assign_user',function(){
         console.log("#assign_user button clicked")
         get_selected_hrs_from_table()
+    })
+}
+function remove_user_button_click_event_handler(){
+    console.log("remove_user_button_click_event_handler called")
+    $('body').on('click','#remove_user',function(){
+        console.log("#remove_user button clicked")
+        get_users_from_removed_hrs_array()
     })
 }
 function get_all_hr(){
@@ -197,10 +207,14 @@ function get_all_hr(){
             responsive: true // Enable responsiveness
         })
         HrTable_row_click_event_handler()
+        /* the function below is responsible to select the rows if the hrs are already assigned to the selected 
+        manager */
+        select_hrs_that_are_assigned_to_the_selected_manager(data)
     })
 }
 // Add click event listener to rows STARTS   (ARCHIVE NOTE DO NOT DELETE)
 var selected_hrs = []
+var removed_hrs = []
 function HrTable_row_click_event_handler(){
     console.log("HrTable_row_click_event_handler function called")
     console.log("selected_hrs array initialized")
@@ -225,6 +239,8 @@ function HrTable_row_click_event_handler(){
             console.log("selected_hrs array :: added user to the array");
             console.log("selected_hrs array elements : ", selected_hrs);
         } else {
+            removed_hrs.push(selected_hrs[index])
+            console.log("removed_hrs array : ",removed_hrs)
             selected_hrs.splice(index, 1);
             console.log("selected_hrs array :: removed user from the array");
             console.log("selected_hrs array elements : ", selected_hrs);
@@ -300,6 +316,94 @@ function get_selected_hrs_from_table(){
     }
 }
 // Add click event listener to rows ENDS   (ARCHIVE NOTE DO NOT DELETE)
+/* ASSIGN HRS TO MANAGERS BY SELECTING HRS FROM THE THR TABLE AFTER SELECTING THE MANAGER FROM THE MANAGERS TABLE ENDS */
+
+/* SHOW THE HRS BY SELECTING THE ROWS THAT ARE ASSIGNED UNDER A PARTICULAR MANAGER FROM THE HR TABLE STARTS */
+// var assigned_hrs = []
+function select_hrs_that_are_assigned_to_the_selected_manager(data) {
+    console.log("select_hrs_that_are_assigned_to_the_selected_manager function called");
+    
+    // Clear the assigned_hrs array
+    selected_hrs = [];
+
+    // Extract the selected manager's user ID
+    var selected_manager_id = extractUserId();
+    
+    // Check if selected_manager_id is valid
+    if (!selected_manager_id) {
+        console.log("No selected manager ID found.");
+        return;
+    }
+
+    console.log("Selected Manager ID: ", selected_manager_id);
+
+    // Loop through the HR data and find those assigned to the selected manager
+    data.forEach(function(hr) {
+        if (hr.user_profile.superior.id == selected_manager_id && hr.user_profile.superior.is_superuser != true) {
+            selected_hrs.push(hr);
+        }
+    });
+
+    console.log("selected_hrs HRs: ", selected_hrs);
+
+    // Update the background color of the rows in the DataTable
+    var table = $('#HrTable').DataTable();
+    $('#HrTable tbody tr').each(function() {
+        var rowData = table.row(this).data();
+        if (selected_hrs.some(function(hr) { return hr.id === rowData.id; })) {
+            $(this).css('background-color', '#a2a8d3'); // Blue background for assigned HRs
+        } else {
+            $(this).css('background-color', ''); // Reset background for other rows
+        }
+    });
+}
+/* SHOW THE HRS BY SELECTING THE ROWS THAT ARE ASSIGNED UNDER A PARTICULAR MANAGER FROM THE HR TABLE ENDS */
+
+// REMOVE THE ASSIGNED HRS FROM SELECTED MANAGER STARTS
+function get_users_from_removed_hrs_array(){
+    console.log("get_users_from_removed_hrs_array function called");
+    var user_id = extractUserId()
+    var data={
+        user_id:user_id,
+        removed_hrs:removed_hrs
+    }
+    console.log("data packet sent through the fetch in get_users_from_removed_hrs_array function is : ",data)
+    fetch(
+        RemoveHrFromMagagerView_url,{
+            method:'PATCH',
+            headers:{
+                Accept:'application/json',
+                'Content-Type':'application/json',
+                'X-CSRFToken':getCookie("csrftoken")
+            },
+            body:JSON.stringify(data)
+        }
+    ).then(response=>response.json())
+    .then(data=>{
+        if(data.status==200){
+            error_msg = data.msg
+            Swal.fire({
+                position: "top-end",
+                icon: "success",
+                title: error_msg,
+                showConfirmButton: false,
+                timer: 1500
+            });
+        }
+        else{
+            error_msg = data.error
+            Swal.fire({
+                position: "top-end",
+                icon: "error",
+                title: error_msg,
+                showConfirmButton: false,
+                timer: 1500
+            });
+        }
+    })
+}
+// REMOVE THE ASSIGNED HRS FROM SELECTED MANAGER ENDS
+
 /* Assign_Hr_to_Manager_UI_container RELATED UI LOGIC ENDS */
 
 

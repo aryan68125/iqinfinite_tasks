@@ -195,7 +195,8 @@ class GetAllHrListView(ListAPIView):
     def get_queryset(self):
         # Filter users by the role 'manager' in their profile
         return User.objects.filter(profile__role=2, is_active=True)
-    
+
+# THIS CODE IS ARCHIVED (DO NOT DELETE) WORKING SAMPLE STARTS
 # class AssignHrToManagerView(APIView):
 #     authentication_classes = (JWTAuthentication, SessionAuthentication)
 #     permission_classes = (IsAuthenticated, IsAdminUser)
@@ -204,24 +205,35 @@ class GetAllHrListView(ListAPIView):
 #         print(user_id)
 #         selected_manager = User.objects.get(id=user_id)
 #         selected_hrs = request.data['selected_hrs']
-        # for hr in selected_hrs:
-        #     print(f"hr : {hr}")
-        #     UserProfile.objects.filter(user = hr['id']).update(
-        #         superior = selected_manager
-        #     )
+#         for hr in selected_hrs:
+#             print(f"hr : {hr}")
+#             UserProfile.objects.filter(user = hr['id']).update(
+#                 superior = selected_manager
+#             )
 #         return Response({'status':200,'msg':f'Hrs assigned to {selected_manager} (Manager)'},status=200)
-    
+# THIS CODE IS ARCHIVED (DO NOT DELETE) WORKING SAMPLE ENDS
+
 class AssignHrToManagerView(APIView):
     authentication_classes = (JWTAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated, IsAdminUser)
     def patch(self,request):
-        user_id = request.data['user_id']
-        selected_manager = User.objects.get(id=user_id)
-        serializers = AssignHrToMagager(data=request.data)
+        serializer = AssignHrToMagagerSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()  # Calls the `update` method in the serializer
+            selected_manager = User.objects.get(id=request.data['user_id'])
+            return Response({'status': 200, 'msg': f'Hrs assigned to {selected_manager.username} (Manager)'}, status=200)
+        else:
+            return Response({'status': 400, 'error': serializer.errors}, status=400)
+        
+class RemoveHrFromMagagerView(APIView):
+    authentication_classes = (JWTAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,IsAdminUser)
+    def patch(self,request):
+        serializers = RemoveHrFromMagagerSerializer(data=request.data)
         if serializers.is_valid():
             serializers.save()
-            return Response({'status':200,'msg':f'Hrs assigned to {selected_manager} (Manager)'},status=200)
+            selected_manager = User.objects.get(id=request.data['user_id'])
+            return Response({'status':200,'msg':f'Hrs removed from under {selected_manager} (Manager)'},status=200)
         else:
-            print(serializers.errors)
             return Response({'status':400,'error':serializers.errors},status=400)
 # ASSIGN HR TO MANAGER ENDS
