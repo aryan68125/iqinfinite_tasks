@@ -147,7 +147,7 @@ function render_form_to_assign_hr(userId, username, role){
 function assign_hr_to_manager_form_back_button_function(){
     console.log("assign_hr_to_manager_form_back_button_function called")
     console.log("Attched the click event handler to assign_hr_to_manager_form_back_button")
-    $('body').on('click','#assign_hr_to_manager_form_back_button',function(){
+    $(document).on('click','#assign_hr_to_manager_form_back_button',function(){
         console.log("Assign_Hr_to_Manager_UI_container UI destroy that contained HrTable")
         $('#Assign_Hr_to_Manager_UI_container').empty()
         HrTable_destroy_data_table()
@@ -162,14 +162,14 @@ function HrTable_destroy_data_table(){
 }
 function assign_user_button_click_event_handler(){
     console.log("assign_user_button_click_event_handler called")
-    $('body').on('click','#assign_user',function(){
+    $(document).on('click','#assign_user',function(){
         console.log("#assign_user button clicked")
         get_selected_hrs_from_table()
     })
 }
 function remove_user_button_click_event_handler(){
     console.log("remove_user_button_click_event_handler called")
-    $('body').on('click','#remove_user',function(){
+    $(document).on('click','#remove_user',function(){
         console.log("#remove_user button clicked")
         get_users_from_removed_hrs_array()
     })
@@ -557,7 +557,7 @@ function assign_employee_button_click_event_handler(){
     return function () {
         if (!hasBeenCalled) {
             console.log("assign_employee_button_click_event_handler called")
-            $('body').on('click','#assign_employee',function(){
+            $(document).on('click','#assign_employee',function(){
                 console.log("#assign_employee button clicked")
                 const selected_employees =  get_selected_employees_from_table()
                 selected_employees()
@@ -744,7 +744,7 @@ function get_selected_employees_from_table(){
 
 function remove_employee_button_click_event_handler(){
     console.log("remove_employee_button_click_event_handler called")
-    $('body').on('click','#remove_employee',function(){
+    $(document).on('click','#remove_employee',function(){
         console.log("#remove_employee button clicked")
         get_employees_from_removed_employees_array()
         //Experimental trying to refresh employee DataTable
