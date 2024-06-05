@@ -168,4 +168,47 @@ class GetAllHrSerializerAssignemployeeToHr(serializers.ModelSerializer):
         data = super().to_representation(instance)
         # Print serialized data for debugging if needed
         return data
+    
+class GetAllEmployeesSerializersEmployeeAssignToHr(serializers.ModelSerializer):
+    user_profile = UserProfileSerializer(source='profile',read_only = True)
+
+    class Meta:
+        model = User
+        fields = ['id','username','first_name','last_name','email','user_profile']
+    
+    def to_representation(self, instance):
+        return super().to_representation(instance)
+    
+class AssignEmployeeToHrSerializer(serializers.Serializer):
+    user_id = serializers.IntegerField()
+    selected_employees = serializers.ListField(
+        child=serializers.DictField()
+    )
+
+    def create(self,validated_data):
+        user_id = validated_data.get('user_id')
+        selected_employees_data = validated_data.get('selected_employees')
+        # Update each HR's superior to the selected manager
+        for employee_data in selected_employees_data:
+            employee_user_id = employee_data['id']
+            UserProfile.objects.filter(user = employee_user_id).update(
+                superior = user_id
+            )
+        return validated_data
+    
+class RemoveEmployeeFromHrSerializer(serializers.Serializer):
+    user_id = serializers.IntegerField()
+    removed_employees = serializers.ListField(
+        child = serializers.DictField()
+    )
+
+    def create(self,validated_data):
+        removed_employees = validated_data.get('removed_employees')
+        superuser = User.objects.get(is_superuser = True)
+        for removed_employee in removed_employees:
+            employee_user_id = removed_employee['id']
+            UserProfile.objects.filter(user = employee_user_id).update(
+                superior = superuser
+            )
+        return validated_data
 # ASSIGN EMPLOYEE TO HR ENDS

@@ -1,0 +1,20 @@
+meta {
+  name: Get all Hrs
+  type: http
+  seq: 1
+}
+
+get {
+  url: http://127.0.0.1:8000/admin_app/api/GetAllHrsListViewEmployeeAssignToHr/
+  body: none
+  auth: bearer
+}
+
+headers {
+  Accept: application/json
+  Content-Type: application/json
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzE3NTYzODk3LCJpYXQiOjE3MTc1NjI5OTcsImp0aSI6ImZhMmNjNzJlNmI0YTRhMmY4MDA1ZDhjNDczZGYxYjYyIiwidXNlcl9pZCI6Mjl9.tGMxiWioGtyU4-lUgcITTL0pQgjYszc4T-5sYoby_78
+}

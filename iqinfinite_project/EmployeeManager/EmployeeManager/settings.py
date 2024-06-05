@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'auth_user',
     'admin_app',
+    'drf_yasg',
 ]
 '''
 CELERY REALTED SETTINGS 

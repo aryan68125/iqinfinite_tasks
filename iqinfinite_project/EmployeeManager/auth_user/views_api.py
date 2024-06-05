@@ -182,7 +182,7 @@ class RegisterUser(APIView):
                 else:
                     return Response({'status':400,'error':'Invalid password : \n 1. password must be greater than 6 characters \n 2. It must contain characters , numbers , and special characters like @'},status=400)
             else:
-                if User_backup != {}:
+                if 'User_backup' in User_backup :
                     User_backup['user'].delete()
                 return Response({'status':400, 'error': "Password do not match"},status=400)
             

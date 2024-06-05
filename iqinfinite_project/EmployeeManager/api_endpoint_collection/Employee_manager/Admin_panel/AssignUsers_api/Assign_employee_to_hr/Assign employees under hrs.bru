@@ -1,0 +1,25 @@
+meta {
+  name: Assign employees under hrs
+  type: http
+  seq: 3
+}
+
+patch {
+  url: http://127.0.0.1:8000/admin_app/api/AssignEmployeeToHrView/
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzE3NTY5ODkwLCJpYXQiOjE3MTc1NjQ2NTksImp0aSI6ImY5ODY1Njc0ZDVjMTQwYzFiZjBlYzU3MDQzMDRhZGMwIiwidXNlcl9pZCI6Mjl9.TqWdkyXvQ6Q3LZrKqE3Sl846w4kLfJBuFnPGhSGrUnk
+}
+
+body:json {
+  {
+    "user_id": 170, 
+    "selected_employees": [
+      {"id": 173}, 
+      {"id": 175} 
+    ]
+  }
+}

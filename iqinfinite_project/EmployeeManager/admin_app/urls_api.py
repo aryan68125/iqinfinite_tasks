@@ -14,4 +14,7 @@ urlpatterns = [
     path('RemoveHrFromMagagerView/',RemoveHrFromMagagerView.as_view(),name="RemoveHrFromMagagerView"),
 
     path('GetAllHrsListViewEmployeeAssignToHr/',GetAllHrsListViewEmployeeAssignToHr.as_view(), name="GetAllHrsListViewEmployeeAssignToHr"),
+    path('GetAllEmployeesListViewEmployeeAssignToHr/',GetAllEmployeesListViewEmployeeAssignToHr.as_view(),name="GetAllEmployeesListViewEmployeeAssignToHr"),
+    path('AssignEmployeeToHrView/',AssignEmployeeToHrView.as_view(),name="AssignEmployeeToHrView"),
+    path('RemoveEmployeeFromHrView/',RemoveEmployeeFromHrView.as_view(),name="RemoveEmployeeFromHrView")
 ]

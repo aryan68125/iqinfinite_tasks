@@ -129,6 +129,8 @@ function collect_form_data(){
     .then(data=>{
         if(data.status==200){
             reset_form()
+            $('#Add_Users_UI').empty()
+            display_verify_otp_ui()
             Swal.fire({
                 position: "top-end",
                 icon: "success",
@@ -138,8 +140,6 @@ function collect_form_data(){
               });
             //   window.location.href=verify_otp_page_url //change here 
             //display verify otp ui when the status returns 200
-            display_verify_otp_ui()
-            $('#Add_Users_UI').empty()
         }
         else{
             console.log(data)
@@ -168,22 +168,25 @@ function display_verify_otp_ui(){
                     <label for="otp" class="form-label">Enter OTP</label>
                     <input type="text" class="form-control" id="otp" aria-describedby="otp">
                 </div>
-                <div class="w-100 display_flex_style_button">
-                    <div class="mx-1">
-                        <button type="submit" class="btn btn-dark" id="verify_button">Verify</button>
-                    </div>
-                    <div class="mx-1">
-                        <button type="submit" class="btn btn-dark" id="resend_otp">Re-send OTP</button>
+                <div>
+                    <button type="button" class="btn btn-dark" id="verify_button_1">Verify</button>
+                    <button type="button" class="btn btn-dark" id="resend_otp_1">resend otp</button>
+                    <div class="mt-5">
+                        <button type="button" class="btn btn-light" id="resend_otp"></button>
                     </div>
                 </div>
             </div>
         </div>
     `)
 }
-
-//GET FORM DATA STARTS
-$('body').on('click','#verify_button', function(){
-    get_form_data()
+// 
+$('body').on('click','#verify_button_1',function(){
+    console.log("verify_button_1 clicked")
+    get_form_data();
+})
+$('body').on('click','#resend_otp_1',function(){
+    console.log("resend_otp_1 clicked")
+    resend_otp()
 })
 function get_form_data(){
     var otp = $('#otp').val()
@@ -237,9 +240,6 @@ function get_form_data(){
 //GET FORM DATA ENDS
 
 //RESEND OTP STARTS
-$('body').on('click','#resend_otp',function(){
-    resend_otp()
-})
 function resend_otp(){
     //reset form
     reset_form()
@@ -256,7 +256,7 @@ function resend_otp(){
     ).then(response=>response.json())
     .then(data=>{
         if (data.status==200){
-            $('#Verify_otp_ui').empty()
+            // $('#Verify_otp_ui').empty()
             Swal.fire({
                 position: "top-end",
                 icon: "success",

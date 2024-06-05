@@ -28,6 +28,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 # utitlities related imports
 import re
+from datetime import datetime
 
 # email related imports
 import random
@@ -82,6 +83,7 @@ class GetAllUsersOrOneUserOrUpdateUser(APIView):
                 user_profile_serialzier.save()
                 user.is_active = not user_profile.is_deleted
                 user_profile.is_active = user.is_active
+                user_profile.updated_by = datetime.today()
                 user.save()
                 user_profile.save()
                 return Response({'status':200,'msg':'User updated!'},status=200)
@@ -246,4 +248,36 @@ class GetAllHrsListViewEmployeeAssignToHr(ListAPIView):
     def get_queryset(self):
         # Filter users by the role 'manager' in their profile
         return User.objects.filter(profile__role=2, is_active=True)
+    
+class GetAllEmployeesListViewEmployeeAssignToHr(ListAPIView):
+    serializer_class = GetAllEmployeesSerializersEmployeeAssignToHr
+    authentication_classes = (JWTAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, IsAdminUser)
+    def get_queryset(self):
+        # Filter users by the role 'manager' in their profile
+        return User.objects.filter(profile__role=1, is_active=True)
+    
+class AssignEmployeeToHrView(APIView):
+    authentication_classes = (JWTAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, IsAdminUser)
+    def patch(self,request):
+        serializer = AssignEmployeeToHrSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()  # Calls the `update` method in the serializer
+            selected_hr = User.objects.get(id=request.data['user_id'])
+            return Response({'status': 200, 'msg': f'Employees assigned to {selected_hr.username} (Hr)'}, status=200)
+        else:
+            return Response({'status': 400, 'error': serializer.errors}, status=400)
+        
+class RemoveEmployeeFromHrView(APIView):
+    authentication_classes = (JWTAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,IsAdminUser)
+    def patch(self,request):
+        serializers = RemoveEmployeeFromHrSerializer(data=request.data)
+        if serializers.is_valid():
+            serializers.save()
+            selected_hr = User.objects.get(id=request.data['user_id'])
+            return Response({'status':200,'msg':f'Employee removed from under {selected_hr} (Hr)'},status=200)
+        else:
+            return Response({'status':400,'error':serializers.errors},status=400)
 # ASSIGN EMPLOYEE TO HRS ENDS
