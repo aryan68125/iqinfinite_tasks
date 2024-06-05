@@ -28,7 +28,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 # utitlities related imports
 import re
-from datetime import datetime
+from datetime import date
 
 # email related imports
 import random
@@ -83,7 +83,7 @@ class GetAllUsersOrOneUserOrUpdateUser(APIView):
                 user_profile_serialzier.save()
                 user.is_active = not user_profile.is_deleted
                 user_profile.is_active = user.is_active
-                user_profile.updated_by = datetime.today()
+                user_profile.updated_at = date.today()
                 user.save()
                 user_profile.save()
                 return Response({'status':200,'msg':'User updated!'},status=200)
