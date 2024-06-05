@@ -11,5 +11,7 @@ urlpatterns = [
     path('GetAllManagersListView/',GetAllManagersListView.as_view(),name="GetAllManagersListView"),
     path('GetAllHrListView/',GetAllHrListView.as_view(),name="GetAllHrListView"),
     path('AssignHrToManagerView/',AssignHrToManagerView.as_view(),name="AssignHrToManagerView"),
-    path('RemoveHrFromMagagerView/',RemoveHrFromMagagerView.as_view(),name="RemoveHrFromMagagerView")
+    path('RemoveHrFromMagagerView/',RemoveHrFromMagagerView.as_view(),name="RemoveHrFromMagagerView"),
+
+    path('GetAllHrsListViewEmployeeAssignToHr/',GetAllHrsListViewEmployeeAssignToHr.as_view(), name="GetAllHrsListViewEmployeeAssignToHr"),
 ]

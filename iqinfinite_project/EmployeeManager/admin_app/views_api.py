@@ -237,3 +237,13 @@ class RemoveHrFromMagagerView(APIView):
         else:
             return Response({'status':400,'error':serializers.errors},status=400)
 # ASSIGN HR TO MANAGER ENDS
+
+# ASSIGN EMPLOYEE TO HRS STARTS
+class GetAllHrsListViewEmployeeAssignToHr(ListAPIView):
+    serializer_class = GetAllHrSerializerAssignemployeeToHr
+    authentication_classes = (JWTAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, IsAdminUser)
+    def get_queryset(self):
+        # Filter users by the role 'manager' in their profile
+        return User.objects.filter(profile__role=2, is_active=True)
+# ASSIGN EMPLOYEE TO HRS ENDS

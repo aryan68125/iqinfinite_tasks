@@ -421,6 +421,7 @@ $('body').on('click','#Assign_Employee_to_Hr_ui_show_button',function(){
 function Assign_Employee_to_Hr_UI_container_function(){
     console.log("Assign_Employee_to_Hr_UI_container_function called")
     console.log("Assign_Employee_to_Hr_UI_container rendered")
+    get_all_hrs_Hr_UI_container()
     $('#Assign_Employee_to_Hr_UI_container').append(
         `
         <div class="card" id="Hr_data_table_card_assign_employee_to_hr">
@@ -435,6 +436,69 @@ function Assign_Employee_to_Hr_UI_container_function(){
         </div>
         `
     )
+function HrTable_assign_employee_to_hr_destroy_data_table(){
+    console.log("destroy HrTable_assign_employee_to_hr DataTable")
+    if ($.fn.DataTable.isDataTable('#HrTable_assign_employee_to_hr')) {
+        $('#HrTable_assign_employee_to_hr').DataTable().clear().destroy();
+    }
 }
+function get_all_hrs_Hr_UI_container(){
+    console.log("get_all_hrs_Hr_UI_container function called")
+    console.log("fetch api call to get all hrs")
+    fetch(
+        GetAllHrsListViewEmployeeAssignToHr_url,{
+            method:'GET',
+            headers:{
+                Accept:'application/json',
+                'Content-Type':'application/json',
+                'X-CSRFToken':getCookie("csrftoken")
+            }
+        }
+    ).then(response => response.json())
+    .then(data=>{
+        console.log("get_all_managers function api call result : ",data)
+        HrTable_assign_employee_to_hr_destroy_data_table()
+        console.log("Create HrTable DataTable HrTable_assign_employee_to_hr")
+        $('#HrTable_assign_employee_to_hr').DataTable({
+            data:data,
+            columns:[
+                {title:'User ID', data:'id'},
+                { title: 'User Name', data: 'username' },
+                { title: 'Email', data: 'email' },
+                { title: 'Role Name', data: 'user_profile.role_name' },
+                { title: 'Created By', data: 'user_profile.created_by.username' },
+                { title: 'Updated By', data: 'user_profile.updated_by.username' },
+                { title: 'Created At', data: 'user_profile.created_at' },
+                { title: 'Updated At', data: 'user_profile.updated_at' }
+            ],
+            responsive: true // Enable responsiveness
+        })
 
+        HrTable_assign_employee_to_hr_data_table_row_double_click_event_handler()
+    })
+}
+}
+function HrTable_assign_employee_to_hr_data_table_row_double_click_event_handler(){
+    console.log("HrTable_assign_employee_to_hr_data_table_row_double_click_event_handler function called")
+    console.log("Attched the click event handler to HrTable_assign_employee_to_hr")
+
+    $('#HrTable_assign_employee_to_hr tbody').on('dblclick', 'tr', function() {
+        var table = $('#HrTable_assign_employee_to_hr').DataTable();
+        $('#HrTable_assign_employee_to_hr tbody tr').css('background-color', '');
+
+        // Add the background color to the clicked row
+        $(this).css('background-color', 'lightgrey');
+
+        var data = table.row(this).data();
+        var userId = data.id;
+        var username = data.username
+        var role = data.user_profile.role_name
+
+        //get on user from DB via api call
+        console.log('HrTable_assign_employee_to_hr Row click User ID :', data)
+
+        //render a form
+        // render_form_to_assign_employee(userId, username, role)
+    });
+}
 /* Assign_Employee_to_Hr_UI_container RELATED UI LOGIC ENDS */

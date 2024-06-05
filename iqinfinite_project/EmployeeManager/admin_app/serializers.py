@@ -155,3 +155,17 @@ class RemoveHrFromMagagerSerializer(serializers.Serializer):
             )
         return validated_data
 # ASSIGN USERS RELATED SERIALIZERS ENDS
+
+# ASSIGN EMPLOYEE TO HR STARTS
+class GetAllHrSerializerAssignemployeeToHr(serializers.ModelSerializer):
+    user_profile = UserProfileSerializer(source='profile', read_only=True)
+
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'first_name', 'last_name', 'email', 'user_profile']
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        # Print serialized data for debugging if needed
+        return data
+# ASSIGN EMPLOYEE TO HR ENDS
