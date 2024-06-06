@@ -8,6 +8,7 @@ class UserRole(models.Model):
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User,on_delete=models.CASCADE,related_name='profile')
+    profile_picture = models.ImageField(upload_to='images/',null=True,blank=True)
     role = models.ForeignKey(UserRole,on_delete=models.PROTECT,null=True,blank=True)
     role_name = models.CharField(max_length=50,null=True,blank=True)
     is_deleted = models.BooleanField(default=False,null=True,blank=True)

@@ -1,5 +1,7 @@
 from django.urls import path
 from admin_app.views_api import *
+from django.conf import settings
+from django.conf.urls.static import static
 urlpatterns = [
     path('GetAllUsers/',GetAllUsersOrOneUserOrUpdateUser.as_view(),name="GetAllUsers"),
     path('GetOneUser/<int:userId>/', GetAllUsersOrOneUserOrUpdateUser.as_view(), name='GetOneUser'),
