@@ -1,0 +1,29 @@
+meta {
+  name: update admin info
+  type: http
+  seq: 2
+}
+
+patch {
+  url: http://127.0.0.1:8000/admin_app/api/ChangeAdminInfoView/
+  body: json
+  auth: bearer
+}
+
+headers {
+  Accept: application/json
+  Content-Type: application/json
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzE3NjYzMjk1LCJpYXQiOjE3MTc2NTc3NDEsImp0aSI6Ijg1MWRjYzFmMDAxOTRlNjU4MmY3Yzg2MDAyOTRiYjQ2IiwidXNlcl9pZCI6Mjl9.ojiZS_K854grD1KeX4G8k6gjV0dfM5EcN9Rd0KNOAuY
+}
+
+body:json {
+  {
+    "user_id": 29, 
+    "first_name": "Vikram",
+    "last_name": "Dixit",
+    "email": "vikram@gmail.com"
+  }
+}

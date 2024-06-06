@@ -109,6 +109,10 @@ class ChangeUserPasswordSerializer(serializers.Serializer):
         return user_instance
 # MANAGE USERS PAGE RELATED SERIALIZERS ENDS
 
+
+
+
+
 # ASSIGN USERS RELATED SERIALIZERS STARTS
 class GetAllManagerSerializer(serializers.ModelSerializer):
     user_profile = UserProfileSerializer(source='profile', read_only=True)
@@ -155,6 +159,10 @@ class RemoveHrFromMagagerSerializer(serializers.Serializer):
             )
         return validated_data
 # ASSIGN USERS RELATED SERIALIZERS ENDS
+
+
+
+
 
 # ASSIGN EMPLOYEE TO HR STARTS
 class GetAllHrSerializerAssignemployeeToHr(serializers.ModelSerializer):
@@ -212,3 +220,14 @@ class RemoveEmployeeFromHrSerializer(serializers.Serializer):
             )
         return validated_data
 # ASSIGN EMPLOYEE TO HR ENDS
+
+
+
+
+
+# (ADMIN PANEL) CHANGE ADMIN INFO STARTS
+class ChangeAdminInfoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id','username','first_name','last_name', 'email']
+# (ADMIN PANEL) CHANGE ADMIN INFO ENDS

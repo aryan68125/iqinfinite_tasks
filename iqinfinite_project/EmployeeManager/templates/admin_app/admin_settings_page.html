@@ -7,7 +7,8 @@
 {% block content %}
 
 <script>
-    
+    var GetAdminUsernameView_url = '{% url "GetAdminUsernameView" %}'
+    var ChangeAdminInfoView_url = "{% url 'ChangeAdminInfoView' %}";
 </script>
 
 <div class="container">
@@ -23,21 +24,72 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-9 col-md-9 col-sm-12 pt-2">
+            <div class="col-lg-9 col-md-9 col-sm-12 pt-4">
+
+
+
+                <div class="row me-2 my-2 pt-2">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-lg-4 col-md-4 col-sm-6">
+                                    <div class="mb-3">
+                                        <label for="first_name_admin_settings_form" class="form-label">First Name</label>
+                                        <input type="text" class="form-control" id="first_name_admin_settings_form" aria-describedby="emailHelp">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="username_admin_settings_form" class="form-label">Username</label>
+                                        <input type="text" class="form-control" id="username_admin_settings_form" aria-describedby="emailHelp" disabled>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-6">
+                                    <div class="mb-3">
+                                        <label for="last_name_admin_settings_form" class="form-label">Last Name</label>
+                                        <input type="text" class="form-control" id="last_name_admin_settings_form" aria-describedby="emailHelp">
+                                    </div>
+                                    <div class="mt-5">
+                                        <button class="btn btn-dark" id="save_admin_updated_info_button">Save changes</button>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-6">
+                                    <div class="mb-3">
+                                        <label for="email_admin_settings_form" class="form-label">Email address</label>
+                                        <input type="email" class="form-control" id="email_admin_settings_form" aria-describedby="emailHelp">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
                 <div class="row me-2 my-2">
                     <div class="card">
                         <div class="card-body">
-                          Admin details change form
+                            <div class="row">
+                                <div class="col-lg-4 col-md-4 col-sm-6">
+                                        <div class="mb-3">
+                                            <label for="password_admin_settings_form" class="form-label">Password</label>
+                                            <input type="password" class="form-control" id="password_admin_settings_form" aria-describedby="emailHelp">
+                                        </div>
+                                        <div>
+                                            <button class="btn btn-dark" id="save_admin_updated_password_button">Change Password</button>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-6">
+                                        <div class="mb-3">
+                                            <label for="password2_admin_settings_form" class="form-label">Re-type Password</label>
+                                            <input type="password" class="form-control" id="password2_admin_settings_form" aria-describedby="emailHelp">
+                                        </div>
+                                    </div>
+                                </div>
                         </div>
-                      </div>
+                    </div>
                 </div>
-                <div class="row me-2 my-2">
-                    <div class="card">
-                        <div class="card-body">
-                          Admin change password form
-                        </div>
-                      </div>
-                </div>
+
+
+
             </div>
           </div>
         </div>

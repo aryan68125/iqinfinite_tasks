@@ -57,9 +57,12 @@ class GetAllUsersOrOneUserOrUpdateUser(APIView):
             except Exception as e: 
                 return Response({'status':500,'error':str(e)},status=500)
         else:
-            user = User.objects.exclude(is_superuser = True)
-            serializer = GetAllUsersSerializers(user,many=True)
-            return Response({'status':200,'data':serializer.data},status=200)
+            try:
+                user = User.objects.exclude(is_superuser = True)
+                serializer = GetAllUsersSerializers(user,many=True)
+                return Response({'status':200,'data':serializer.data},status=200)
+            except Exception as e:
+                return Response({'status':500,'error':str(e)},status=500)
     def patch(self,request):
         user_id = request.data['user_id']
         try:
@@ -181,6 +184,10 @@ class ChangeUserPassword(APIView):
             return Response({'status':500,'error':str(e)},status=500)
 # MANAGE USER PAGE RELATED API VIEWS ENDS
 
+
+
+
+
 # ASSIGN HR TO MANAGER STARTS
 class GetAllManagersListView(ListAPIView):
     serializer_class = GetAllManagerSerializer
@@ -220,25 +227,35 @@ class AssignHrToManagerView(APIView):
     permission_classes = (IsAuthenticated, IsAdminUser)
     def patch(self,request):
         serializer = AssignHrToMagagerSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()  # Calls the `update` method in the serializer
-            selected_manager = User.objects.get(id=request.data['user_id'])
-            return Response({'status': 200, 'msg': f'Hrs assigned to {selected_manager.username} (Manager)'}, status=200)
-        else:
-            return Response({'status': 400, 'error': serializer.errors}, status=400)
-        
+        try:
+            if serializer.is_valid():
+                serializer.save()  # Calls the `update` method in the serializer
+                selected_manager = User.objects.get(id=request.data['user_id'])
+                return Response({'status': 200, 'msg': f'Hrs assigned to {selected_manager.username} (Manager)'}, status=200)
+            else:
+                return Response({'status': 400, 'error': serializer.errors}, status=400)
+        except Exception as e:
+            return Response({'status':500,'error':str(e)},status=500)
+
 class RemoveHrFromMagagerView(APIView):
     authentication_classes = (JWTAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,IsAdminUser)
     def patch(self,request):
         serializers = RemoveHrFromMagagerSerializer(data=request.data)
-        if serializers.is_valid():
-            serializers.save()
-            selected_manager = User.objects.get(id=request.data['user_id'])
-            return Response({'status':200,'msg':f'Hrs removed from under {selected_manager} (Manager)'},status=200)
-        else:
-            return Response({'status':400,'error':serializers.errors},status=400)
+        try:
+            if serializers.is_valid():
+                serializers.save()
+                selected_manager = User.objects.get(id=request.data['user_id'])
+                return Response({'status':200,'msg':f'Hrs removed from under {selected_manager} (Manager)'},status=200)
+            else:
+                return Response({'status':400,'error':serializers.errors},status=400)
+        except Exception as e:
+            return Response({'status':500,'error':str(e)},status=500)
 # ASSIGN HR TO MANAGER ENDS
+
+
+
+
 
 # ASSIGN EMPLOYEE TO HRS STARTS
 class GetAllHrsListViewEmployeeAssignToHr(ListAPIView):
@@ -262,22 +279,63 @@ class AssignEmployeeToHrView(APIView):
     permission_classes = (IsAuthenticated, IsAdminUser)
     def patch(self,request):
         serializer = AssignEmployeeToHrSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()  # Calls the `update` method in the serializer
-            selected_hr = User.objects.get(id=request.data['user_id'])
-            return Response({'status': 200, 'msg': f'Employees assigned to {selected_hr.username} (Hr)'}, status=200)
-        else:
-            return Response({'status': 400, 'error': serializer.errors}, status=400)
+        try:
+            if serializer.is_valid():
+                serializer.save()  # Calls the `update` method in the serializer
+                selected_hr = User.objects.get(id=request.data['user_id'])
+                return Response({'status': 200, 'msg': f'Employees assigned to {selected_hr.username} (Hr)'}, status=200)
+            else:
+                return Response({'status': 400, 'error': serializer.errors}, status=400)
+        except Exception as e:
+            return Response({'status':500,'error':str(e)},status=500)
         
 class RemoveEmployeeFromHrView(APIView):
     authentication_classes = (JWTAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,IsAdminUser)
     def patch(self,request):
         serializers = RemoveEmployeeFromHrSerializer(data=request.data)
-        if serializers.is_valid():
-            serializers.save()
-            selected_hr = User.objects.get(id=request.data['user_id'])
-            return Response({'status':200,'msg':f'Employee removed from under {selected_hr} (Hr)'},status=200)
-        else:
-            return Response({'status':400,'error':serializers.errors},status=400)
+        try:
+            if serializers.is_valid():
+                serializers.save()
+                selected_hr = User.objects.get(id=request.data['user_id'])
+                return Response({'status':200,'msg':f'Employee removed from under {selected_hr} (Hr)'},status=200)
+            else:
+                return Response({'status':400,'error':serializers.errors},status=400)
+        except Exception as e:
+            return Response({'status':500,'error':str(e)},status=500)
 # ASSIGN EMPLOYEE TO HRS ENDS
+
+
+
+
+
+# (ADMIN PANEL) CHANGE ADMIN INFO STARTS
+class ChangeAdminInfoView(APIView):
+    authentication_classes = (JWTAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,IsAdminUser)
+    def patch(self,request):
+        try:
+            user_id = request.user.id
+            user = User.objects.get(id = user_id, is_superuser = True)
+            serializers = ChangeAdminInfoSerializer(user,data=request.data,partial = True)
+            if serializers.is_valid():
+                serializers.save()
+                return Response({'status':200,'msg':'Admin profile info saved'},status=200)
+            else:
+                print(serializers.error)
+                return Response({'status':400,'error':serializers.errors},status=400)
+        except Exception as e:
+            return Response({'status':500,'error':str(e)},status=500)
+        
+class GetAdminUsernameView(APIView):
+    authentication_classes = (JWTAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,IsAdminUser)
+    def get(self,request):
+        try:
+            user_id = request.user.id
+            user = User.objects.get(id=user_id,is_superuser = True)
+            username= user.username
+            return Response({'status':200,'username':username},status=200)
+        except Exception as e:
+            return Response({'status':500,'error':str(e)},status=500) 
+# (ADMIN PANEL) CHANGE ADMIN INFO ENDS
