@@ -11,7 +11,37 @@
 </script>
 
 <div class="container">
-    <h3>This is the Admin settings page for admin user</h3>
+    <div class="card">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-lg-3 col-md-3 col-sm-12">
+                <div><h3>Admin settings:</h3></div>
+                <div class="card" style="width: 18rem;">
+                    <img src="..." class="card-img-top" alt="..." style="height:18rem; width:18rem;">
+                    <div class="card-body">
+                      <button class="btn btn-dark" id="upload_profile_pic_admin">Upload</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-9 col-md-9 col-sm-12 pt-2">
+                <div class="row me-2 my-2">
+                    <div class="card">
+                        <div class="card-body">
+                          Admin details change form
+                        </div>
+                      </div>
+                </div>
+                <div class="row me-2 my-2">
+                    <div class="card">
+                        <div class="card-body">
+                          Admin change password form
+                        </div>
+                      </div>
+                </div>
+            </div>
+          </div>
+        </div>
+    </div>
 </div>
 <script src="{% static 'js/admin_app/admin_settings_page.js' %}"></script>
 <!-- <link href="{% static 'css/auth_user/login_page.css' %}" rel="stylesheet"/> -->

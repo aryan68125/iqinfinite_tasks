@@ -1,0 +1,25 @@
+meta {
+  name: Remove employees from under hr
+  type: http
+  seq: 4
+}
+
+patch {
+  url: http://127.0.0.1:8000/admin_app/api/RemoveEmployeeFromHrView/
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzE3NjQ5Mjc4LCJpYXQiOjE3MTc2NDgzNzgsImp0aSI6ImYwN2NhMDAyZTEyYTQxMmNiZjExZmFlOTk2MzZhY2U4IiwidXNlcl9pZCI6Mjl9.uwsPYTF9WFa11uwU8LJEyRDub_jY8bNeE3ptJStXDmM
+}
+
+body:json {
+  {
+    "user_id": 170, 
+    "removed_employees": [
+      {"id": 173}, 
+      {"id": 246} 
+    ]
+  }
+}
