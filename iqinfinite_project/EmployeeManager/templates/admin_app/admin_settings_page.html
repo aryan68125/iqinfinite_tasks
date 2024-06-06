@@ -9,9 +9,11 @@
 <script>
     var GetAdminUsernameView_url = '{% url "GetAdminUsernameView" %}'
     var ChangeAdminInfoView_url = "{% url 'ChangeAdminInfoView' %}";
+    var ChangeAdminPasswordView_url = "{% url 'ChangeAdminPasswordView' %}"
 </script>
 
 <div class="container">
+    <p id="admin_user_id" style="display:none"></p>
     <div class="card">
         <div class="card-body">
           <div class="row">

@@ -230,4 +230,35 @@ class ChangeAdminInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id','username','first_name','last_name', 'email']
+
+class ChangeAdminPasswordSerializer(serializers.Serializer):
+    user_id = serializers.IntegerField()
+    password = serializers.CharField(max_length = 255)
+    password2  =serializers.CharField(max_length = 255)
+    def validate(self,data):
+        password = data.get('password')
+        password2  = data.get('password2')
+        if password != password2:
+            raise serializers.ValidationError("Password do not match")
+        
+        # Check if password has minimum 6 characters
+        if len(password) < 6:
+            raise serializers.ValidationError("Password must be greater than 6 characters")
+        
+        # Check if password contains at least one letter, one number, and one "@" character
+        if not re.search(r'[a-zA-Z]', password):
+            raise serializers.ValidationError("Password must contain alphabets")
+        if not re.search(r'\d', password):
+            raise serializers.ValidationError("Password must contain numbers")
+        if not re.search(r'[@]', password):
+            raise serializers.ValidationError("Password must contain @")
+        return data
+    
+    def create(self,data):
+        user_id = data.get('user_id')
+        password = data.get('password')
+        user = User.objects.get(id=user_id, is_superuser = True)
+        user.set_password(password)
+        user.save()
+        return data
 # (ADMIN PANEL) CHANGE ADMIN INFO ENDS

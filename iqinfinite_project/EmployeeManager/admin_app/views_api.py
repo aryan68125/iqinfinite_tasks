@@ -335,7 +335,33 @@ class GetAdminUsernameView(APIView):
             user_id = request.user.id
             user = User.objects.get(id=user_id,is_superuser = True)
             username= user.username
-            return Response({'status':200,'username':username},status=200)
+            user_id = user.id
+            return Response({'status':200,'username':username, 'user_id':user_id},status=200)
         except Exception as e:
             return Response({'status':500,'error':str(e)},status=500) 
+
+class ChangeAdminPasswordView(APIView):
+    authentication_classes = (JWTAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,IsAdminUser)
+    def patch(self,request):  
+        serializers = ChangeAdminPasswordSerializer(data=request.data)
+        try:
+            if serializers.is_valid():
+                serializers.save()
+                user_id = request.data['user_id']
+                admin = User.objects.get(id = user_id)
+                login_user(request,admin)
+                return Response({'status':200,'msg':"Password changed!"},status=200)
+            else:
+                print(serializers.errors)
+                if 'non_field_errors' in serializers.errors:
+                    return Response({'status':400,'error':serializers.errors['non_field_errors']},status=400)
+                if 'user_id' in serializers.errors:
+                    return Response({'status':400,'error':serializers.errors['user_id']},status=400)
+                if 'password' in serializers.errors:
+                    return Response({'status':400,'error':serializers.errors['password']},status=400)
+                if 'password2' in serializers.errors:
+                    return Response({'status':400,'error':serializers.errors['password2']},status=400)
+        except Exception as e:
+            return Response({'status':500,'error':str(e)},status=500)
 # (ADMIN PANEL) CHANGE ADMIN INFO ENDS

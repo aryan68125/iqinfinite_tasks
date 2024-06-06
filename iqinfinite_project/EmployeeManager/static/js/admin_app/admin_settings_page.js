@@ -55,6 +55,7 @@ function get_admin_info_from_form(){
     ).then(response=>response.json())
     .then(data=>{
         if(data.status == 200){
+            reset_admin_info_form()
             msg = data.msg
             Swal.fire({
                 position: "top-end",
@@ -76,6 +77,11 @@ function get_admin_info_from_form(){
         }
     })
 }
+function reset_admin_info_form(){
+    $('#first_name_admin_settings_form').val("")
+    $('#last_name_admin_settings_form').val("")
+    $('#email_admin_settings_form').val("")
+}
 $(document).ready(function(){
     get_admin_username()
 })
@@ -95,6 +101,7 @@ function get_admin_username(){
         if(data.status==200){
             console.log("get_admin_username : ",data)
             $('#username_admin_settings_form').val(data.username)
+            $('#admin_user_id').text(data.user_id)
         }
         else{
             error_msg = data.error
@@ -119,43 +126,51 @@ function get_passwords_from_the_form(){
     console.log("get_passwords_from_the_form function called")
     var password = $('#password_admin_settings_form').val()
     var password2 = $('#password2_admin_settings_form').val()
+    var user_id = $('#admin_user_id').text()
     var data = {
+        user_id:user_id,
         password:password,
         password2:password2
     }
     console.log(data)
-    // fetch(
-    //     url,{
-    //         method:'PATCH',
-    //         headers:{
-    //             Accept:'application/json',
-    //             'Content-Type':'application/json',
-    //             'X-CSRFToken':getCookie("csrftoken")
-    //         },
-    //         body:JSON.stringify(data)
-    //     }
-    // ).then(response=>response.json())
-    // .then(data=>{
-    //     if(data.status==200){
-    //         msg = data.msg
-    //         Swal.fire({
-    //             position: "top-end",
-    //             icon: "success",
-    //             title: msg,
-    //             showConfirmButton: false,
-    //             timer: 1500
-    //         });
-    //     }
-    //     else{
-    //         msg = data.error
-    //         Swal.fire({
-    //             position: "top-end",
-    //             icon: "error",
-    //             title: msg,
-    //             showConfirmButton: false,
-    //             timer: 1500
-    //         });
-    //     }
-    // })
+    fetch(
+        ChangeAdminPasswordView_url,{
+            method:'PATCH',
+            headers:{
+                Accept:'application/json',
+                'Content-Type':'application/json',
+                'X-CSRFToken':getCookie("csrftoken")
+            },
+            body:JSON.stringify(data)
+        }
+    ).then(response=>response.json())
+    .then(data=>{
+        if(data.status==200){
+            reset_password_form()
+            msg = data.msg
+            Swal.fire({
+                position: "top-end",
+                icon: "success",
+                title: msg,
+                showConfirmButton: false,
+                timer: 1500
+            });
+        }
+        else{
+            msg = data.error
+            Swal.fire({
+                position: "top-end",
+                icon: "error",
+                title: msg,
+                showConfirmButton: false,
+                timer: 1500
+            });
+        }
+    })
+}
+function reset_password_form(){
+    console.log("reset_password_form called")
+    $('#password_admin_settings_form').val("")
+    $('#password2_admin_settings_form').val("")
 }
 //ADMIN PASSWORD CHANGE RELATED UI LOGIC ENDS

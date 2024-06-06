@@ -20,4 +20,5 @@ urlpatterns = [
 
     path('GetAdminUsernameView/',GetAdminUsernameView.as_view(),name="GetAdminUsernameView"),
     path('ChangeAdminInfoView/',ChangeAdminInfoView.as_view(),name="ChangeAdminInfoView"),
+    path('ChangeAdminPasswordView/',ChangeAdminPasswordView.as_view(),name="ChangeAdminPasswordView"),
 ]
