@@ -1,0 +1,23 @@
+meta {
+  name: Upload admin profile image
+  type: http
+  seq: 4
+}
+
+patch {
+  url: http://127.0.0.1:8000/admin_app/api/UploadAdminProfilePictureView/
+  body: multipartForm
+  auth: bearer
+}
+
+headers {
+  Content-Type: multipart/form-data
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzE3NzQzMjYxLCJpYXQiOjE3MTc3MzkyODgsImp0aSI6IjM3N2U1M2IyNjIxYjRjZGU4YWEzYTg0NTVmZjBhNDRiIiwidXNlcl9pZCI6Mjl9.ybkjUXC5Ho8LK5viZSRaO0G7xTHcmEQQ8_xNs2EQ30o
+}
+
+body:multipart-form {
+  profile_picture: @file(/home/adityakumar/Downloads/admin_image.jpg)
+}

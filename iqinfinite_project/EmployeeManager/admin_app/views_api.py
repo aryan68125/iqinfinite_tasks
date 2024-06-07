@@ -19,6 +19,8 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.views import APIView
 from rest_framework.generics import ListAPIView
+# imports related to handle image upload
+from rest_framework.parsers import MultiPartParser, FormParser
 # for cross-origin api support
 from rest_framework_simplejwt.authentication import JWTAuthentication
 #for same-origin api support for fetch api clients
@@ -364,4 +366,23 @@ class ChangeAdminPasswordView(APIView):
                     return Response({'status':400,'error':serializers.errors['password2']},status=400)
         except Exception as e:
             return Response({'status':500,'error':str(e)},status=500)
+
+class UploadAdminProfilePictureView(APIView):
+    authentication_classes = (JWTAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, IsAdminUser)
+ 
+    parser_classes = (MultiPartParser, FormParser)
+    def patch(self,request):
+        user_profile = UserProfile.objects.get(user=request.user.id)
+        serializer = UploadAdminProfilePictureSerializer(user_profile, data=request.data, partial=True)
+        
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'status':200,'msg':'Profile picture saved'},status=200)
+        else:
+            print(serializer.errors)
+            if 'non_field_errors' in serializer.errors:
+                return Response({'status':400,'error':serializer.errors['non_field_errors']},status=400)
+            if 'profile_picture' in serializer.errors:
+                return Response({'status':400,'error':serializer.errors['profile_picture']},status=400)
 # (ADMIN PANEL) CHANGE ADMIN INFO ENDS
