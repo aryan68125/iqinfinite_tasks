@@ -262,7 +262,7 @@ class ChangeAdminPasswordSerializer(serializers.Serializer):
         user.save()
         return data
 
-class UploadAdminProfilePictureSerializer(serializers.ModelSerializer):
+class AdminProfilePictureSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
         fields = ['profile_picture']

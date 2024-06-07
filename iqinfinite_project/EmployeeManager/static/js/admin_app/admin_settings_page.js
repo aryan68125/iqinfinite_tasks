@@ -1,5 +1,6 @@
 $('body').ready(function(){
     console.log("admin settings page js ready!!")
+    fetchProfilePicture()
 })
 
 // GET CSRF TOKEN FROM THE BROWSER'S COOCKIE STARTS
@@ -21,9 +22,97 @@ function getCookie(name) {
 // GET CSRF TOKEN FROM THE BROWSER'S COOCKIE ENDS
 
 // ADMIN CHANGE PROFILE PICTURE STARTS
-$(document).on('click','#upload_profile_pic_admin',function(){
-      console.log("upload_profile_pic_admin button clicked!")  
-})
+
+// upload image (starts)
+$(document).ready(function() {
+    // Trigger the file input when the select button is clicked
+    $('#select_profile_picture_button').on('click', function() {
+        $('#profile_picture_input').click();
+    });
+
+    // Handle the file upload when the upload button is clicked
+    $('#upload_profile_pic_admin').on('click', function() {
+        var fileInput = $('#profile_picture_input')[0];
+        if (fileInput.files.length > 0) {
+            var formData = new FormData();
+            formData.append('profile_picture', fileInput.files[0]);
+
+            fetch(UploadAdminProfilePictureView_url, {
+                method: 'PATCH',
+                headers: {
+                    'X-CSRFToken': getCookie("csrftoken")
+                },
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status == 200) {
+                    fetchProfilePicture()
+                    Swal.fire({
+                        position: "top-end",
+                        icon: "success",
+                        title: data.msg,
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                } else {
+                    var error_msg = data.error;
+                    Swal.fire({
+                        position: "top-end",
+                        icon: "error",
+                        title: error_msg,
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                Swal.fire({
+                    position: "top-end",
+                    icon: "error",
+                    title: 'An error occurred while uploading the profile picture.',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            });
+        } else {
+            Swal.fire({
+                position: "top-end",
+                icon: "warning",
+                title: 'Please select a file to upload.',
+                showConfirmButton: false,
+                timer: 1500
+            });
+        }
+    });
+});
+// upload image (ends)
+
+// get image (starts)
+function fetchProfilePicture() {
+    console.log("fetchProfilePicture function called")
+    fetch(GetAdminProfilePictureView_url)  // Replace with your actual back-end URL
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.status === 200) {
+            const imageUrl = data.data.profile_picture;
+            document.getElementById('admin_profile_pic').src = imageUrl;
+        } else {
+            console.error('Failed to load image:', data);
+        }
+    })
+    .catch(error => {
+        console.error('There was a problem with the fetch operation:', error);
+    });
+}
+// get image (ends)
+
 // ADMIN CHANGE PROFILE PICTURE ENDS
 
 // ADMIN INFO RELATED UI LOGIC STARTS

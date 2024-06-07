@@ -24,4 +24,5 @@ urlpatterns = [
     path('ChangeAdminInfoView/',ChangeAdminInfoView.as_view(),name="ChangeAdminInfoView"),
     path('ChangeAdminPasswordView/',ChangeAdminPasswordView.as_view(),name="ChangeAdminPasswordView"),
     path('UploadAdminProfilePictureView/',UploadAdminProfilePictureView.as_view(),name="UploadAdminProfilePictureView"),
+    path('GetAdminProfilePictureView/',GetAdminProfilePictureView.as_view(),name="GetAdminProfilePictureView"),
 ]

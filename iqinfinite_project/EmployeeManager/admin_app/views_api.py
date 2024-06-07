@@ -351,7 +351,7 @@ class ChangeAdminPasswordView(APIView):
             if serializers.is_valid():
                 serializers.save()
                 user_id = request.data['user_id']
-                admin = User.objects.get(id = user_id)
+                admin = User.objects.get(id = user_id, is_superuser=True)
                 login_user(request,admin)
                 return Response({'status':200,'msg':"Password changed!"},status=200)
             else:
@@ -374,7 +374,7 @@ class UploadAdminProfilePictureView(APIView):
     parser_classes = (MultiPartParser, FormParser)
     def patch(self,request):
         user_profile = UserProfile.objects.get(user=request.user.id)
-        serializer = UploadAdminProfilePictureSerializer(user_profile, data=request.data, partial=True)
+        serializer = AdminProfilePictureSerializer(user_profile, data=request.data, partial=True)
         
         if serializer.is_valid():
             serializer.save()
@@ -385,4 +385,13 @@ class UploadAdminProfilePictureView(APIView):
                 return Response({'status':400,'error':serializer.errors['non_field_errors']},status=400)
             if 'profile_picture' in serializer.errors:
                 return Response({'status':400,'error':serializer.errors['profile_picture']},status=400)
+            
+class GetAdminProfilePictureView(APIView):
+    authentication_classes = (JWTAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, IsAdminUser)
+    parser_classes = (IsAuthenticated,IsAdminUser)
+    def get(self,request):
+        user_profile = UserProfile.objects.get(user=request.user.id)
+        serializers = AdminProfilePictureSerializer(user_profile, many=False)
+        return Response({'status':200,'data':serializers.data},status=200)
 # (ADMIN PANEL) CHANGE ADMIN INFO ENDS

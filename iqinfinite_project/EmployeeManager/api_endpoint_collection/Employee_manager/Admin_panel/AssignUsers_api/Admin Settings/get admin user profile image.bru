@@ -1,0 +1,15 @@
+meta {
+  name: get admin user profile image
+  type: http
+  seq: 5
+}
+
+get {
+  url: http://127.0.0.1:8000/admin_app/api/GetAdminProfilePictureView/
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzE3NzUzODg0LCJpYXQiOjE3MTc3NDIzNjEsImp0aSI6Ijg3NjU5YmE0OGU3NzQ3YWZiNmE4ZjYxMTgyZDQzOGYwIiwidXNlcl9pZCI6Mjl9.wT4BxxnSzqmaionjbFm0x0yvB1resPuybRPb5gGYnjA
+}

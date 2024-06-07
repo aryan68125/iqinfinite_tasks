@@ -9,7 +9,9 @@
 <script>
     var GetAdminUsernameView_url = '{% url "GetAdminUsernameView" %}'
     var ChangeAdminInfoView_url = "{% url 'ChangeAdminInfoView' %}";
-    var ChangeAdminPasswordView_url = "{% url 'ChangeAdminPasswordView' %}"
+    var ChangeAdminPasswordView_url = "{% url 'ChangeAdminPasswordView' %}";
+    var UploadAdminProfilePictureView_url = "{% url 'UploadAdminProfilePictureView' %}";
+    var GetAdminProfilePictureView_url = "{% url 'GetAdminProfilePictureView' %}"
 </script>
 
 <div class="container">
@@ -20,9 +22,12 @@
             <div class="col-lg-3 col-md-3 col-sm-12">
                 <div><h3>Admin settings:</h3></div>
                 <div class="card" style="width: 18rem;">
-                    <img src="..." class="card-img-top" alt="..." style="height:18rem; width:18rem;">
+                    <img src="" class="card-img-top" alt="..." style="height:18rem; width:18rem;" id = "admin_profile_pic">
                     <div class="card-body">
-                      <button class="btn btn-dark" id="upload_profile_pic_admin">Upload</button>
+                      <!-- <button class="btn btn-dark" id="upload_profile_pic_admin">Upload</button> -->
+                      <input type="file" id="profile_picture_input" accept="image/*" style="display: none;">
+                      <button type="button" id="select_profile_picture_button" class="btn btn-dark mx-1"><i class="fa-solid fa-file-import"></i></button>
+                      <button type="button" id="upload_profile_pic_admin" class="btn btn-dark mx-1"><i class="fa-solid fa-upload"></i></button>
                     </div>
                 </div>
             </div>
