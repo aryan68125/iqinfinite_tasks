@@ -33,7 +33,7 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
-
+# 'django_minio_backend',
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -104,6 +104,14 @@ SIMPLE_JWT = {
 }
 '''
 SIMPLE JWT RELATED SETTINGS ENDS
+'''
+
+'''
+Minio AWs s3 bucket alternative related settings starts
+'''
+# MINIO_CONSISTENCY_CHECK_ON_START = True
+'''
+Minio AWs s3 bucket alternative related settings ends
 '''
 
 MIDDLEWARE = [
@@ -193,6 +201,29 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = MEDIA_DIR
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
+
+'''
+S3 Bucket alternative MinIO cucket related settings (starts)
+'''
+# MINIO_PUBLIC_BUCKETS.append(MINIO_STATIC_FILES_BUCKET)
+# import boto3
+
+# if DEBUG:
+#     DEFAULT_FILE_STORAGE = 'django_minio_backend.models.MinioBackend'
+#     MINIO_ENDPOINT = "http://localhost:9001"
+#     MINIO_ACCESS_KEY = config('MINIO_ACCESS_KEY_ID')
+#     MINIO_SECRET_KEY = config('MINIO_SECRET_ACCESS_KEY')
+#     MINIO_BUCKET_NAME = "images"
+#     MINIO_USE_SSL = False  # Set to True if using HTTPS
+#     MINIO_USE_HTTPS = False
+#     # Bucket for media files
+#     MINIO_MEDIA_FILES_BUCKET = "images"
+#     MINIO_PRIVATE_BUCKETS = ['images',]
+#     # Storage settings for media files
+#     DEFAULT_FILE_STORAGE = 'django_minio_backend.models.MinioBackend'
+'''
+S3 Bucket alternative MinIO cucket related settings (ends)
+'''
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 

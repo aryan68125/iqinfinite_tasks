@@ -103,6 +103,7 @@ function fetchProfilePicture() {
         if (data.status === 200) {
             const imageUrl = data.data.profile_picture;
             document.getElementById('admin_profile_pic').src = imageUrl;
+            download_image_function(imageUrl)
         } else {
             console.error('Failed to load image:', data);
         }
@@ -113,6 +114,11 @@ function fetchProfilePicture() {
 }
 // get image (ends)
 
+// downlod image (starts)
+function download_image_function(imageUrl){
+    $('#download-link').attr('href', imageUrl).show();
+}
+// downlod image (ends)
 // ADMIN CHANGE PROFILE PICTURE ENDS
 
 // ADMIN INFO RELATED UI LOGIC STARTS
